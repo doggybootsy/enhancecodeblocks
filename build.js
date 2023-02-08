@@ -35,6 +35,17 @@ function shim(id, contents) {
     version: pkg.version,
     author: pkg.author
   };
-  writeFileSync("dist/EnhanceCodeBlocks.plugin.js", `/**\n${Object.entries(meta).map(([ k, v ]) => ` * @${k} ${v}`).join("\n")}\n */\n${readFileSync("dist/EnhanceCodeBlocks.plugin.js", "utf-8")}`);
+
+  const pluginCode = `/**\n${Object.entries(meta).map(([ k, v ]) => ` * @${k} ${v}`).join("\n")}\n */\n${readFileSync("dist/EnhanceCodeBlocks.plugin.js", "utf-8")}`;
+  writeFileSync("dist/EnhanceCodeBlocks.plugin.js", pluginCode);
   console.log("Built");
+
+  if (process.argv.includes("--bd")) {
+    const index = process.argv.findIndex(arg => arg.includes("--bd-path="));
+    let path;
+    if (~index) { path = process.argv[index].replace("--bd-path=", ""); }
+    else { path = join(process.env.APPDATA ? process.env.APPDATA : "", "betterdiscord"); }
+    writeFileSync(join(path, "plugins", "EnhanceCodeBlocks.plugin.js"), pluginCode);
+    console.log("Added to BD");
+  };
 })();
