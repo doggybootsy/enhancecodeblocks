@@ -313,7 +313,7 @@ function useFetchContent(url) {
     let abortController = new AbortController();
     return (async () => {
       let result = await fetch(url, { signal: abortController.signal });
-      body.current = await result.text(), cache.set(url, body.current), forceUpdate(Symbol());
+      result.ok ? (body.current = await result.text(), cache.set(url, body.current)) : body.current = `Enhance Codeblocks FETCH ERROR: STATUS=${JSON.stringify(result.status)} OK=${JSON.stringify(result.ok)} URL=${JSON.stringify(result.url)}`, forceUpdate(Symbol());
     })(), () => abortController.abort();
   }, []), body.current;
 }
@@ -362,10 +362,10 @@ var import_react9, BdApi2, codeBlock, Message, messageListItem, ECBlocks, src_de
         }
       }
       start() {
-        BdApi2.Patcher.instead(codeBlock, "react", (_that, [props]) => import_react9.default.createElement(codeblock_default, { ...props, modal: !1, fileName: () => `codeblock-${Date.now()}.${props.lang || "txt"}` })), BdApi2.Patcher.after(Message.prototype, "renderAttachments", (that, props, res) => {
-          res && res.map((m) => {
-            m.props.children.props.renderPlaintextFilePreview = (props2) => import_react9.default.createElement(attachment_default, { ...props2 });
-          });
+        BdApi2.Patcher.instead(codeBlock, "react", (_that, [props]) => import_react9.default.createElement(codeblock_default, { ...props, modal: !1, fileName: () => `codeblock-${Date.now()}.${props.lang || "txt"}` })), BdApi2.Patcher.after(Message.prototype, "renderAttachments", (that, props, attachments) => {
+          if (attachments)
+            for (let attachment of attachments)
+              attachment.props.children.props.renderPlaintextFilePreview = (props2) => import_react9.default.createElement(attachment_default, { ...props2 });
         }), BdApi2.DOM.addStyle(styles_default), this.forceUpdateMessages();
       }
       stop() {

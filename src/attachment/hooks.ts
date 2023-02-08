@@ -19,8 +19,11 @@ export function useFetchContent(url: string) {
 
     (async () => {
       const result = await fetch(url, { signal: abortController.signal });
-      body.current = await result.text();
-      cache.set(url, body.current);
+      if (result.ok) {
+        body.current = await result.text();
+        cache.set(url, body.current);
+      }
+      else body.current = `Enhance Codeblocks FETCH ERROR: STATUS=${JSON.stringify(result.status)} OK=${JSON.stringify(result.ok)} URL=${JSON.stringify(result.url)}`;
 
       forceUpdate(Symbol());
     })();

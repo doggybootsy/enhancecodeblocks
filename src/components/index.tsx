@@ -9,7 +9,7 @@ export function Grow({ width, height }: { width: number, height: number }) {
       <path fill="currentColor" d="M8.78374 7.21643C9.02041 7.4531 9.40405 7.4531 9.64072 7.21643L13.4547 3.40245V6.18188C13.4547 6.51643 13.7262 6.78794 14.0608 6.78794C14.3953 6.78794 14.6668 6.51643 14.6668 6.18188V1.93941C14.6668 1.60486 14.3953 1.33334 14.0608 1.33334L9.8183 1.33334C9.48375 1.33334 9.21223 1.60486 9.21223 1.93941C9.21223 2.27396 9.48375 2.54548 9.8183 2.54548H12.5977L8.78374 6.35945C8.54707 6.59612 8.54707 6.97976 8.78374 7.21643Z" />
     </svg>
   )
-}
+};
 
 export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("ENTERING"), {searchExports: true}) as React.ComponentClass<any>;
 

@@ -3,8 +3,7 @@ import React, { memo, useMemo } from "react";
 import { useFetchContent } from "./hooks";
 import Codeblock from "../codeblock";
 
-// A wrapper to use the same Codeblock component for attachments
-function Attachment({ attachment, renderAdjacentContent, onContextMenu, className }: {
+export type AttachmentProps = {
   attachment: {
     content_type: string,
     filename: string,
@@ -17,7 +16,10 @@ function Attachment({ attachment, renderAdjacentContent, onContextMenu, classNam
   renderAdjacentContent: () => React.ReactNode,
   onContextMenu: (event: React.MouseEvent<HTMLDivElement>) => void,
   className: string
-}) {
+};
+
+// A wrapper to use the same Codeblock component for attachments
+function Attachment({ attachment, renderAdjacentContent, onContextMenu, className }: AttachmentProps) {
   const content = useFetchContent(attachment.url);
 
   const adjacentContent = useMemo(() => renderAdjacentContent(), [ renderAdjacentContent ]);
@@ -33,7 +35,7 @@ function Attachment({ attachment, renderAdjacentContent, onContextMenu, classNam
       <Codeblock content={content || ""} lang={lang} modal={false} fileName={() => attachment.filename} loading={typeof content !== "string"} />
       {adjacentContent}
     </div>
-  )
+  );
 };
 
 export default memo(Attachment);
