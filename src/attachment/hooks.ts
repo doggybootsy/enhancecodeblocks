@@ -2,13 +2,13 @@ import React, { useLayoutEffect, useMemo, useState } from "react";
 
 const cache = new Map<string, string>();
 export function useFetchContent(url: string) {
-  const refPureValue = useMemo(() => {
+  const refOriginalValue = useMemo(() => {
     const cached = cache.has(url);
     if (cached) return cache.get(url) as string;
     return false;
   }, []);
 
-  const body = React.useRef<false | string>(refPureValue);
+  const body = React.useRef<false | string>(refOriginalValue);
 
   const [, forceUpdate ] = useState(Symbol());
   

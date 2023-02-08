@@ -4,7 +4,7 @@ import ReactSpring from "react-spring";
 import type { SpringValue } from "@react-spring/web";
 import type { Language } from "highlight.js";
 
-import { Tooltip, Arrow, Eye, Download, Copy, Grow } from "../components";
+import { Tooltip, Arrow, Eye, Download, Copy, Enlarge } from "../components";
 
 function Header({ angle, collapsed, setCollapsed, aliases, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, aliases: string[], language: Language, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean }) {
   return (
@@ -56,7 +56,7 @@ function Header({ angle, collapsed, setCollapsed, aliases, language, isSVG, show
         {!modal && <Tooltip text="Enlarge" hideOnClick={false}>
           {(props) => (
             <div className="ECBlock-enlarge" {...props} onClick={enlargeAction}>
-              <Grow width={16} height={16} />
+              <Enlarge width={16} height={16} />
             </div>
           )}
         </Tooltip>}

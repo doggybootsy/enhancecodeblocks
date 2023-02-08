@@ -4,6 +4,8 @@ import type { Language } from "highlight.js";
 import hljs from "highlight.js";
 import ReactSpring from "react-spring";
 
+import { PREVIEW_HEIGHT, MODAL_CONTENT_HEIGHT, MAX_HEIGHT } from "./constants";
+
 const listFormat = new (Intl as any).ListFormat();
 
 export function useLanguage(language: string): Language {
@@ -67,7 +69,7 @@ export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTabl
   useLayoutEffect(() => {
     ref.current = false;
 
-    if (modal) setTableHeight(362);
+    if (modal) setTableHeight(MODAL_CONTENT_HEIGHT);
     else if (tableRef.current && tableRef.current.parentElement) {
       const scrollerHeight = Number(getComputedStyle(tableRef.current.parentElement, "::-webkit-scrollbar").height.replace("px", ""));
 
@@ -76,10 +78,10 @@ export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTabl
       tableRef.current.parentElement.scroll({ left: 10000 });
       const add = tableRef.current.parentElement.scrollLeft !== 0;
       tableRef.current.parentElement.scroll({ left: 0 });
-      // Have a max height of 300px
-      setTableHeight(Math.min(add ? scrollerHeight + tableRef.current.offsetHeight : tableRef.current.offsetHeight, 300));
+
+      setTableHeight(Math.min(add ? scrollerHeight + tableRef.current.offsetHeight : tableRef.current.offsetHeight, MAX_HEIGHT));
     }
-    else setTableHeight(200);
+    else setTableHeight(PREVIEW_HEIGHT);
     
     setTimeout(() => ref.current = true);
   }, [ content, showPreview, lang ]);

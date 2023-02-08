@@ -23,6 +23,8 @@ class ECBlocks implements Plugin {
     
     for (const owner of new Set(owners)) {
       const { render } = owner;
+      // Hopefully this wont kill the chat area when hotswapping
+      if (render.toString() === "() => null") continue;
       owner.render = () => null;
       owner.forceUpdate(() => {
         owner.render = render;

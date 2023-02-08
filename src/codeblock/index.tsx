@@ -8,6 +8,7 @@ import Table from "./table";
 import Preview from "./preview";
 import { ModalRoot } from "../components";
 import { Spinner } from "../components";
+import { MODAL_CONTENT_HEIGHT, PREVIEW_HEIGHT } from "./constants";
 
 const { thin } = BdApi.Webpack.getModule(m => m.thin && m.none);
 
@@ -31,14 +32,14 @@ function CodeBlock({ content, lang, modal, fileName, loading = false }: { conten
 
   const downloadAction = useCallback(() => {
     if (loading) return;
-    (window as any).DiscordNative.fileManager.saveWithDialog(content, fileName());
+    window.DiscordNative.fileManager.saveWithDialog(content, fileName());
   }, [ content, lang, loading ]);
 
   const [ copied, setCopied ] = React.useState(false);
   const copyAction = useCallback(() => {
     if (loading) return;
     if (copied) return;
-    (window as any).DiscordNative.clipboard.copy(content);
+    window.DiscordNative.clipboard.copy(content);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [ content, copied, loading ]);
@@ -55,8 +56,10 @@ function CodeBlock({ content, lang, modal, fileName, loading = false }: { conten
   return (
     <div className={`ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`}>
       <Header angle={angle} collapsed={collapsed} setCollapsed={setCollapsed} aliases={aliases} language={language} isSVG={isSVG} showPreview={showPreview} setShowPreview={setShowPreview} copied={copied} downloadAction={downloadAction} copyAction={copyAction} enlargeAction={enlargeAction} modal={modal} />
-      <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height: modal ? 400 : height }}>
-        {loading ? <Spinner type={Spinner.Type.WANDERING_CUBES} /> : showPreview && isSVG ? <Preview content={content} height={modal ? 400 : 200} /> : <Table highlighted={highlighted} tableRef={tableRef} />}
+      <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height: height }}>
+        {loading && <Spinner type={Spinner.Type.WANDERING_CUBES} />}
+        {(!loading && showPreview && isSVG) && <Preview content={content} height={modal ? MODAL_CONTENT_HEIGHT : PREVIEW_HEIGHT} />}
+        {(!loading && !(showPreview && isSVG)) && <Table highlighted={highlighted} tableRef={tableRef} />}
       </ReactSpring.animated.div>
     </div>
   )

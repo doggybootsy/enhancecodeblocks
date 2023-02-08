@@ -22,8 +22,6 @@ export type AttachmentProps = {
 function Attachment({ attachment, renderAdjacentContent, onContextMenu, className }: AttachmentProps) {
   const content = useFetchContent(attachment.url);
 
-  const adjacentContent = useMemo(() => renderAdjacentContent(), [ renderAdjacentContent ]);
-
   const lang = useMemo(() => {
     const spl = attachment.filename.split(".");
     if (spl.length - 1) return spl.pop() as string;
@@ -33,7 +31,7 @@ function Attachment({ attachment, renderAdjacentContent, onContextMenu, classNam
   return (
     <div className={`ECBlock-file ${className}`}onContextMenu={onContextMenu}>
       <Codeblock content={content || ""} lang={lang} modal={false} fileName={() => attachment.filename} loading={typeof content !== "string"} />
-      {adjacentContent}
+      {renderAdjacentContent()}
     </div>
   );
 };

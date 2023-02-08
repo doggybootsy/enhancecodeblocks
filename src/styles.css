@@ -11,10 +11,10 @@
 }
 .ECBlock-file .ECBlock {
   /* so they wont be small */
-  width: 10000000px;
+  width: 100vw;
 }
 .ECBlock.ECBlock-modal {
-  width: clamp(50vw, 800px, 1000px);
+  width: clamp(50vw, 800px, 1200px);
 }
 .ECBlock.ECBlock-loading .ECBlock-wrapper {
   display: flex;

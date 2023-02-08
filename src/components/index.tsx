@@ -2,7 +2,7 @@ import React from "react";
 
 type Icon = React.ComponentClass<{ width: number, height: number }>;
 
-export function Grow({ width, height }: { width: number, height: number }) {
+export function Enlarge({ width, height }: { width: number, height: number }) {
   return (
     <svg aria-hidden="true" role="img" width={width} height={height} viewBox="0 0 16 16">
       <path fill="currentColor" d="M1.93956 14.6668H6.18203C6.51658 14.6668 6.7881 14.3953 6.7881 14.0607C6.7881 13.7262 6.51658 13.4547 6.18203 13.4547H3.40261L7.21658 9.64069C7.45325 9.40402 7.45325 9.02038 7.21658 8.78371C7.0984 8.66522 6.94325 8.60613 6.7881 8.60613C6.63294 8.60613 6.47779 8.66522 6.35961 8.78371L2.54563 12.5977V9.81826C2.54563 9.48372 2.27411 9.2122 1.93956 9.2122C1.60501 9.2122 1.3335 9.48372 1.3335 9.81826V14.0607C1.3335 14.3953 1.60501 14.6668 1.93956 14.6668Z" />
