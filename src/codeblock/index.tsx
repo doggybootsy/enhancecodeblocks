@@ -56,7 +56,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = false }: { conten
     <div className={`ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`}>
       <Header angle={angle} collapsed={collapsed} setCollapsed={setCollapsed} aliases={aliases} language={language} isSVG={isSVG} showPreview={showPreview} setShowPreview={setShowPreview} copied={copied} downloadAction={downloadAction} copyAction={copyAction} enlargeAction={enlargeAction} modal={modal} />
       <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height: modal ? 400 : height }}>
-        {loading ? <Spinner type={Spinner.Type.WANDERING_CUBES} /> : showPreview && isSVG ? <Preview content={content} height={modal ? 364 : 200} /> : <Table highlighted={highlighted} tableRef={tableRef} />}
+        {loading ? <Spinner type={Spinner.Type.WANDERING_CUBES} /> : showPreview && isSVG ? <Preview content={content} height={modal ? 400 : 200} /> : <Table highlighted={highlighted} tableRef={tableRef} />}
       </ReactSpring.animated.div>
     </div>
   )
