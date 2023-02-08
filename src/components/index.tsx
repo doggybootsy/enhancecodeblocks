@@ -23,5 +23,13 @@ export const Copy = BdApi.Webpack.getModule(m => m.toString().includes("21V7h6v5
 export const Tooltip = BdApi.Webpack.getModule(m => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()")) as React.ComponentClass<{
   text: React.ReactNode, 
   hideOnClick?: boolean, 
-  children: (props: any) => React.ReactNode
+  children: (props: {
+    "aria-label": string,
+    onBlur: () => void,
+    onClick: () => void,
+    onContextMenu: () => void,
+    onFocus: () => void,
+    onMouseEnter: () => void,
+    onMouseLeave: () => void,
+  }) => React.ReactNode
 }>;

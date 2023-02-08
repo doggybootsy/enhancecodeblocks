@@ -59,9 +59,6 @@ var styles_default, init_styles = __esm({
   /* so they wont be small */\r
   width: 100vw;\r
 }\r
-.ECBlock.ECBlock-modal {\r
-  width: clamp(50vw, 800px, 1200px);\r
-}\r
 .ECBlock.ECBlock-loading .ECBlock-wrapper {\r
   display: flex;\r
   align-items: center;\r
@@ -168,6 +165,7 @@ var require_highlight = __commonJS({
 // src/codeblock/constants.ts
 var init_constants = __esm({
   "src/codeblock/constants.ts"() {
+    "use strict";
   }
 });
 
@@ -224,6 +222,7 @@ function useSizing(collapsed, tableRef, modal, content, lang, showPreview) {
 }
 var import_react, import_highlight, import_react_spring, listFormat, createURL, init_hooks = __esm({
   "src/codeblock/hooks.ts"() {
+    "use strict";
     import_react = __toESM(require_react()), import_highlight = __toESM(require_highlight()), import_react_spring = __toESM(require_react_spring());
     init_constants();
     listFormat = new Intl.ListFormat();
@@ -240,6 +239,7 @@ function Enlarge({ width, height }) {
 }
 var import_react2, ModalRoot, Spinner, Arrow, Eye, Download, Copy, Tooltip, init_components = __esm({
   "src/components/index.tsx"() {
+    "use strict";
     import_react2 = __toESM(require_react());
     ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS), Arrow = BdApi.Webpack.getModule((m) => m.toString().includes("M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.")), Eye = BdApi.Webpack.getModule((m) => m.toString().includes("13.1046 10.8954 14 12 14Z")), Download = BdApi.Webpack.getModule((m) => m.toString().includes("20V18H6V20H18Z")), Copy = BdApi.Webpack.getModule((m) => m.toString().includes("21V7h6v5h5v9H8z")), Tooltip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"));
   }
@@ -255,6 +255,7 @@ function Header({ angle, collapsed, setCollapsed, aliases, language, isSVG, show
 }
 var import_react3, import_react_spring2, header_default, init_header = __esm({
   "src/codeblock/header.tsx"() {
+    "use strict";
     import_react3 = __toESM(require_react()), import_react_spring2 = __toESM(require_react_spring());
     init_components();
     header_default = (0, import_react3.memo)(Header);
@@ -269,6 +270,7 @@ function Code({ highlighted, tableRef }) {
 }
 var import_react4, table_default, init_table = __esm({
   "src/codeblock/table.tsx"() {
+    "use strict";
     import_react4 = __toESM(require_react());
     table_default = (0, import_react4.memo)(Code);
   }
@@ -281,6 +283,7 @@ function Preview({ content, height }) {
 }
 var import_react5, preview_default, init_preview = __esm({
   "src/codeblock/preview.tsx"() {
+    "use strict";
     import_react5 = __toESM(require_react());
     init_hooks();
     preview_default = (0, import_react5.memo)(Preview);
@@ -300,6 +303,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = !1 }) {
 }
 var import_react6, import_react_spring3, thin, openModal, codeblock_default, init_codeblock = __esm({
   "src/codeblock/index.tsx"() {
+    "use strict";
     import_react6 = __toESM(require_react()), import_react_spring3 = __toESM(require_react_spring());
     init_hooks();
     init_header();
@@ -328,6 +332,7 @@ function useFetchContent(url) {
 }
 var import_react7, cache, init_hooks2 = __esm({
   "src/attachment/hooks.ts"() {
+    "use strict";
     import_react7 = __toESM(require_react()), cache = /* @__PURE__ */ new Map();
   }
 });
@@ -342,6 +347,7 @@ function Attachment({ attachment, renderAdjacentContent, onContextMenu, classNam
 }
 var import_react8, attachment_default, init_attachment = __esm({
   "src/attachment/index.tsx"() {
+    "use strict";
     import_react8 = __toESM(require_react());
     init_hooks2();
     init_codeblock();
@@ -356,6 +362,7 @@ __export(src_exports, {
 });
 var import_react9, BdApi2, codeBlock, Message, messageListItem, ECBlocks, src_default, init_src = __esm({
   "src/index.tsx"() {
+    "use strict";
     import_react9 = __toESM(require_react());
     init_styles();
     init_codeblock();

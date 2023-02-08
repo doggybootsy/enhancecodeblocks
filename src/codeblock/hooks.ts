@@ -6,7 +6,7 @@ import ReactSpring from "react-spring";
 
 import { PREVIEW_HEIGHT, MODAL_CONTENT_HEIGHT, MAX_HEIGHT } from "./constants";
 
-const listFormat = new (Intl as any).ListFormat();
+const listFormat = new Intl.ListFormat();
 
 export function useLanguage(language: string): Language {
   return useMemo(() => {
