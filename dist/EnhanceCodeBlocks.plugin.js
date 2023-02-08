@@ -375,5 +375,5 @@ var import_react9, BdApi2, codeBlock, Message, messageListItem, ECBlocks, src_de
   }
 });
 
-// dummy.js
+// index.js
 module.exports = (init_src(), __toCommonJS(src_exports));

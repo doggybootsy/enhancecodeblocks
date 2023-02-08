@@ -2,9 +2,10 @@
   "name": "enhancecodeblocks",
   "version": "1.0.0",
   "description": "Enhances Discords Codeblocks",
-  "main": "index.js",
+  "main": "build.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node ./build.js"
   },
   "author": "Doggybootsy",
   "license": "MIT",
