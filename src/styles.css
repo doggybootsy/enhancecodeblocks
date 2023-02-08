@@ -1,0 +1,102 @@
+.ECBlock-file {
+  width: 100%;
+  display: flex;
+}
+.ECBlock {
+  background: var(--background-secondary-alt);
+  border: 1px solid var(--background-tertiary);
+  border-radius: 4px;
+  overflow: hidden;
+  color: var(--text-muted);
+}
+.ECBlock-file .ECBlock {
+  /* so they wont be small */
+  width: 10000000px;
+}
+.ECBlock.ECBlock-modal {
+  width: clamp(50vw, 800px, 1000px);
+}
+.ECBlock.ECBlock-loading .ECBlock-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ECBlock .ECBlock-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--background-tertiary);
+  align-items: center;
+  color: var(--text-normal);
+} 
+.ECBlock .ECBlock-title {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+} 
+.ECBlock .ECBlock-title > :not(:last-child) {
+  margin-right: 8px;
+} 
+.ECBlock .ECBlock-collapse {
+  cursor: pointer;
+  display: flex;
+} 
+.ECBlock .ECBlock-enlarge {
+  width: 22px;
+  justify-content: center;
+} 
+.ECBlock-collapsed .ECBlock-header {
+  border-bottom: 0 solid var(--background-tertiary);
+} 
+.ECBlock .ECBlock-actions {
+  display: flex;
+} 
+.ECBlock .ECBlock-actions > :not(:last-child) {
+  margin-right: 8px;
+} 
+.ECBlock .ECBlock-actions > div {
+  cursor: pointer;
+  color: var(--interactive-normal);  
+  display: flex;
+  align-items: center;
+} 
+.ECBlock.ECBlock-loading .ECBlock-actions > div {
+  color: var(--interactive-muted);
+  cursor: not-allowed;
+} 
+.ECBlock .ECBlock-actions > div:hover {
+  color: var(--interactive-hover);  
+}
+.ECBlock .ECBlock-actions > div:active,
+.ECBlock .ECBlock-actions .ECBlock-active {
+  color: var(--interactive-active);  
+}
+.ECBlock .ECBlock-actions > div.ECBlock-copied {
+  color: var(--status-positive);
+}
+.ECBlock .ECBlock-wrapper {
+  overflow: auto scroll;
+}
+.ECBlock .ECBlock-table {
+  font-size: 0.9rem;
+}
+.ECBlock .ECBlock-table tr > :first-child {
+  padding: 0 8px;
+  border-right: 1px solid var(--background-tertiary);
+  user-select: none;
+  text-align: center;
+  position: sticky;
+  left: 0;
+  background: var(--background-secondary-alt);
+}
+.ECBlock .ECBlock-table tr > :last-child {
+  padding: 0 8px;
+  white-space: pre;
+  user-select: text;
+}
+.ECBlock-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

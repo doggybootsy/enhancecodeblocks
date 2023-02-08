@@ -1,0 +1,17 @@
+{
+  "name": "enhancecodeblocks",
+  "version": "1.0.0",
+  "description": "Enhances Discords Codeblocks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Doggybootsy",
+  "license": "MIT",
+  "dependencies": {
+    "@react-spring/web": "^9.6.1",
+    "@types/betterdiscord": "github:zerthox/betterdiscord-types",
+    "@types/react": "^18.0.27",
+    "esbuild": "^0.17.6"
+  }
+}
