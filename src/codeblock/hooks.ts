@@ -1,3 +1,4 @@
+/// <reference path="../index.d.ts" />
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { Language } from "highlight.js";
 import hljs from "highlight.js";

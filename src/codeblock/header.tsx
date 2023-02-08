@@ -1,3 +1,4 @@
+/// <reference path="../index.d.ts" />
 import React, { memo } from "react";
 import ReactSpring from "react-spring";
 import type { SpringValue } from "@react-spring/web";

@@ -1,3 +1,4 @@
+/// <reference path="../index.d.ts" />
 import React, { memo, useMemo } from "react";
 import type { HighlightResult } from "highlight.js";
 
