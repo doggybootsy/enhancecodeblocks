@@ -32,3 +32,15 @@ export const Tooltip = BdApi.Webpack.getModule(m => m.prototype?.setDomElement &
     onMouseLeave: () => void,
   }) => React.ReactNode
 }>;
+
+export const Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: true }) as React.ComponentClass<{
+  children: React.ReactNode,
+  note?: React.ReactNode,
+  style?: React.CSSProperties,
+  className?: string,
+  onChange: (val: boolean) => void,
+  tooltipNote?: string,
+  hideBorder?: boolean,
+  disabled?: boolean,
+  value: boolean
+}>;

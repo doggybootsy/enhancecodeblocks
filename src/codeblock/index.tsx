@@ -9,6 +9,7 @@ import Preview from "./preview";
 import { ModalRoot } from "../components";
 import { Spinner } from "../components";
 import { MODAL_HEIGHT, PREVIEW_HEIGHT } from "./constants";
+import { getData } from "../data";
 
 const { thin } = BdApi.Webpack.getModule(m => m.thin && m.none);
 
@@ -17,9 +18,7 @@ const openModal = BdApi.Webpack.getModule(m => m?.toString?.().includes("onClose
 function CodeBlock({ content, lang, modal, fileName, loading = false }: { content: string, lang: string, modal: boolean, fileName: () => string, loading?: boolean }) {
   const tableRef = useRef<HTMLTableElement>(null);
   
-  // Second is default value (ignore first value!)
-  // This is for whenever i add settings and allow codeblocks to be collapsed by default
-  const [ collapsed, setCollapsed ] = useState<boolean>(modal ? false : false);
+  const [ collapsed, setCollapsed ] = useState<boolean>(modal ? false : getData("autoCollapse", false));
   
   const language = useLanguage(lang);
   const highlighted = useHighlighted(language, content);

@@ -5,6 +5,7 @@ import css from "./styles.css";
 
 import CodeBlock from "./codeblock";
 import Attachment, { AttachmentProps } from "./attachment";
+import Settings from "./settings";
 
 const BdApi = new window.BdApi("ECBlocks");
 
@@ -47,6 +48,9 @@ class ECBlocks implements Plugin {
     BdApi.DOM.removeStyle();
     this.forceUpdateMessages();
   };
+  getSettingsPanel(): JSX.Element {
+    return <Settings />
+  }
 };
 
 export default ECBlocks;

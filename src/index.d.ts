@@ -2,12 +2,12 @@ import "../typings/module";
 import "../typings/hljs";
 // Only type what i need
 type DiscordNative = {
-  fileManager: { saveWithDialog: (content: string, filename: string) => void }
-  clipboard: { copy: (content: string) => void }
+  readonly public fileManager: { readonly public saveWithDialog: (content: string, filename: string) => void }
+  readonly public clipboard: { readonly public copy: (content: string) => void }
 }
 
 declare global {
   interface Window {
-    DiscordNative: DiscordNative
+    readonly public DiscordNative: DiscordNative
   }
 }

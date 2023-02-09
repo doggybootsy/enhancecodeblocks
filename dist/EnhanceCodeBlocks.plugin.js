@@ -253,11 +253,11 @@ var import_react2, import_highlight, import_react_spring, listFormat, init_hooks
 function EnlargeIcon({ width, height }) {
   return import_react3.default.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 16 16" }, import_react3.default.createElement("path", { fill: "currentColor", d: "M1.93956 14.6668H6.18203C6.51658 14.6668 6.7881 14.3953 6.7881 14.0607C6.7881 13.7262 6.51658 13.4547 6.18203 13.4547H3.40261L7.21658 9.64069C7.45325 9.40402 7.45325 9.02038 7.21658 8.78371C7.0984 8.66522 6.94325 8.60613 6.7881 8.60613C6.63294 8.60613 6.47779 8.66522 6.35961 8.78371L2.54563 12.5977V9.81826C2.54563 9.48372 2.27411 9.2122 1.93956 9.2122C1.60501 9.2122 1.3335 9.48372 1.3335 9.81826V14.0607C1.3335 14.3953 1.60501 14.6668 1.93956 14.6668Z" }), import_react3.default.createElement("path", { fill: "currentColor", d: "M8.78374 7.21643C9.02041 7.4531 9.40405 7.4531 9.64072 7.21643L13.4547 3.40245V6.18188C13.4547 6.51643 13.7262 6.78794 14.0608 6.78794C14.3953 6.78794 14.6668 6.51643 14.6668 6.18188V1.93941C14.6668 1.60486 14.3953 1.33334 14.0608 1.33334L9.8183 1.33334C9.48375 1.33334 9.21223 1.60486 9.21223 1.93941C9.21223 2.27396 9.48375 2.54548 9.8183 2.54548H12.5977L8.78374 6.35945C8.54707 6.59612 8.54707 6.97976 8.78374 7.21643Z" }));
 }
-var import_react3, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, ModalRoot, Spinner, Tooltip, init_components = __esm({
+var import_react3, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, ModalRoot, Spinner, Tooltip, Switch, init_components = __esm({
   "src/components/index.tsx"() {
     "use strict";
     import_react3 = __toESM(require_react()), ArrowIcon = BdApi.Webpack.getModule((m) => m.toString().includes("M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.")), EyeIcon = BdApi.Webpack.getModule((m) => m.toString().includes("13.1046 10.8954 14 12 14Z")), DownloadIcon = BdApi.Webpack.getModule((m) => m.toString().includes("20V18H6V20H18Z")), CopyIcon = BdApi.Webpack.getModule((m) => m.toString().includes("21V7h6v5h5v9H8z"));
-    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS), Tooltip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"));
+    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS), Tooltip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()")), Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 });
   }
 });
 
@@ -306,21 +306,55 @@ var import_react6, preview_default, init_preview = __esm({
   }
 });
 
+// src/data/index.ts
+function useData(key, presetValue) {
+  let [state, setState] = (0, import_react7.useState)(() => getData(key, presetValue)), updateState = (0, import_react7.useCallback)((state2) => {
+    setState(state2), setData(key, state2);
+    let set = listeners.get(key);
+    set || (set = /* @__PURE__ */ new Set());
+    for (let listener of set)
+      listener();
+  }, [state]);
+  return (0, import_react7.useLayoutEffect)(() => {
+    let set = listeners.get(key);
+    set || listeners.set(key, set = /* @__PURE__ */ new Set());
+    function forceUpdate() {
+      setState(() => getData(key, presetValue));
+    }
+    return set.add(forceUpdate), () => void set?.delete(forceUpdate);
+  }, []), [
+    state,
+    updateState
+  ];
+}
+function getData(key, presetValue) {
+  return BdApi.Data.load("ECBlocks", key) ?? presetValue;
+}
+function setData(key, newValue) {
+  return BdApi.Data.save("ECBlocks", key, newValue);
+}
+var import_react7, listeners, init_data = __esm({
+  "src/data/index.ts"() {
+    "use strict";
+    import_react7 = __toESM(require_react()), listeners = /* @__PURE__ */ new Map();
+  }
+});
+
 // src/codeblock/index.tsx
 function CodeBlock({ content, lang, modal, fileName, loading = !1 }) {
-  let tableRef = (0, import_react7.useRef)(null), [collapsed, setCollapsed] = (0, import_react7.useState)(!1), language = useLanguage(lang), highlighted = useHighlighted(language, content), [showPreview, setShowPreview] = (0, import_react7.useState)(!1), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), aliases = useAlaises(language, lang), isSVG = (0, import_react7.useMemo)(() => lang === "svg", [lang]), downloadAction = (0, import_react7.useCallback)(() => {
+  let tableRef = (0, import_react8.useRef)(null), [collapsed, setCollapsed] = (0, import_react8.useState)(modal ? !1 : getData("autoCollapse", !1)), language = useLanguage(lang), highlighted = useHighlighted(language, content), [showPreview, setShowPreview] = (0, import_react8.useState)(!1), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), aliases = useAlaises(language, lang), isSVG = (0, import_react8.useMemo)(() => lang === "svg", [lang]), downloadAction = (0, import_react8.useCallback)(() => {
     loading || window.DiscordNative.fileManager.saveWithDialog(content, fileName());
-  }, [content, lang, loading]), [copied, setCopied] = import_react7.default.useState(!1), copyAction = (0, import_react7.useCallback)(() => {
+  }, [content, lang, loading]), [copied, setCopied] = import_react8.default.useState(!1), copyAction = (0, import_react8.useCallback)(() => {
     loading || copied || (window.DiscordNative.clipboard.copy(content), setCopied(!0), setTimeout(() => setCopied(!1), 2e3));
-  }, [content, copied, loading]), enlargeAction = (0, import_react7.useCallback)(() => {
-    loading || openModal((props) => import_react7.default.createElement(ModalRoot, { ...props, size: "large" }, import_react7.default.createElement(CodeBlock, { content, lang, modal: !0, fileName })));
+  }, [content, copied, loading]), enlargeAction = (0, import_react8.useCallback)(() => {
+    loading || openModal((props) => import_react8.default.createElement(ModalRoot, { ...props, size: "large" }, import_react8.default.createElement(CodeBlock, { content, lang, modal: !0, fileName })));
   }, [content, lang, loading]);
-  return import_react7.default.createElement("div", { className: `ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}` }, import_react7.default.createElement(header_default, { angle, collapsed, setCollapsed, aliases, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal }), import_react7.default.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && import_react7.default.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && import_react7.default.createElement(preview_default, { content, height: modal ? 400 : 200 }), !loading && !(showPreview && isSVG) && import_react7.default.createElement(table_default, { highlighted, tableRef })));
+  return import_react8.default.createElement("div", { className: `ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}` }, import_react8.default.createElement(header_default, { angle, collapsed, setCollapsed, aliases, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal }), import_react8.default.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && import_react8.default.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && import_react8.default.createElement(preview_default, { content, height: modal ? 400 : 200 }), !loading && !(showPreview && isSVG) && import_react8.default.createElement(table_default, { highlighted, tableRef })));
 }
-var import_react7, import_react_spring3, thin, openModal, codeblock_default, init_codeblock = __esm({
+var import_react8, import_react_spring3, thin, openModal, codeblock_default, init_codeblock = __esm({
   "src/codeblock/index.tsx"() {
     "use strict";
-    import_react7 = __toESM(require_react()), import_react_spring3 = __toESM(require_react_spring());
+    import_react8 = __toESM(require_react()), import_react_spring3 = __toESM(require_react_spring());
     init_hooks();
     init_header();
     init_table();
@@ -328,15 +362,16 @@ var import_react7, import_react_spring3, thin, openModal, codeblock_default, ini
     init_components();
     init_components();
     init_constants();
+    init_data();
     ({ thin } = BdApi.Webpack.getModule((m) => m.thin && m.none)), openModal = BdApi.Webpack.getModule((m) => m?.toString?.().includes("onCloseCallback") && m?.toString().includes("Layer"), { searchExports: !0 });
-    codeblock_default = (0, import_react7.memo)(CodeBlock);
+    codeblock_default = (0, import_react8.memo)(CodeBlock);
   }
 });
 
 // src/attachment/hooks.ts
 function useFetchContent(url) {
-  let refOriginalValue = (0, import_react8.useMemo)(() => cache.has(url) ? cache.get(url) : !1, []), body = import_react8.default.useRef(refOriginalValue), forceUpdate = useForceUpdate();
-  return (0, import_react8.useLayoutEffect)(() => {
+  let refOriginalValue = (0, import_react9.useMemo)(() => cache.has(url) ? cache.get(url) : !1, []), body = import_react9.default.useRef(refOriginalValue), forceUpdate = useForceUpdate();
+  return (0, import_react9.useLayoutEffect)(() => {
     if (body.current)
       return;
     let abortController = new AbortController();
@@ -346,10 +381,10 @@ function useFetchContent(url) {
     })(), () => abortController.abort();
   }, []), body.current;
 }
-var import_react8, cache, init_hooks2 = __esm({
+var import_react9, cache, init_hooks2 = __esm({
   "src/attachment/hooks.ts"() {
     "use strict";
-    import_react8 = __toESM(require_react());
+    import_react9 = __toESM(require_react());
     init_util();
     cache = /* @__PURE__ */ new Map();
   }
@@ -357,19 +392,41 @@ var import_react8, cache, init_hooks2 = __esm({
 
 // src/attachment/index.tsx
 function Attachment({ attachment, renderAdjacentContent, onContextMenu, className }) {
-  let content = useFetchContent(attachment.url), lang = (0, import_react9.useMemo)(() => {
+  let content = useFetchContent(attachment.url), lang = (0, import_react10.useMemo)(() => {
     let spl = attachment.filename.split(".");
     return spl.length - 1 ? spl.pop() : "";
   }, []);
-  return import_react9.default.createElement("div", { className: `ECBlock-file ${className}`, onContextMenu }, import_react9.default.createElement(codeblock_default, { content: content || "", lang, modal: !1, fileName: () => attachment.filename, loading: typeof content != "string" }), renderAdjacentContent());
+  return import_react10.default.createElement("div", { className: `ECBlock-file ${className}`, onContextMenu }, import_react10.default.createElement(codeblock_default, { content: content || "", lang, modal: !1, fileName: () => attachment.filename, loading: typeof content != "string" }), renderAdjacentContent());
 }
-var import_react9, attachment_default, init_attachment = __esm({
+var import_react10, attachment_default, init_attachment = __esm({
   "src/attachment/index.tsx"() {
     "use strict";
-    import_react9 = __toESM(require_react());
+    import_react10 = __toESM(require_react());
     init_hooks2();
     init_codeblock();
-    attachment_default = (0, import_react9.memo)(Attachment);
+    attachment_default = (0, import_react10.memo)(Attachment);
+  }
+});
+
+// src/settings/index.tsx
+function Settings() {
+  let [autoCollapse, setAutoCollapse] = useData("autoCollapse", !1);
+  return import_react11.default.createElement("div", null, import_react11.default.createElement(
+    Switch,
+    {
+      value: autoCollapse,
+      onChange: setAutoCollapse
+    },
+    "Auto Collapse"
+  ));
+}
+var import_react11, settings_default, init_settings = __esm({
+  "src/settings/index.tsx"() {
+    "use strict";
+    import_react11 = __toESM(require_react());
+    init_components();
+    init_data();
+    settings_default = (0, import_react11.memo)(Settings);
   }
 });
 
@@ -378,13 +435,14 @@ var src_exports = {};
 __export(src_exports, {
   default: () => src_default
 });
-var import_react10, BdApi2, codeBlock, Message, messageListItem, ECBlocks, src_default, init_src = __esm({
+var import_react12, BdApi2, codeBlock, Message, messageListItem, ECBlocks, src_default, init_src = __esm({
   "src/index.tsx"() {
     "use strict";
-    import_react10 = __toESM(require_react());
+    import_react12 = __toESM(require_react());
     init_styles();
     init_codeblock();
     init_attachment();
+    init_settings();
     BdApi2 = new window.BdApi("ECBlocks"), { codeBlock } = BdApi2.Webpack.getModule((m) => m.parse && m.parseTopic).defaultRules, Message = BdApi2.Webpack.getModule((m) => m.defaultProps?.renderEmbeds, { searchExports: !0 }), { messageListItem } = BdApi2.Webpack.getModule((m) => m.messageListItem), ECBlocks = class {
       forceUpdateMessages() {
         let nodes = document.querySelectorAll(`.${messageListItem}`), owners = Array.from(nodes, (node) => BdApi2.ReactUtils.getOwnerInstance(node)).filter((m) => m);
@@ -396,14 +454,17 @@ var import_react10, BdApi2, codeBlock, Message, messageListItem, ECBlocks, src_d
         }
       }
       start() {
-        BdApi2.Patcher.instead(codeBlock, "react", (_that, [props]) => import_react10.default.createElement(codeblock_default, { ...props, modal: !1, fileName: () => `codeblock-${Date.now()}.${props.lang || "txt"}` })), BdApi2.Patcher.after(Message.prototype, "renderAttachments", (that, props, attachments) => {
+        BdApi2.Patcher.instead(codeBlock, "react", (_that, [props]) => import_react12.default.createElement(codeblock_default, { ...props, modal: !1, fileName: () => `codeblock-${Date.now()}.${props.lang || "txt"}` })), BdApi2.Patcher.after(Message.prototype, "renderAttachments", (that, props, attachments) => {
           if (attachments)
             for (let attachment of attachments)
-              attachment.props.children.props.renderPlaintextFilePreview = (props2) => import_react10.default.createElement(attachment_default, { ...props2 });
+              attachment.props.children.props.renderPlaintextFilePreview = (props2) => import_react12.default.createElement(attachment_default, { ...props2 });
         }), BdApi2.DOM.addStyle(styles_default), this.forceUpdateMessages();
       }
       stop() {
         BdApi2.Patcher.unpatchAll(), BdApi2.DOM.removeStyle(), this.forceUpdateMessages();
+      }
+      getSettingsPanel() {
+        return import_react12.default.createElement(settings_default, null);
       }
     }, src_default = ECBlocks;
   }
