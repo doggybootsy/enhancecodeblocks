@@ -1,5 +1,8 @@
-import React, { useLayoutEffect, useMemo, useState } from "react";
+import React, { useLayoutEffect, useMemo } from "react";
 
+import { useForceUpdate } from "../util";
+
+// Maybe store in a window? For hotswapping / updates
 const cache = new Map<string, string>();
 export function useFetchContent(url: string) {
   const refOriginalValue = useMemo(() => {
@@ -10,7 +13,7 @@ export function useFetchContent(url: string) {
 
   const body = React.useRef<false | string>(refOriginalValue);
 
-  const [, forceUpdate ] = useState(Symbol());
+  const forceUpdate = useForceUpdate();
   
   useLayoutEffect(() => {
     if (body.current) return;
@@ -25,7 +28,7 @@ export function useFetchContent(url: string) {
       }
       else body.current = `Enhance Codeblocks FETCH ERROR: STATUS=${JSON.stringify(result.status)} OK=${JSON.stringify(result.ok)} URL=${JSON.stringify(result.url)}`;
 
-      forceUpdate(Symbol());
+      forceUpdate();
     })();
 
     return () => abortController.abort();

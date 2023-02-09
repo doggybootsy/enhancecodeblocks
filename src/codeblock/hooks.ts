@@ -4,7 +4,8 @@ import type { Language } from "highlight.js";
 import hljs from "highlight.js";
 import ReactSpring from "react-spring";
 
-import { PREVIEW_HEIGHT, MODAL_CONTENT_HEIGHT, MAX_HEIGHT } from "./constants";
+import { PREVIEW_HEIGHT, MODAL_HEIGHT, MAX_HEIGHT } from "./constants";
+import { createURL, useForceUpdate } from "../util";
 
 const listFormat = new Intl.ListFormat();
 
@@ -31,13 +32,8 @@ export function useHighlighted(language: Language, content: string) {
   }, [ content, language ]);
 };
 
-const createURL = (content: string) => {
-  // Add a 'xmlns' tag if it doesnt exist
-  const svg = content.includes("xmlns=") ? content : content.replace(/^(<svg) /, "$1 xmlns=\"http://www.w3.org/2000/svg\" ");
-  return URL.createObjectURL(new Blob([ svg ], { type: "image/svg+xml" }));
-};
 export function useSrc(content: string) {
-  const [, forceUpdate ] = useState(Symbol());
+  const forceUpdate = useForceUpdate();
 
   const src = useRef(createURL(content));
   
@@ -45,7 +41,7 @@ export function useSrc(content: string) {
   useLayoutEffect(() => {
     URL.revokeObjectURL(src.current);
     src.current = createURL(content);
-    forceUpdate(Symbol());
+    forceUpdate();
   }, [ content ]);
 
   return src.current;
@@ -69,7 +65,7 @@ export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTabl
   useLayoutEffect(() => {
     ref.current = false;
 
-    if (modal) setTableHeight(MODAL_CONTENT_HEIGHT);
+    if (modal) setTableHeight(MODAL_HEIGHT);
     else if (tableRef.current && tableRef.current.parentElement) {
       const scrollerHeight = Number(getComputedStyle(tableRef.current.parentElement, "::-webkit-scrollbar").height.replace("px", ""));
 

@@ -20,7 +20,7 @@ class ECBlocks implements Plugin {
     const nodes = document.querySelectorAll(`.${messageListItem}`) as NodeListOf<HTMLElement>;
 
     const owners = Array.from(nodes, (node) => BdApi.ReactUtils.getOwnerInstance(node)).filter(m => m) as React.Component<any, any, any>[];
-    
+
     for (const owner of new Set(owners)) {
       const { render } = owner;
       // Hopefully this wont kill the chat area when hotswapping
@@ -30,7 +30,7 @@ class ECBlocks implements Plugin {
         owner.render = render;
         owner.forceUpdate();
       });
-    }
+    };
   };
   start(): void {
     BdApi.Patcher.instead(codeBlock, "react", (_that, [ props ]) => <CodeBlock {...props as ({ content: string, lang: string })} modal={false} fileName={() => `codeblock-${Date.now()}.${(props as { lang: string }).lang || "txt"}`} />);
