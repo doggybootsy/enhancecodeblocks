@@ -7,8 +7,7 @@ A BetterDiscord plugin that aims to make Discords codeblocks better.
 * Download
 * Copy
 * Collapsability
-* Mild File Info
-
+* Change File type
 
 ## Codeblocks
 <img src="./previews/collection.png" />
@@ -18,3 +17,9 @@ A BetterDiscord plugin that aims to make Discords codeblocks better.
 <img src="./previews/modal-preview.png" />
 
 (SVG preview within the modal)
+## Change Language
+<img src="./previews/change-lang.png" />
+
+(Showing how the tsx alias will show typescript)
+
+Allows searching using language name and language aliases
