@@ -82,6 +82,7 @@ var styles_default, init_styles = __esm({
   display: flex;\r
   align-items: center;\r
   margin-right: 16px;\r
+  cursor: pointer;\r
 } \r
 .ECBlock .ECBlock-title > :not(:last-child) {\r
   margin-right: 8px;\r
@@ -199,14 +200,6 @@ function useLanguage(language) {
     return lang || import_highlight.default.getLanguage("txt");
   }, [language]);
 }
-function useAlaises(language, lang) {
-  return (0, import_react2.useMemo)(() => {
-    if (!language.aliases)
-      return `.${lang}`;
-    let langs = Array.from(/* @__PURE__ */ new Set([...language.aliases, lang]), (alias) => alias && `.${alias}`);
-    return listFormat.format(langs.filter(Boolean));
-  }, [language]);
-}
 function useHighlighted(language, _lang, content) {
   return (0, import_react2.useMemo)(() => {
     let lang = language.aliases?.[0] ? language.aliases[0] : language.name;
@@ -305,13 +298,13 @@ var import_react4, import_highlight2, SearchPopout, SearchItem, LANGUAGES, langu
 });
 
 // src/codeblock/header.tsx
-function Header({ angle, collapsed, setCollapsed, aliases, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang }) {
+function Header({ angle, collapsed, setCollapsed, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang }) {
   let [shouldShow, setShouldShow] = import_react5.default.useState(!1);
   return import_react5.default.createElement("div", { className: "ECBlock-header" }, import_react5.default.createElement("div", { className: "ECBlock-title" }, !modal && import_react5.default.createElement(import_react_spring2.default.animated.div, { style: {
     transform: angle.to({
       output: ["rotate(-90deg)", "rotate(0deg)"]
     })
-  } }, import_react5.default.createElement(Tooltip, { text: collapsed ? "Collapsed" : "Uncollapse", hideOnClick: !1 }, (props) => import_react5.default.createElement("div", { className: "ECBlock-collapse", ...props, onClick: () => setCollapsed(!collapsed) }, import_react5.default.createElement(ArrowIcon, { width: 22, height: 22 })))), import_react5.default.createElement(Tooltip, { text: aliases, hideOnClick: !1 }, (props) => import_react5.default.createElement(
+  } }, import_react5.default.createElement(Tooltip, { text: collapsed ? "Collapsed" : "Uncollapse", hideOnClick: !1 }, (props) => import_react5.default.createElement("div", { className: "ECBlock-collapse", ...props, onClick: () => setCollapsed(!collapsed) }, import_react5.default.createElement(ArrowIcon, { width: 22, height: 22 })))), import_react5.default.createElement(
     Popout,
     {
       renderPopout: () => import_react5.default.createElement(changeLang_default, { value: language.name, onChange: (value) => {
@@ -325,10 +318,10 @@ function Header({ angle, collapsed, setCollapsed, aliases, language, isSVG, show
       nudgeAlignIntoViewport: !0,
       onRequestClose: () => setShouldShow(!1)
     },
-    (popoutProps) => import_react5.default.createElement("div", { className: "ECBlock-lang", ...props, ...popoutProps, onClick: (event) => {
-      setShouldShow(!shouldShow), popoutProps.onClick(event);
+    (props) => import_react5.default.createElement("div", { className: "ECBlock-lang", ...props, onClick: (event) => {
+      setShouldShow(!shouldShow), props.onClick(event);
     } }, language.name)
-  ))), import_react5.default.createElement("div", { className: "ECBlock-actions" }, isSVG && import_react5.default.createElement(Tooltip, { text: "Preview", hideOnClick: !1 }, (props) => import_react5.default.createElement("div", { className: `ECBlock-previewButton${showPreview ? " ECBlock-active" : ""}`, ...props, onClick: () => setShowPreview(!showPreview) }, import_react5.default.createElement(EyeIcon, { width: 22, height: 22 }))), import_react5.default.createElement(Tooltip, { text: "Download", hideOnClick: !1 }, (props) => import_react5.default.createElement("div", { className: "ECBlock-downloadButton", ...props, onClick: downloadAction }, import_react5.default.createElement(DownloadIcon, { width: 22, height: 22 }))), import_react5.default.createElement(Tooltip, { text: copied ? "Copied" : "Copy", hideOnClick: !1 }, (props) => import_react5.default.createElement("div", { className: `ECBlock-copyButton${copied ? " ECBlock-copied" : ""}`, ...props, onClick: copyAction }, import_react5.default.createElement(CopyIcon, { width: 22, height: 22 }))), !modal && import_react5.default.createElement(Tooltip, { text: "Enlarge", hideOnClick: !1 }, (props) => import_react5.default.createElement("div", { className: "ECBlock-enlarge", ...props, onClick: enlargeAction }, import_react5.default.createElement(EnlargeIcon, { width: 16, height: 16 })))));
+  )), import_react5.default.createElement("div", { className: "ECBlock-actions" }, isSVG && import_react5.default.createElement(Tooltip, { text: "Preview", hideOnClick: !1 }, (props) => import_react5.default.createElement("div", { className: `ECBlock-previewButton${showPreview ? " ECBlock-active" : ""}`, ...props, onClick: () => setShowPreview(!showPreview) }, import_react5.default.createElement(EyeIcon, { width: 22, height: 22 }))), import_react5.default.createElement(Tooltip, { text: "Download", hideOnClick: !1 }, (props) => import_react5.default.createElement("div", { className: "ECBlock-downloadButton", ...props, onClick: downloadAction }, import_react5.default.createElement(DownloadIcon, { width: 22, height: 22 }))), import_react5.default.createElement(Tooltip, { text: copied ? "Copied" : "Copy", hideOnClick: !1 }, (props) => import_react5.default.createElement("div", { className: `ECBlock-copyButton${copied ? " ECBlock-copied" : ""}`, ...props, onClick: copyAction }, import_react5.default.createElement(CopyIcon, { width: 22, height: 22 }))), !modal && import_react5.default.createElement(Tooltip, { text: "Enlarge", hideOnClick: !1 }, (props) => import_react5.default.createElement("div", { className: "ECBlock-enlarge", ...props, onClick: enlargeAction }, import_react5.default.createElement(EnlargeIcon, { width: 16, height: 16 })))));
 }
 var import_react5, import_react_spring2, header_default, init_header = __esm({
   "src/codeblock/header.tsx"() {
@@ -404,14 +397,14 @@ var import_react8, listeners, init_data = __esm({
 
 // src/codeblock/index.tsx
 function CodeBlock({ content, lang, modal, fileName, loading = !1 }) {
-  let tableRef = (0, import_react9.useRef)(null), [_lang, setLang] = (0, import_react9.useState)(lang), [collapsed, setCollapsed] = (0, import_react9.useState)(modal ? !1 : getData("autoCollapse", !1)), language = useLanguage(_lang), highlighted = useHighlighted(language, _lang, content), [showPreview, setShowPreview] = (0, import_react9.useState)(!1), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), aliases = useAlaises(language, _lang), isSVG = (0, import_react9.useMemo)(() => lang === "svg", [lang]), downloadAction = (0, import_react9.useCallback)(() => {
-    loading || window.DiscordNative.fileManager.saveWithDialog(content, fileName());
+  let tableRef = (0, import_react9.useRef)(null), [_lang, setLang] = (0, import_react9.useState)(lang), [collapsed, setCollapsed] = (0, import_react9.useState)(modal ? !1 : getData("autoCollapse", !1)), language = useLanguage(_lang), highlighted = useHighlighted(language, _lang, content), [showPreview, setShowPreview] = (0, import_react9.useState)(!1), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), isSVG = (0, import_react9.useMemo)(() => lang === "svg", [lang]), downloadAction = (0, import_react9.useCallback)(() => {
+    loading || window.DiscordNative && window.DiscordNative.fileManager.saveWithDialog(content, fileName());
   }, [content, lang, loading]), [copied, setCopied] = import_react9.default.useState(!1), copyAction = (0, import_react9.useCallback)(() => {
-    loading || copied || (window.DiscordNative.clipboard.copy(content), setCopied(!0), setTimeout(() => setCopied(!1), 2e3));
+    loading || copied || (window.DiscordNative && window.DiscordNative.clipboard.copy(content), setCopied(!0), setTimeout(() => setCopied(!1), 2e3));
   }, [content, copied, loading]), enlargeAction = (0, import_react9.useCallback)(() => {
     loading || openModal(({ transitionState, onClose }) => import_react9.default.createElement(ModalRoot, { transitionState, onClose, size: "large" }, import_react9.default.createElement(CodeBlock, { content, lang, modal: !0, fileName })));
   }, [content, lang, loading]);
-  return import_react9.default.createElement("div", { className: `ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}` }, import_react9.default.createElement(header_default, { angle, collapsed, setCollapsed, aliases, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang }), import_react9.default.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && import_react9.default.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && import_react9.default.createElement(preview_default, { content, height: modal ? 400 : 200 }), !loading && !(showPreview && isSVG) && import_react9.default.createElement(table_default, { highlighted, tableRef })));
+  return import_react9.default.createElement("div", { className: `ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}` }, import_react9.default.createElement(header_default, { angle, collapsed, setCollapsed, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang }), import_react9.default.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && import_react9.default.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && import_react9.default.createElement(preview_default, { content, height: modal ? 400 : 200 }), !loading && !(showPreview && isSVG) && import_react9.default.createElement(table_default, { highlighted, tableRef })));
 }
 var import_react9, import_react_spring3, thin, openModal, codeblock_default, init_codeblock = __esm({
   "src/codeblock/index.tsx"() {

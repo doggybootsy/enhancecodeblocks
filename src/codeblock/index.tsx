@@ -2,7 +2,7 @@
 import React, { memo, useMemo, useState, useRef, useCallback } from "react";
 import ReactSpring from "react-spring";
 
-import { useLanguage, useAlaises, useHighlighted, useSizing } from "./hooks";
+import { useLanguage, useHighlighted, useSizing } from "./hooks";
 import Header from "./header";
 import Table from "./table";
 import Preview from "./preview";
@@ -32,20 +32,18 @@ function CodeBlock({ content, lang, modal, fileName, loading = false }: { conten
 
   const { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview);
 
-  const aliases = useAlaises(language, _lang);
-
   const isSVG = useMemo(() => lang === "svg", [ lang ]);
 
   const downloadAction = useCallback(() => {
     if (loading) return;
-    window.DiscordNative.fileManager.saveWithDialog(content, fileName());
+    if (window.DiscordNative) window.DiscordNative.fileManager.saveWithDialog(content, fileName());
   }, [ content, lang, loading ]);
 
   const [ copied, setCopied ] = React.useState(false);
   const copyAction = useCallback(() => {
     if (loading) return;
     if (copied) return;
-    window.DiscordNative.clipboard.copy(content);
+    if (window.DiscordNative) window.DiscordNative.clipboard.copy(content);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [ content, copied, loading ]);
@@ -61,7 +59,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = false }: { conten
 
   return (
     <div className={`ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`}>
-      <Header angle={angle} collapsed={collapsed} setCollapsed={setCollapsed} aliases={aliases} language={language} isSVG={isSVG} showPreview={showPreview} setShowPreview={setShowPreview} copied={copied} downloadAction={downloadAction} copyAction={copyAction} enlargeAction={enlargeAction} modal={modal} setLang={setLang} />
+      <Header angle={angle} collapsed={collapsed} setCollapsed={setCollapsed} language={language} isSVG={isSVG} showPreview={showPreview} setShowPreview={setShowPreview} copied={copied} downloadAction={downloadAction} copyAction={copyAction} enlargeAction={enlargeAction} modal={modal} setLang={setLang} />
       <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height }}>
         {loading && <Spinner type={Spinner.Type.WANDERING_CUBES} />}
         {(!loading && showPreview && isSVG) && <Preview content={content} height={modal ? MODAL_HEIGHT : PREVIEW_HEIGHT} />}

@@ -17,14 +17,6 @@ export function useLanguage(language: string): Language {
   }, [ language ]);
 };
 
-export function useAlaises(language: Language, lang: string) {
-  return useMemo(() => {
-    if (!language.aliases) return `.${lang}`;
-    const langs = Array.from(new Set([ ...language.aliases, lang ]), (alias) => alias ? `.${alias}` : alias);
-    return listFormat.format(langs.filter(Boolean));
-  }, [ language ]);
-};
-
 export function useHighlighted(language: Language, _lang: string, content: string) {
   return useMemo(() => {
     const lang = (language.aliases?.[0] ? language.aliases[0] : language.name) as string;
