@@ -1,14 +1,16 @@
 /// <reference path="../index.d.ts" />
-import React, { memo, useLayoutEffect } from "react";
+import React, { memo } from "react";
 import ReactSpring from "react-spring";
 import type { SpringValue } from "@react-spring/web";
 import type { Language } from "highlight.js";
 
 import { Tooltip, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, EnlargeIcon, Popout } from "../components";
 import ChangeLang from "./changeLang";
+import { useMessages } from "./hooks";
 
 function Header({ angle, collapsed, setCollapsed, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, language: Language, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void }) {
   const [ shouldShow, setShouldShow ] = React.useState(false);
+  const messages = useMessages();
 
   return (
     <div className="ECBlock-header">
@@ -59,21 +61,21 @@ function Header({ angle, collapsed, setCollapsed, language, isSVG, showPreview, 
             )}
           </Tooltip>
         )}
-        <Tooltip text="Download" hideOnClick={false}>
+        <Tooltip text={messages.DOWNLOAD} hideOnClick={false}>
           {(props) => (
             <div className="ECBlock-downloadButton" {...props} onClick={downloadAction}>
               <DownloadIcon width={22} height={22} />
             </div>
           )}
         </Tooltip>
-        <Tooltip text={copied ? "Copied" : "Copy"} hideOnClick={false}>
+        <Tooltip text={copied ? messages.COPIED : messages.COPY} hideOnClick={false}>
           {(props) => (
             <div className={`ECBlock-copyButton${copied ? " ECBlock-copied" : ""}`} {...props} onClick={copyAction}>
               <CopyIcon width={22} height={22} />
             </div>
           )}
         </Tooltip>
-        {!modal && <Tooltip text="Enlarge" hideOnClick={false}>
+        {!modal && <Tooltip text={messages.PREVIEW_WHOLE_FILE} hideOnClick={false}>
           {(props) => (
             <div className="ECBlock-enlarge" {...props} onClick={enlargeAction}>
               <EnlargeIcon width={16} height={16} />

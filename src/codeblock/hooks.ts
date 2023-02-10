@@ -1,13 +1,17 @@
 /// <reference path="../index.d.ts" />
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import type { Language } from "highlight.js";
-import hljs from "highlight.js";
+import hljs, { Language } from "highlight.js";
 import ReactSpring from "react-spring";
 
 import { PREVIEW_HEIGHT, MODAL_HEIGHT, MAX_HEIGHT } from "./constants";
 import { createURL, useForceUpdate } from "../util";
 
-const listFormat = new Intl.ListFormat();
+const intl = BdApi.Webpack.getModule(m => m.Messages);
+export function useMessages(): Record<string, string> {
+  const ref = useRef(intl._fetchMessages(intl.getLocale()));
+
+  return ref.current;
+};
 
 export function useLanguage(language: string): Language {
   return useMemo(() => {

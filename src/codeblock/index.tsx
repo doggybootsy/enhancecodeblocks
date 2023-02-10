@@ -32,7 +32,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = false }: { conten
 
   const { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview);
 
-  const isSVG = useMemo(() => lang === "svg", [ lang ]);
+  const isSVG = useMemo(() => lang === "svg" && language.name === "HTML, XML", [ lang, language ]);
 
   const downloadAction = useCallback(() => {
     if (loading) return;
@@ -58,7 +58,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = false }: { conten
   }, [ content, lang, loading ]);
 
   return (
-    <div className={`ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`}>
+    <div className={`ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`} data-language={language.name}>
       <Header angle={angle} collapsed={collapsed} setCollapsed={setCollapsed} language={language} isSVG={isSVG} showPreview={showPreview} setShowPreview={setShowPreview} copied={copied} downloadAction={downloadAction} copyAction={copyAction} enlargeAction={enlargeAction} modal={modal} setLang={setLang} />
       <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height }}>
         {loading && <Spinner type={Spinner.Type.WANDERING_CUBES} />}
