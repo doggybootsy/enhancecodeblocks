@@ -1,7 +1,7 @@
 {
   "name": "enhancecodeblocks",
   "version": "1.0.0",
-  "description": "Enhances Discords Codeblocks",
+  "description": "Enhances Discords Codeblocks & Text File Attachments",
   "main": "build.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

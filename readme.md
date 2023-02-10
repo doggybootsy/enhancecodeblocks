@@ -1,5 +1,5 @@
 # Enhance CodeBlocks
-A BetterDiscord plugin that aims to make Discords codeblocks better.
+A BetterDiscord plugin that aims to make Discords codeblocks & text file attachments better.
 
 ## Features
 * SVG Preview

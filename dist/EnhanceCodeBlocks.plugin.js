@@ -1,6 +1,6 @@
 /**
  * @name enhancecodeblocks
- * @description Enhances Discords Codeblocks
+ * @description Enhances Discords Codeblocks & Text File Attachments
  * @version 1.0.0
  * @author Doggybootsy
  */
