@@ -12,6 +12,8 @@ function shim(id, contents) {
   }
 };
 
+const exportModule = (module) => `const module = ${module};Object.assign(exports, module);if (!module.default) Object.assign(exports, { default: module });`;
+
 (async () => {
   await esbuild.build({
     entryPoints: [ join(__dirname, "index.js") ],
@@ -23,9 +25,9 @@ function shim(id, contents) {
     loader: { ".css": "text" },
     ignoreAnnotations: true,
     plugins: [
-      shim("react", "Object.assign(exports, BdApi.React, { default: BdApi.React });"),
-      shim("react-spring", "const rs = BdApi.Webpack.getModule(m => m.useSpring);Object.assign(exports, rs, { default: rs });"),
-      shim("highlight.js", "const hljs = BdApi.Webpack.getModule(m => m.highlight);Object.assign(exports, hljs, { default: hljs });")
+      shim("react", exportModule("BdApi.React")),
+      shim("react-spring", exportModule("BdApi.Webpack.getModule(m => m.useSpring)")),
+      shim("highlight.js", exportModule("BdApi.Webpack.getModule(m => m.highlight)"))
     ]
   });
   const pkg = require("./package.json");

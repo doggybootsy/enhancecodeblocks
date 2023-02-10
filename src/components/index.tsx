@@ -15,7 +15,12 @@ export function EnlargeIcon({ width, height }: { width: number, height: number }
   )
 };
 
-export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("ENTERING"), {searchExports: true}) as React.ComponentClass<any>;
+export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("ENTERING"), { searchExports: true  }) as React.ComponentClass<{
+  onClose: () => void,
+  transitionState: null | number,
+  children: React.ReactNode,
+  size?: string
+}>;
 
 export const Spinner = BdApi.Webpack.getModule(m => m.Type?.PULSING_ELLIPSIS) as React.ComponentClass<{ type: string }> & { Type: { WANDERING_CUBES: "string" }};
 
@@ -44,3 +49,21 @@ export const Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".t
   disabled?: boolean,
   value: boolean
 }>;
+
+export const Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout")) as React.ComponentClass<{
+  children: (props: {
+    "aria-controls": undefined,
+    "aria-expanded": false,
+    onClick: React.MouseEventHandler<HTMLDivElement>,
+    onKeyDown: React.KeyboardEventHandler<HTMLDivElement>,
+    onMouseDown: React.MouseEventHandler<HTMLDivElement>
+  }) => React.ReactNode,
+  shouldShow: boolean,
+  position: string,
+  align: string,
+  renderPopout: (props: any) => React.ReactNode,
+  spacing: number,
+  autoInvert: boolean,
+  nudgeAlignIntoViewport: boolean,
+  onRequestClose: () => void
+}>

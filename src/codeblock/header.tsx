@@ -1,12 +1,15 @@
 /// <reference path="../index.d.ts" />
-import React, { memo } from "react";
+import React, { memo, useLayoutEffect } from "react";
 import ReactSpring from "react-spring";
 import type { SpringValue } from "@react-spring/web";
 import type { Language } from "highlight.js";
 
-import { Tooltip, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, EnlargeIcon } from "../components";
+import { Tooltip, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, EnlargeIcon, Popout } from "../components";
+import ChangeLang from "./changeLang";
 
-function Header({ angle, collapsed, setCollapsed, aliases, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, aliases: string, language: Language, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean }) {
+function Header({ angle, collapsed, setCollapsed, aliases, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, aliases: string, language: Language, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void }) {
+  const [ shouldShow, setShouldShow ] = React.useState(false);
+
   return (
     <div className="ECBlock-header">
       <div className="ECBlock-title">
@@ -25,7 +28,28 @@ function Header({ angle, collapsed, setCollapsed, aliases, language, isSVG, show
         </ReactSpring.animated.div>}
         <Tooltip text={aliases} hideOnClick={false}>
           {(props) => (
-            <div className="ECBlock-lang" {...props}>{language.name}</div>
+            <Popout
+              renderPopout={() => (
+                <ChangeLang value={language.name as string} onChange={(value) => {
+                  setShouldShow(false);
+                  setLang(value);
+                }} />
+              )}
+              shouldShow={shouldShow}
+              position="right"
+              align="top"
+              spacing={16}
+              autoInvert={true}
+              nudgeAlignIntoViewport={true}
+              onRequestClose={() => setShouldShow(false)}
+            >
+              {(popoutProps) => (
+                <div className="ECBlock-lang" {...props} {...popoutProps} onClick={(event) => {
+                  setShouldShow(!shouldShow);
+                  popoutProps.onClick(event);
+                }}>{language.name}</div>
+              )}
+            </Popout>
           )}
         </Tooltip>
       </div>

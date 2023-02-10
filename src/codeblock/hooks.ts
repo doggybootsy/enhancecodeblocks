@@ -11,7 +11,7 @@ const listFormat = new Intl.ListFormat();
 
 export function useLanguage(language: string): Language {
   return useMemo(() => {
-    const lang = hljs.getLanguage(language);
+    const lang = hljs.getLanguage(language);    
     if (lang) return lang;
     return hljs.getLanguage("txt") as Language;
   }, [ language ]);
@@ -25,10 +25,11 @@ export function useAlaises(language: Language, lang: string) {
   }, [ language ]);
 };
 
-export function useHighlighted(language: Language, content: string) {
+export function useHighlighted(language: Language, _lang: string, content: string) {
   return useMemo(() => {
-    const lang = language.aliases?.[0] ? language.aliases[0] : language.name;
-    return hljs.highlight(lang as string, content);
+    const lang = (language.aliases?.[0] ? language.aliases[0] : language.name) as string;
+    if (hljs.getLanguage(lang)) return hljs.highlight(lang, content);
+    return hljs.highlight(_lang, content);
   }, [ content, language ]);
 };
 
@@ -69,13 +70,14 @@ export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTabl
     else if (tableRef.current && tableRef.current.parentElement) {
       const scrollerHeight = Number(getComputedStyle(tableRef.current.parentElement, "::-webkit-scrollbar").height.replace("px", ""));
 
-      tableRef.current
-
       tableRef.current.parentElement.scroll({ left: 10000 });
       const add = tableRef.current.parentElement.scrollLeft !== 0;
       tableRef.current.parentElement.scroll({ left: 0 });
 
-      setTableHeight(Math.min(add ? scrollerHeight + tableRef.current.offsetHeight : tableRef.current.offsetHeight, MAX_HEIGHT));
+      setTableHeight(
+        // Max Height of 300px
+        Math.min(add ? scrollerHeight + tableRef.current.offsetHeight : tableRef.current.offsetHeight, MAX_HEIGHT)
+      );
     }
     else setTableHeight(PREVIEW_HEIGHT);
     

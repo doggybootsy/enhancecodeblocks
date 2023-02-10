@@ -1,19 +1,23 @@
 import { useCallback, useLayoutEffect, useState } from "react";
 
+type settings = {
+  autoCollapse: boolean
+};
+
 const listeners = new Map<string, Set<() => void>>();
-export function useData<type extends any>(key: string, presetValue: type): [
-  type,
-  (value: type) => void
+export function useData<key extends keyof settings>(key: key, presetValue: settings[key]): [
+  settings[key],
+  (value: settings[key]) => void
 ] {
   const [ state, setState ] = useState(() => getData(key, presetValue));
 
-  const updateState = useCallback((state: type) => {
+  const updateState = useCallback((state: settings[key]) => {
     setState(state);
     setData(key, state);
 
     let set = listeners.get(key);
     if (!set) set = new Set();
-    
+
     for (const listener of set) listener();
   }, [ state ]);
 
@@ -22,7 +26,7 @@ export function useData<type extends any>(key: string, presetValue: type): [
     if (!set) listeners.set(key, set = new Set());
 
     function forceUpdate() {
-      setState(() => getData(key, presetValue))
+      setState(() => getData(key, presetValue));
     };
     
     set.add(forceUpdate);
@@ -32,13 +36,13 @@ export function useData<type extends any>(key: string, presetValue: type): [
   return [
     state, 
     updateState
-  ]
+  ];
 }
 
-export function getData<type extends any>(key: string, presetValue: type): type {
+export function getData<key extends keyof settings>(key: key, presetValue: settings[key]): settings[key] {
   return BdApi.Data.load("ECBlocks", key) ?? presetValue;
 };
 
-export function setData(key: string, newValue: any) {
+export function setData<key extends keyof settings>(key: key, newValue: settings[key]) {
   return BdApi.Data.save("ECBlocks", key, newValue);
 };
