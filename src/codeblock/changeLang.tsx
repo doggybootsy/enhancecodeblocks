@@ -16,7 +16,6 @@ const LANGUAGES = hljs.listLanguages().map(name => {
   }
 });
 
-
 function getContent(searchValue: string) {
   return LANGUAGES.map(({ value, aliases, lang }) => ({
     component: (

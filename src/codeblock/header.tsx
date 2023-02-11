@@ -2,13 +2,12 @@
 import React, { memo } from "react";
 import ReactSpring from "react-spring";
 import type { SpringValue } from "@react-spring/web";
-import type { Language } from "highlight.js";
 
 import { Tooltip, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, EnlargeIcon, Popout } from "../components";
 import ChangeLang from "./changeLang";
 import { useMessages } from "./hooks";
 
-function Header({ angle, collapsed, setCollapsed, language, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, language: Language, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void }) {
+function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, languageName: string, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void }) {
   const [ shouldShow, setShouldShow ] = React.useState(false);
   const messages = useMessages();
 
@@ -30,7 +29,7 @@ function Header({ angle, collapsed, setCollapsed, language, isSVG, showPreview, 
         </ReactSpring.animated.div>}
         <Popout
           renderPopout={() => (
-            <ChangeLang value={language.name as string} onChange={(value) => {
+            <ChangeLang value={languageName} onChange={(value) => {
               setShouldShow(false);
               setLang(value);
             }} />
@@ -47,7 +46,7 @@ function Header({ angle, collapsed, setCollapsed, language, isSVG, showPreview, 
             <div className="ECBlock-lang" {...props} onClick={(event) => {
               setShouldShow(!shouldShow);
               props.onClick(event);
-            }}>{language.name}</div>
+            }}>{languageName}</div>
           )}
         </Popout>
       </div>
