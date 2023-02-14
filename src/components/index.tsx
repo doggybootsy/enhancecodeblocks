@@ -23,7 +23,8 @@ export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("
   size?: string
 }>;
 
-export const Spinner = BdApi.Webpack.getModule(m => m.Type?.PULSING_ELLIPSIS) as React.ComponentClass<{ type: string }> & { Type: { WANDERING_CUBES: "string" }};
+export const Spinner = BdApi.Webpack.getModule(m => m.Type?.PULSING_ELLIPSIS, { searchExports: true }) as React.ComponentClass<{ type: string }> & { Type: { WANDERING_CUBES: "string" }};
+
 
 export const Tooltip = BdApi.Webpack.getModule(m => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()")) as React.ComponentClass<{
   text: React.ReactNode, 

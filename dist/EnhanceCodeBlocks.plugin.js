@@ -260,7 +260,7 @@ var import_react3, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, ModalRoot, Spinne
   "src/components/index.tsx"() {
     "use strict";
     import_react3 = __toESM(require_react()), ArrowIcon = BdApi.Webpack.getModule((m) => m.toString().includes("M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.")), EyeIcon = BdApi.Webpack.getModule((m) => m.toString().includes("13.1046 10.8954 14 12 14Z")), DownloadIcon = BdApi.Webpack.getModule((m) => m.toString().includes("20V18H6V20H18Z")), CopyIcon = BdApi.Webpack.getModule((m) => m.toString().includes("21V7h6v5h5v9H8z"));
-    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS), Tooltip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()")), Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"));
+    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), Tooltip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()")), Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"));
   }
 });
 
