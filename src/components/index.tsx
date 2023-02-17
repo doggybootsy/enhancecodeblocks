@@ -25,7 +25,6 @@ export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("
 
 export const Spinner = BdApi.Webpack.getModule(m => m.Type?.PULSING_ELLIPSIS, { searchExports: true }) as React.ComponentClass<{ type: string }> & { Type: { WANDERING_CUBES: "string" }};
 
-
 export const Tooltip = BdApi.Webpack.getModule(m => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()")) as React.ComponentClass<{
   text: React.ReactNode, 
   hideOnClick?: boolean, 
@@ -68,4 +67,25 @@ export const Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toStri
   autoInvert: boolean,
   nudgeAlignIntoViewport: boolean,
   onRequestClose: () => void
-}>
+}>;
+
+type boundaryProps = { fallback?: React.ReactNode, children: React.ReactNode }
+
+export class ErrorBoundary extends React.Component<
+  boundaryProps,
+  { hasError: boolean }
+> {
+  constructor(props: boundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  };
+
+  componentDidCatch() {    
+    this.setState({ hasError: true });
+  };
+
+  render() {
+    if (this.state.hasError) return this.props.fallback ?? <div className="react-error">There was an unexpected Error.</div>;  
+    return this.props.children; 
+  };
+}

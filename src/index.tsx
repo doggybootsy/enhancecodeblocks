@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { Plugin } from "betterdiscord";
 
 import css from "./styles.css";
@@ -6,6 +6,7 @@ import css from "./styles.css";
 import CodeBlock from "./codeblock";
 import Attachment, { AttachmentProps } from "./attachment";
 import Settings from "./settings";
+import { ErrorBoundary } from "./components";
 
 const BdApi = new window.BdApi("ECBlocks");
 
@@ -34,11 +35,22 @@ class ECBlocks implements Plugin {
     };
   };
   start(): void {
-    BdApi.Patcher.instead(codeBlock, "react", (_that, [ props ]) => <CodeBlock {...props as ({ content: string, lang: string })} modal={false} fileName={() => `codeblock-${Date.now()}.${(props as { lang: string }).lang || "txt"}`} />);
+    BdApi.Patcher.after(codeBlock, "react", (_that, [ props ], res) => (
+      <ErrorBoundary fallback={res}>
+        <CodeBlock {...props as ({ content: string, lang: string })} modal={false} fileName={() => `codeblock-${Date.now()}.${(props as { lang: string }).lang || "txt"}`} />
+      </ErrorBoundary>
+    ));
     BdApi.Patcher.after(Message.prototype, "renderAttachments", (that, props, attachments: Array<DiscordAttachment> | false) => {
       if (!attachments) return;
-      for (const attachment of attachments)
-        attachment.props.children.props.renderPlaintextFilePreview = (props) => <Attachment {...props} />;
+      for (const attachment of attachments) {
+        const { renderPlaintextFilePreview } = attachment.props.children.props;
+        
+        attachment.props.children.props.renderPlaintextFilePreview = (props) => (
+          <ErrorBoundary fallback={renderPlaintextFilePreview.apply(attachment.props.children.props, [ props ])}>
+            <Attachment {...props} />
+          </ErrorBoundary>
+        );
+      }
     });
     BdApi.DOM.addStyle(css);
     this.forceUpdateMessages();
