@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.1
+ * @version 1.0.2
  * @author Doggybootsy
  */
 "use strict";
@@ -52,6 +52,8 @@ var styles_default, init_styles = __esm({
 .ECBlock-file {\r
   width: 100%;\r
   display: flex;\r
+  padding-right: 32px;\r
+  box-sizing: border-box;\r
 }\r
 .ECBlock {\r
   background: var(--background-secondary-alt);\r
@@ -301,7 +303,7 @@ var import_react4, import_highlight2, SearchPopout, SearchItem, languageSelector
     "use strict";
     import_react4 = __toESM(require_react()), import_highlight2 = __toESM(require_highlight());
     init_hooks();
-    SearchPopout = BdApi.Webpack.getModule((m) => m.toString?.().includes(".Messages.AUTOCOMPLETE_NO_RESULTS_HEADER"), { searchExports: !0 }), SearchItem = BdApi.Webpack.getModule((e, m) => e.Checkbox && e.Checkmark, { searchExports: !0 }), { languageSelector } = BdApi.Webpack.getModule((m) => m.languageSelector), LANGUAGES = import_highlight2.default.listLanguages().map((name) => {
+    SearchPopout = BdApi.Webpack.getModule((m) => m.toString?.().includes(".Messages.AUTOCOMPLETE_NO_RESULTS_HEADER"), { searchExports: !0 }), SearchItem = BdApi.Webpack.getModule((m) => m.Checkbox && m.Checkmark, { searchExports: !0 }), { languageSelector } = BdApi.Webpack.getModule((m) => m.languageSelector), LANGUAGES = import_highlight2.default.listLanguages().map((name) => {
       let lang = import_highlight2.default.getLanguage(name);
       return {
         lang,
@@ -507,7 +509,7 @@ var src_exports = {};
 __export(src_exports, {
   default: () => src_default
 });
-var import_react13, BdApi2, codeBlock, Message, messageListItem, ECBlocks, src_default, init_src = __esm({
+var import_react13, BdApi2, codeBlock, MessageAttachment, messageListItem, ECBlocks, src_default, init_src = __esm({
   "src/index.tsx"() {
     "use strict";
     import_react13 = __toESM(require_react());
@@ -516,7 +518,7 @@ var import_react13, BdApi2, codeBlock, Message, messageListItem, ECBlocks, src_d
     init_attachment();
     init_settings();
     init_components();
-    BdApi2 = new window.BdApi("ECBlocks"), { codeBlock } = BdApi2.Webpack.getModule((m) => m.parse && m.parseTopic).defaultRules, Message = BdApi2.Webpack.getModule((m) => m.defaultProps?.renderEmbeds, { searchExports: !0 }), { messageListItem } = BdApi2.Webpack.getModule((m) => m.messageListItem), ECBlocks = class {
+    BdApi2 = new window.BdApi("ECBlocks"), { codeBlock } = BdApi2.Webpack.getModule((m) => m.parse && m.parseTopic).defaultRules, MessageAttachment = BdApi2.Webpack.getModule((m) => m.defaultProps?.renderEmbeds, { searchExports: !0 }), { messageListItem } = BdApi2.Webpack.getModule((m) => m.messageListItem), ECBlocks = class {
       forceUpdateMessages() {
         let nodes = document.querySelectorAll(`.${messageListItem}`), owners = Array.from(nodes, (node) => BdApi2.ReactUtils.getOwnerInstance(node)).filter((m) => m);
         for (let owner of new Set(owners)) {
@@ -527,11 +529,11 @@ var import_react13, BdApi2, codeBlock, Message, messageListItem, ECBlocks, src_d
         }
       }
       start() {
-        BdApi2.Patcher.after(codeBlock, "react", (_that, [props], res) => import_react13.default.createElement(ErrorBoundary, { fallback: res }, import_react13.default.createElement(codeblock_default, { ...props, modal: !1, fileName: () => `codeblock-${Date.now()}.${props.lang || "txt"}` }))), BdApi2.Patcher.after(Message.prototype, "renderAttachments", (that, props, attachments) => {
-          if (attachments)
-            for (let attachment of attachments) {
-              let { renderPlaintextFilePreview } = attachment.props.children.props;
-              attachment.props.children.props.renderPlaintextFilePreview = (props2) => import_react13.default.createElement(ErrorBoundary, { fallback: renderPlaintextFilePreview.apply(attachment.props.children.props, [props2]) }, import_react13.default.createElement(attachment_default, { ...props2 }));
+        BdApi2.Patcher.after(codeBlock, "react", (_that, [props], res) => import_react13.default.createElement(ErrorBoundary, { fallback: res }, import_react13.default.createElement(codeblock_default, { ...props, modal: !1, fileName: () => `codeblock-${Date.now()}.${props.lang || "txt"}` }))), BdApi2.Patcher.after(MessageAttachment.prototype, "renderAttachments", (that, props, res) => {
+          if (res)
+            for (let attachment of res.props.attachments) {
+              let { renderPlaintextFilePreview } = attachment;
+              attachment.renderPlaintextFilePreview = (props2) => import_react13.default.createElement(ErrorBoundary, { fallback: renderPlaintextFilePreview.apply(attachment, [props2]) }, import_react13.default.createElement(attachment_default, { ...props2 }));
             }
         }), BdApi2.DOM.addStyle(styles_default), this.forceUpdateMessages();
       }

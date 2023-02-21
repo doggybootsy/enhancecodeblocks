@@ -4,6 +4,8 @@
 .ECBlock-file {
   width: 100%;
   display: flex;
+  padding-right: 32px;
+  box-sizing: border-box;
 }
 .ECBlock {
   background: var(--background-secondary-alt);

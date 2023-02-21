@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import type { Plugin } from "betterdiscord";
 
 import css from "./styles.css";
@@ -11,11 +11,11 @@ import { ErrorBoundary } from "./components";
 const BdApi = new window.BdApi("ECBlocks");
 
 const { codeBlock } = BdApi.Webpack.getModule(m => m.parse && m.parseTopic).defaultRules;
-const Message = BdApi.Webpack.getModule(m => m.defaultProps?.renderEmbeds, { searchExports: true });
+const MessageAttachment = BdApi.Webpack.getModule(m => m.defaultProps?.renderEmbeds, { searchExports: true });
 
 const { messageListItem } = BdApi.Webpack.getModule(m => m.messageListItem);
 
-type DiscordAttachment = { props: { children: { props: { renderPlaintextFilePreview: (props: AttachmentProps) => React.ReactNode } }}};
+type DiscordAttachment = { renderPlaintextFilePreview: (props: AttachmentProps) => React.ReactNode };
 
 class ECBlocks implements Plugin {
   forceUpdateMessages(): void {
@@ -40,13 +40,15 @@ class ECBlocks implements Plugin {
         <CodeBlock {...props as ({ content: string, lang: string })} modal={false} fileName={() => `codeblock-${Date.now()}.${(props as { lang: string }).lang || "txt"}`} />
       </ErrorBoundary>
     ));
-    BdApi.Patcher.after(Message.prototype, "renderAttachments", (that, props, attachments: Array<DiscordAttachment> | false) => {
-      if (!attachments) return;
-      for (const attachment of attachments) {
-        const { renderPlaintextFilePreview } = attachment.props.children.props;
+
+    BdApi.Patcher.after(MessageAttachment.prototype, "renderAttachments", (that, props, res: React.ReactElement<{ attachments: Array<DiscordAttachment> }, "div"> | false) => {
+      if (!res) return;
+      
+      for (const attachment of res.props.attachments) {        
+        const { renderPlaintextFilePreview } = attachment;
         
-        attachment.props.children.props.renderPlaintextFilePreview = (props) => (
-          <ErrorBoundary fallback={renderPlaintextFilePreview.apply(attachment.props.children.props, [ props ])}>
+        attachment.renderPlaintextFilePreview = (props) => (
+          <ErrorBoundary fallback={renderPlaintextFilePreview.apply(attachment, [ props ])}>
             <Attachment {...props} />
           </ErrorBoundary>
         );

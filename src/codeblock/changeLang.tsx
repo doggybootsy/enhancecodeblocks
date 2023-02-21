@@ -3,7 +3,7 @@ import hljs, { Language } from "highlight.js";
 import { useMessages } from "./hooks";
 
 const SearchPopout = BdApi.Webpack.getModule(m => m.toString?.().includes(".Messages.AUTOCOMPLETE_NO_RESULTS_HEADER"), { searchExports: true });
-const SearchItem = BdApi.Webpack.getModule((e, m) => e.Checkbox && e.Checkmark, { searchExports: true });
+const SearchItem = BdApi.Webpack.getModule(m => m.Checkbox && m.Checkmark, { searchExports: true });
 const { languageSelector } = BdApi.Webpack.getModule(m => m.languageSelector);
 
 const LANGUAGES = hljs.listLanguages().map(name => {
