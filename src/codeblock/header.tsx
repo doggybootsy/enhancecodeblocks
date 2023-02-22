@@ -3,11 +3,11 @@ import React, { memo } from "react";
 import ReactSpring from "react-spring";
 import type { SpringValue } from "@react-spring/web";
 
-import { Tooltip, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, EnlargeIcon, Popout } from "../components";
+import { Tooltip, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, EnlargeIcon, Popout, TrashIcon } from "../components";
 import ChangeLang from "./changeLang";
 import { useMessages } from "./hooks";
 
-function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, languageName: string, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void }) {
+function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, languageName: string, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void, remove?: () => void }) {
   const [ shouldShow, setShouldShow ] = React.useState(false);
   const messages = useMessages();
 
@@ -51,6 +51,13 @@ function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPrevi
         </Popout>
       </div>
       <div className="ECBlock-actions">
+        {remove && <Tooltip text={messages.DELETE} hideOnClick={false}>
+          {(props) => (
+            <div className="ECBlock-remove" {...props} onClick={remove}>
+              <TrashIcon width={22} height={22} />
+            </div>
+          )}
+        </Tooltip>}
         {isSVG && (
           <Tooltip text="Preview" hideOnClick={false}>
             {(props) => (

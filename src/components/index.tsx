@@ -6,6 +6,7 @@ export const ArrowIcon = BdApi.Webpack.getModule(m => m.toString().includes("M16
 export const EyeIcon = BdApi.Webpack.getModule(m => m.toString().includes("13.1046 10.8954 14 12 14Z")) as Icon;
 export const DownloadIcon = BdApi.Webpack.getModule(m => m.toString().includes("20V18H6V20H18Z")) as Icon;
 export const CopyIcon = BdApi.Webpack.getModule(m => m.toString().includes("21V7h6v5h5v9H8z")) as Icon;
+export const TrashIcon = BdApi.Webpack.getModule(m => m.toString?.().includes("17H9V11H11V17ZM15 17H13V11H15V17Z")) as Icon;
 
 export function EnlargeIcon({ width, height }: { width: number, height: number }) {
   return (

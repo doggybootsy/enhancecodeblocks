@@ -18,7 +18,7 @@ const openModal = BdApi.Webpack.getModule(m => m?.toString?.().includes("onClose
   transitionState: null | number
 }) => React.ReactNode) => string;
 
-function CodeBlock({ content, lang, modal, fileName, loading = false }: { content: string, lang: string, modal: boolean, fileName: () => string, loading?: boolean }) {
+function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: { content: string, lang: string, modal: boolean, fileName: () => string, loading?: boolean, remove?: () => void }) {
   const tableRef = useRef<HTMLTableElement>(null);
 
   const [ _lang, setLang ] = useState(lang);
@@ -60,7 +60,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = false }: { conten
 
   return (
     <div className={`ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`} data-language={language.name}>
-      <Header angle={angle} collapsed={collapsed} setCollapsed={setCollapsed} languageName={`${isSVG ? "SVG, " : ""}${language.name}`} isSVG={isSVG} showPreview={showPreview} setShowPreview={setShowPreview} copied={copied} downloadAction={downloadAction} copyAction={copyAction} enlargeAction={enlargeAction} modal={modal} setLang={setLang} />
+      <Header angle={angle} collapsed={collapsed} setCollapsed={setCollapsed} languageName={`${isSVG ? "SVG, " : ""}${language.name}`} isSVG={isSVG} showPreview={showPreview} setShowPreview={setShowPreview} copied={copied} downloadAction={downloadAction} copyAction={copyAction} enlargeAction={enlargeAction} modal={modal} setLang={setLang} remove={remove} />
       <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height }}>
         {loading && <Spinner type={Spinner.Type.WANDERING_CUBES} />}
         {(!loading && showPreview && isSVG) && <Preview content={content} height={modal ? MODAL_HEIGHT : PREVIEW_HEIGHT} />}

@@ -4,8 +4,6 @@
 .ECBlock-file {
   width: 100%;
   display: flex;
-  padding-right: 32px;
-  box-sizing: border-box;
 }
 .ECBlock {
   background: var(--background-secondary-alt);
@@ -57,6 +55,9 @@
 } 
 .ECBlock .ECBlock-actions > :not(:last-child) {
   margin-right: 8px;
+} 
+.ECBlock .ECBlock-actions > .ECBlock-remove:hover {
+  color: var(--status-danger);
 } 
 .ECBlock .ECBlock-actions > div {
   cursor: pointer;
