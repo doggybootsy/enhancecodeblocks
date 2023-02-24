@@ -1,11 +1,6 @@
 [
 	{
 		"priority": 1,
-		"id": "ACAU",
-		"name": "Make setting 'auto-collapse' automatically update codeblocks"
-	},
-	{
-		"priority": 1,
 		"id": "MHLS",
 		"name": "Make setting for max-height limit"
 	},

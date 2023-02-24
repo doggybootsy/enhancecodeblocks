@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.3
+ * @version 1.0.4
  * @author Doggybootsy
  */
 "use strict";
@@ -188,6 +188,10 @@ function useForceUpdate() {
 function createURL(content) {
   let svg = content.includes("xmlns=") ? content : content.replace(/^(<svg) /, '$1 xmlns="http://www.w3.org/2000/svg" ');
   return URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+}
+function useStateDeps(initialState, deps) {
+  let [state, setState] = (0, import_react.useState)(initialState);
+  return (0, import_react.useLayoutEffect)(() => setState(initialState), deps), [state, setState];
 }
 var import_react, init_util = __esm({
   "src/util/index.ts"() {
@@ -417,7 +421,7 @@ var import_react8, listeners, init_data = __esm({
 
 // src/codeblock/index.tsx
 function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
-  let tableRef = (0, import_react9.useRef)(null), [_lang, setLang] = (0, import_react9.useState)(lang), [collapsed, setCollapsed] = (0, import_react9.useState)(modal ? !1 : getData("autoCollapse", !1)), language = useLanguage(_lang), highlighted = useHighlighted(language, _lang, content), [showPreview, setShowPreview] = (0, import_react9.useState)(!1), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), isSVG = (0, import_react9.useMemo)(() => lang === "svg" && language.name === "HTML, XML", [lang, language]), downloadAction = (0, import_react9.useCallback)(() => {
+  let tableRef = (0, import_react9.useRef)(null), [_lang, setLang] = useStateDeps(lang, [lang]), [autoCollapse] = useData("autoCollapse", !1), [collapsed, setCollapsed] = useStateDeps(modal ? !1 : autoCollapse, [autoCollapse]), language = useLanguage(_lang), highlighted = useHighlighted(language, _lang, content), [showPreview, setShowPreview] = (0, import_react9.useState)(!1), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), isSVG = (0, import_react9.useMemo)(() => lang === "svg" && language.name === "HTML, XML", [lang, language]), downloadAction = (0, import_react9.useCallback)(() => {
     loading || window.DiscordNative && window.DiscordNative.fileManager.saveWithDialog(content, fileName());
   }, [content, lang, loading]), [copied, setCopied] = import_react9.default.useState(!1), copyAction = (0, import_react9.useCallback)(() => {
     loading || copied || (window.DiscordNative && window.DiscordNative.clipboard.copy(content), setCopied(!0), setTimeout(() => setCopied(!1), 2e3));
@@ -438,6 +442,7 @@ var import_react9, import_react_spring3, thin, openModal, codeblock_default, ini
     init_components();
     init_constants();
     init_data();
+    init_util();
     ({ thin } = BdApi.Webpack.getModule((m) => m.thin && m.none)), openModal = BdApi.Webpack.getModule((m) => m?.toString?.().includes("onCloseCallback") && m?.toString().includes("Layer"), { searchExports: !0 });
     codeblock_default = (0, import_react9.memo)(CodeBlock);
   }

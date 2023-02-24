@@ -1,5 +1,5 @@
 /// <reference path="../index.d.ts" />
-import React, { memo, useMemo, useState, useRef, useCallback } from "react";
+import React, { memo, useMemo, useState, useRef, useCallback, useLayoutEffect } from "react";
 import ReactSpring from "react-spring";
 
 import { useLanguage, useHighlighted, useSizing } from "./hooks";
@@ -9,7 +9,8 @@ import Preview from "./preview";
 import { ModalRoot } from "../components";
 import { Spinner } from "../components";
 import { MODAL_HEIGHT, PREVIEW_HEIGHT } from "./constants";
-import { getData } from "../data";
+import { useData } from "../data";
+import { useStateDeps } from "../util";
 
 const { thin } = BdApi.Webpack.getModule(m => m.thin && m.none);
 
@@ -21,9 +22,10 @@ const openModal = BdApi.Webpack.getModule(m => m?.toString?.().includes("onClose
 function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: { content: string, lang: string, modal: boolean, fileName: () => string, loading?: boolean, remove?: () => void }) {
   const tableRef = useRef<HTMLTableElement>(null);
 
-  const [ _lang, setLang ] = useState(lang);
+  const [ _lang, setLang ] = useStateDeps(lang, [ lang ]);
   
-  const [ collapsed, setCollapsed ] = useState<boolean>(modal ? false : getData("autoCollapse", false));
+  const [ autoCollapse ] = useData("autoCollapse", false);
+  const [ collapsed, setCollapsed ] = useStateDeps(modal ? false : autoCollapse, [ autoCollapse ]);
   
   const language = useLanguage(_lang);
   const highlighted = useHighlighted(language, _lang, content);
