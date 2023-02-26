@@ -71,6 +71,9 @@ export const Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toStri
 
 export const NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,"));
 
+const classes = BdApi.Webpack.getModule(m => m.container && m.dividerDefault);
+const { divider } = BdApi.Webpack.getModule(m => m.divider && Object.keys(m).length === 1);
+
 export function SettingItem({ title, disabled, hideBorder, item }: {
   title: string,
   disabled?: boolean,
@@ -78,12 +81,12 @@ export function SettingItem({ title, disabled, hideBorder, item }: {
   item: React.ReactNode
 }) {
   return (
-    <div className="container-31PmuA">
-      <div className="labelRow-NnoUIp">
-        <label className="title-2yADjX">{title}</label>
-        <div className="control-10qYax">{item}</div>
+    <div className={`${classes.container}${disabled ? ` ${classes.disabled}` : ""}`}>
+      <div className={classes.labelRow}>
+        <label className={classes.title}>{title}</label>
+        <div className={classes.control}>{item}</div>
       </div>
-      {!hideBorder && <div className="divider-3nqZNm dividerDefault-wIfHHD" />}
+      {!hideBorder && <div className={`${divider} ${classes.dividerDefault}`} />}
     </div>
   )
 };
