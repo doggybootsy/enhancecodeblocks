@@ -23,12 +23,18 @@ export function useLanguage(language: string): Language {
   }, [ language ]);
 };
 
+
 export function useHighlighted(language: Language, _lang: string, content: string) {
+  const [ maxBytes ] = useData("maxBytes", 21_846);
+
   return useMemo(() => {
     const lang = (language.aliases?.[0] ? language.aliases[0] : language.name) as string;
-    if (hljs.getLanguage(lang)) return hljs.highlight(lang, content);
-    return hljs.highlight(_lang, content);
-  }, [ content, language ]);
+
+    const _content = content.length > maxBytes ? `${content.slice(0, maxBytes)}\n\n[Download to view the rest of this file]` : content;
+
+    if (hljs.getLanguage(lang)) return hljs.highlight(lang, _content);
+    return hljs.highlight(_lang, _content);
+  }, [ content, language, maxBytes ]);
 };
 
 export function useSrc(content: string) {

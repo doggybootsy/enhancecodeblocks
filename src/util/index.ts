@@ -12,11 +12,8 @@ export function createURL(content: string): string {
   const svg = content.includes("xmlns=") ? content : content.replace(/^(<svg) /, "$1 xmlns=\"http://www.w3.org/2000/svg\" ");
   return URL.createObjectURL(new Blob([ svg ], { type: "image/svg+xml" }));
 };
-/** @note 'useState' but with deps */
-export function useStateDeps<T>(initialState: T | (() => T), deps: React.DependencyList): [ T, (v:T) => void ] {
-  const [ state, setState ] = useState(initialState);
+export function formatBytes(bytes: number) {
+  const i = Math.floor(Math.log(bytes) / Math.log(1024))
 
-  useLayoutEffect(() => setState(initialState), deps);
-
-  return [ state, setState ];
-};
+  return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${[ "", "K", "M" ][i]}B`
+}

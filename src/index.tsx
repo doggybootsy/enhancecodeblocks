@@ -42,14 +42,14 @@ class ECBlocks implements Plugin {
     ));
 
     BdApi.Patcher.after(MessageAttachment.prototype, "renderAttachments", (that, props, res: React.ReactElement<{ attachments: Array<DiscordAttachment> }, "div"> | false) => {
-      if (!res) return;
+      if (!res) return;      
       
       for (const attachment of res.props.attachments) {        
         const { renderPlaintextFilePreview } = attachment;
 
         attachment.renderPlaintextFilePreview = (props) => (
           <ErrorBoundary fallback={renderPlaintextFilePreview.call(attachment, props)}>
-            <Attachment {...props} remove={() => attachment.onRemoveAttachment(attachment.attachment)} />
+            <Attachment {...props} canDeleteAttachments={(that as any).props.canDeleteAttachments} remove={() => attachment.onRemoveAttachment(attachment.attachment)} />
           </ErrorBoundary>
         );
       }

@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.6
+ * @version 1.0.7
  * @author Doggybootsy
  */
 "use strict";
@@ -51,10 +51,15 @@ var styles_default, init_styles = __esm({
   overflow: hidden;\r
   color: var(--text-muted);\r
 }\r
-.ECBlock-error {\r
+.ECBlock.ECBlock-error {\r
   padding: 8px;\r
-  border-radius: 8px;\r
   background: var(--background-message-automod);\r
+}\r
+.ECBlock.ECBlock-error pre {\r
+  max-width: 100%;\r
+}\r
+.ECBlock .react-error {\r
+  margin-bottom: 8px;\r
 }\r
 .ECBlock-file .ECBlock {\r
   /* so they wont be small */\r
@@ -78,10 +83,16 @@ var styles_default, init_styles = __esm({
   display: flex;\r
   align-items: center;\r
   margin-right: 16px;\r
-  cursor: pointer;\r
 } \r
 .ECBlock .ECBlock-title > :not(:last-child) {\r
   margin-right: 8px;\r
+} \r
+.ECBlock .ECBlock-lang {\r
+  cursor: pointer;\r
+} \r
+.ECBlock .ECBlock-byteSize {\r
+  font-size: small;\r
+  color: var(--text-muted);\r
 } \r
 .ECBlock .ECBlock-collapse {\r
   cursor: pointer;\r
@@ -199,6 +210,10 @@ function createURL(content) {
   let svg = content.includes("xmlns=") ? content : content.replace(/^(<svg) /, '$1 xmlns="http://www.w3.org/2000/svg" ');
   return URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
 }
+function formatBytes(bytes) {
+  let i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${["", "K", "M"][i]}B`;
+}
 var import_react2, init_util = __esm({
   "src/util/index.ts"() {
     "use strict";
@@ -251,10 +266,13 @@ function useLanguage(language) {
   }, [language]);
 }
 function useHighlighted(language, _lang, content) {
+  let [maxBytes] = useData("maxBytes", 21846);
   return (0, import_react4.useMemo)(() => {
-    let lang = language.aliases?.[0] ? language.aliases[0] : language.name;
-    return import_highlight.default.getLanguage(lang) ? import_highlight.default.highlight(lang, content) : import_highlight.default.highlight(_lang, content);
-  }, [content, language]);
+    let lang = language.aliases?.[0] ? language.aliases[0] : language.name, _content = content.length > maxBytes ? `${content.slice(0, maxBytes)}
+
+[Download to view the rest of this file]` : content;
+    return import_highlight.default.getLanguage(lang) ? import_highlight.default.highlight(lang, _content) : import_highlight.default.highlight(_lang, _content);
+  }, [content, language, maxBytes]);
 }
 function useSrc(content) {
   let forceUpdate = useForceUpdate(), src = (0, import_react4.useRef)(createURL(content));
@@ -297,23 +315,27 @@ var import_highlight, import_react4, import_react_spring, intl, init_codeblock =
 
 // src/hooks/attachment.ts
 function useFetchContent(url) {
-  let refOriginalValue = (0, import_react5.useMemo)(() => cache.has(url) ? cache.get(url) : !1, []), body = (0, import_react5.useRef)(refOriginalValue), forceUpdate = useForceUpdate();
-  return (0, import_react5.useLayoutEffect)(() => {
-    if (body.current)
+  let [content, setContent] = (0, import_react5.useState)(() => cache.has(url) ? cache.get(url) : !1);
+  return (0, import_react5.useEffect)(() => {
+    if (content !== !1)
       return;
     let abortController = new AbortController();
     return (async () => {
       let result = await fetch(url, { signal: abortController.signal });
-      result.ok ? (body.current = await result.text(), cache.set(url, body.current)) : body.current = `Enhance Codeblocks FETCH ERROR: STATUS=${JSON.stringify(result.status)} OK=${JSON.stringify(result.ok)} URL=${JSON.stringify(result.url)}`, forceUpdate();
-    })(), () => abortController.abort();
-  }, []), body.current;
+      if (result.ok) {
+        let text = await result.text();
+        cache.set(url, text), setContent(text);
+      } else
+        setContent(`Enhance Codeblocks FETCH ERROR: STATUS=${JSON.stringify(result.status)} OK=${JSON.stringify(result.ok)} URL=${JSON.stringify(result.url)}`);
+    })(), () => {
+      abortController.abort();
+    };
+  }, []), content;
 }
 var import_react5, cache, init_attachment = __esm({
   "src/hooks/attachment.ts"() {
     "use strict";
-    import_react5 = __toESM(require_react());
-    init_common();
-    cache = /* @__PURE__ */ new Map();
+    import_react5 = __toESM(require_react()), cache = /* @__PURE__ */ new Map();
   }
 });
 
@@ -331,21 +353,21 @@ var init_hooks = __esm({
 function EnlargeIcon({ width, height }) {
   return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 16 16" }, BdApi.React.createElement("path", { fill: "currentColor", d: "M1.93956 14.6668H6.18203C6.51658 14.6668 6.7881 14.3953 6.7881 14.0607C6.7881 13.7262 6.51658 13.4547 6.18203 13.4547H3.40261L7.21658 9.64069C7.45325 9.40402 7.45325 9.02038 7.21658 8.78371C7.0984 8.66522 6.94325 8.60613 6.7881 8.60613C6.63294 8.60613 6.47779 8.66522 6.35961 8.78371L2.54563 12.5977V9.81826C2.54563 9.48372 2.27411 9.2122 1.93956 9.2122C1.60501 9.2122 1.3335 9.48372 1.3335 9.81826V14.0607C1.3335 14.3953 1.60501 14.6668 1.93956 14.6668Z" }), BdApi.React.createElement("path", { fill: "currentColor", d: "M8.78374 7.21643C9.02041 7.4531 9.40405 7.4531 9.64072 7.21643L13.4547 3.40245V6.18188C13.4547 6.51643 13.7262 6.78794 14.0608 6.78794C14.3953 6.78794 14.6668 6.51643 14.6668 6.18188V1.93941C14.6668 1.60486 14.3953 1.33334 14.0608 1.33334L9.8183 1.33334C9.48375 1.33334 9.21223 1.60486 9.21223 1.93941C9.21223 2.27396 9.48375 2.54548 9.8183 2.54548H12.5977L8.78374 6.35945C8.54707 6.59612 8.54707 6.97976 8.78374 7.21643Z" }));
 }
-function SettingItem({ title, disabled, hideBorder, item }) {
-  return BdApi.React.createElement("div", { className: `${classes.container}${disabled ? ` ${classes.disabled}` : ""}` }, BdApi.React.createElement("div", { className: classes.labelRow }, BdApi.React.createElement("label", { className: classes.title }, title), BdApi.React.createElement("div", { className: classes.control }, item)), !hideBorder && BdApi.React.createElement("div", { className: `${divider} ${classes.dividerDefault}` }));
+function SettingItem({ title, disabled, hideBorder, item, note }) {
+  return BdApi.React.createElement("div", { className: `${classes.container}${disabled ? ` ${classes.disabled}` : ""}` }, BdApi.React.createElement("div", { className: classes.labelRow }, BdApi.React.createElement("label", { className: classes.title }, title), BdApi.React.createElement("div", { className: classes.control }, item)), note && BdApi.React.createElement(Text, { className: `${noteClasses.description} ${noteClasses.modeDefault}${disabled ? ` ${noteClasses.modeDisabled}` : ""}` }, note), !hideBorder && BdApi.React.createElement("div", { className: `${divider} ${classes.dividerDefault}` }));
 }
-var import_react6, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, TrashIcon, ModalRoot, Spinner, Tooltip, Switch, Popout, NumberInputStepper, classes, divider, ErrorBoundary, init_components = __esm({
+var import_react6, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, TrashIcon, ModalRoot, Spinner, Tooltip, Switch, Popout, NumberInputStepper, Text, classes, noteClasses, divider, ErrorBoundary, init_components = __esm({
   "src/components/index.tsx"() {
     "use strict";
     import_react6 = __toESM(require_react()), ArrowIcon = BdApi.Webpack.getModule((m) => m.toString().includes("M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.")), EyeIcon = BdApi.Webpack.getModule((m) => m.toString().includes("13.1046 10.8954 14 12 14Z")), DownloadIcon = BdApi.Webpack.getModule((m) => m.toString().includes("20V18H6V20H18Z")), CopyIcon = BdApi.Webpack.getModule((m) => m.toString().includes("21V7h6v5h5v9H8z")), TrashIcon = BdApi.Webpack.getModule((m) => m.toString?.().includes("17H9V11H11V17ZM15 17H13V11H15V17Z"));
-    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), Tooltip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()")), Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout")), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,")), classes = BdApi.Webpack.getModule((m) => m.container && m.dividerDefault), { divider } = BdApi.Webpack.getModule((m) => m.divider && Object.keys(m).length === 1);
+    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), Tooltip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()")), Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout")), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,")), Text = BdApi.Webpack.getModule((m) => m.Colors && m.Sizes), classes = BdApi.Webpack.getModule((m) => m.container && m.dividerDefault), noteClasses = BdApi.Webpack.getModule((m) => m.description && m.modeDefault), { divider } = BdApi.Webpack.getModule((m) => m.divider && Object.keys(m).length === 1);
     ErrorBoundary = class extends import_react6.default.Component {
       state = { hasError: !1 };
       componentDidCatch() {
         this.setState({ hasError: !0 });
       }
       render() {
-        return this.state.hasError ? BdApi.React.createElement("div", { className: "ECBlock-error" }, BdApi.React.createElement("div", { className: "react-error", onClick: () => this.setState({ hasError: !1 }) }, "There was an unexpected Error with Enhance Codeblocks. Click to try and rerender."), this.props.fallback) : this.props.children;
+        return this.state.hasError ? BdApi.React.createElement("div", { className: "ECBlock ECBlock-error" }, BdApi.React.createElement("div", { className: "react-error", onClick: () => this.setState({ hasError: !1 }) }, "There was an unexpected Error with Enhance Codeblocks. Click to try and rerender."), this.props.fallback) : this.props.children;
       }
     };
   }
@@ -391,8 +413,8 @@ var import_react7, import_highlight2, SearchPopout, SearchItem, languageSelector
 });
 
 // src/codeblock/header.tsx
-function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove }) {
-  let [shouldShow, setShouldShow] = import_react8.default.useState(!1), messages = useMessages();
+function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove, bytes }) {
+  let [shouldShow, setShouldShow] = import_react8.default.useState(!1), messages = useMessages(), formattedBytes = (0, import_react8.useMemo)(() => formatBytes(bytes), [bytes]);
   return BdApi.React.createElement("div", { className: "ECBlock-header" }, BdApi.React.createElement("div", { className: "ECBlock-title" }, !modal && BdApi.React.createElement(import_react_spring2.default.animated.div, { style: {
     transform: angle.to({
       output: ["rotate(-90deg)", "rotate(0deg)"]
@@ -414,7 +436,7 @@ function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPrevi
     (props) => BdApi.React.createElement("div", { className: "ECBlock-lang", ...props, onClick: (event) => {
       setShouldShow(!shouldShow), props.onClick(event);
     } }, languageName)
-  )), BdApi.React.createElement("div", { className: "ECBlock-actions" }, remove && BdApi.React.createElement(Tooltip, { text: messages.DELETE, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-remove", ...props, onClick: remove }, BdApi.React.createElement(TrashIcon, { width: 22, height: 22 }))), isSVG && BdApi.React.createElement(Tooltip, { text: "Preview", hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-previewButton${showPreview ? " ECBlock-active" : ""}`, ...props, onClick: () => setShowPreview(!showPreview) }, BdApi.React.createElement(EyeIcon, { width: 22, height: 22 }))), BdApi.React.createElement(Tooltip, { text: messages.DOWNLOAD, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-downloadButton", ...props, onClick: downloadAction }, BdApi.React.createElement(DownloadIcon, { width: 22, height: 22 }))), BdApi.React.createElement(Tooltip, { text: copied ? messages.COPIED : messages.COPY, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-copyButton${copied ? " ECBlock-copied" : ""}`, ...props, onClick: copyAction }, BdApi.React.createElement(CopyIcon, { width: 22, height: 22 }))), !modal && BdApi.React.createElement(Tooltip, { text: messages.PREVIEW_WHOLE_FILE, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-enlarge", ...props, onClick: enlargeAction }, BdApi.React.createElement(EnlargeIcon, { width: 16, height: 16 })))));
+  ), BdApi.React.createElement(Tooltip, { text: `${bytes} B`, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-byteSize", ...props }, formattedBytes))), BdApi.React.createElement("div", { className: "ECBlock-actions" }, remove && BdApi.React.createElement(Tooltip, { text: messages.DELETE, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-remove", ...props, onClick: remove }, BdApi.React.createElement(TrashIcon, { width: 22, height: 22 }))), isSVG && BdApi.React.createElement(Tooltip, { text: "Preview", hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-previewButton${showPreview ? " ECBlock-active" : ""}`, ...props, onClick: () => setShowPreview(!showPreview) }, BdApi.React.createElement(EyeIcon, { width: 22, height: 22 }))), BdApi.React.createElement(Tooltip, { text: messages.DOWNLOAD, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-downloadButton", ...props, onClick: downloadAction }, BdApi.React.createElement(DownloadIcon, { width: 22, height: 22 }))), BdApi.React.createElement(Tooltip, { text: copied ? messages.COPIED : messages.COPY, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-copyButton${copied ? " ECBlock-copied" : ""}`, ...props, onClick: copyAction }, BdApi.React.createElement(CopyIcon, { width: 22, height: 22 }))), !modal && BdApi.React.createElement(Tooltip, { text: messages.PREVIEW_WHOLE_FILE, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-enlarge", ...props, onClick: enlargeAction }, BdApi.React.createElement(EnlargeIcon, { width: 16, height: 16 })))));
 }
 var import_react8, import_react_spring2, header_default, init_header = __esm({
   "src/codeblock/header.tsx"() {
@@ -423,6 +445,7 @@ var import_react8, import_react_spring2, header_default, init_header = __esm({
     init_components();
     init_changeLang();
     init_hooks();
+    init_util();
     header_default = (0, import_react8.memo)(Header);
   }
 });
@@ -463,7 +486,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
     loading || copied || (window.DiscordNative && window.DiscordNative.clipboard.copy(content), setCopied(!0), setTimeout(() => setCopied(!1), 2e3));
   }, [content, copied, loading]), enlargeAction = (0, import_react11.useCallback)(() => {
     loading || openModal(({ transitionState, onClose }) => BdApi.React.createElement(ModalRoot, { transitionState, onClose, size: "large" }, BdApi.React.createElement(CodeBlock, { content, lang, modal: !0, fileName })));
-  }, [content, lang, loading]);
+  }, [content, lang, loading]), byteSize = (0, import_react11.useMemo)(() => new File([content], "").size, [content]);
   return BdApi.React.createElement(
     "div",
     {
@@ -486,7 +509,8 @@ function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
         enlargeAction,
         modal,
         setLang,
-        remove
+        remove,
+        bytes: byteSize
       }
     ),
     BdApi.React.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && BdApi.React.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && BdApi.React.createElement(preview_default, { content, height: modal ? 400 : previewHeight }), !loading && !(showPreview && isSVG) && BdApi.React.createElement(table_default, { highlighted, tableRef }))
@@ -501,7 +525,6 @@ var import_react11, import_react_spring3, thin, openModal, codeblock_default, in
     init_table();
     init_preview();
     init_components();
-    init_components();
     init_data();
     ({ thin } = BdApi.Webpack.getModule((m) => m.thin && m.none)), openModal = BdApi.Webpack.getModule((m) => m?.toString?.().includes("onCloseCallback") && m?.toString().includes("Layer"), { searchExports: !0 });
     codeblock_default = (0, import_react11.memo)(CodeBlock);
@@ -509,7 +532,7 @@ var import_react11, import_react_spring3, thin, openModal, codeblock_default, in
 });
 
 // src/attachment/index.tsx
-function Attachment({ attachment: attachment2, onContextMenu, className, remove }) {
+function Attachment({ attachment: attachment2, onContextMenu, className, remove, canDeleteAttachments }) {
   let content = useFetchContent(attachment2.url), lang = (0, import_react12.useMemo)(() => {
     let spl = attachment2.filename.split(".");
     return spl.length - 1 ? spl.pop() : "";
@@ -522,7 +545,7 @@ function Attachment({ attachment: attachment2, onContextMenu, className, remove 
       modal: !1,
       fileName: () => attachment2.filename,
       loading: typeof content != "string",
-      remove
+      remove: canDeleteAttachments ? remove : !1
     }
   ));
 }
@@ -538,7 +561,7 @@ var import_react12, attachment_default, init_attachment2 = __esm({
 
 // src/settings/index.tsx
 function Settings() {
-  let [autoCollapse, setAutoCollapse] = useData("autoCollapse", !1), [maxHeight, setMaxHeight] = useData("maxHeight", 300), [previewHeight, setPreviewHeight] = useData("previewHeight", 200);
+  let [autoCollapse, setAutoCollapse] = useData("autoCollapse", !1), [maxHeight, setMaxHeight] = useData("maxHeight", 300), [previewHeight, setPreviewHeight] = useData("previewHeight", 200), [maxBytes, setBytes] = useData("maxBytes", 21846);
   return BdApi.React.createElement("div", null, BdApi.React.createElement(
     Switch,
     {
@@ -557,6 +580,13 @@ function Settings() {
     {
       item: BdApi.React.createElement(NumberInputStepper, { onChange: setPreviewHeight, value: previewHeight }),
       title: "Preview Height"
+    }
+  ), BdApi.React.createElement(
+    SettingItem,
+    {
+      item: BdApi.React.createElement(NumberInputStepper, { onChange: setBytes, value: maxBytes }),
+      note: "This helps reduce lag, by limiting the amount of characters that gets highlighted",
+      title: "Max Number of Characters"
     }
   ));
 }
@@ -598,7 +628,7 @@ var BdApi2, codeBlock, MessageAttachment, messageListItem, ECBlocks, src_default
           if (res)
             for (let attachment2 of res.props.attachments) {
               let { renderPlaintextFilePreview } = attachment2;
-              attachment2.renderPlaintextFilePreview = (props2) => BdApi2.React.createElement(ErrorBoundary, { fallback: renderPlaintextFilePreview.call(attachment2, props2) }, BdApi2.React.createElement(attachment_default, { ...props2, remove: () => attachment2.onRemoveAttachment(attachment2.attachment) }));
+              attachment2.renderPlaintextFilePreview = (props2) => BdApi2.React.createElement(ErrorBoundary, { fallback: renderPlaintextFilePreview.call(attachment2, props2) }, BdApi2.React.createElement(attachment_default, { ...props2, canDeleteAttachments: that.props.canDeleteAttachments, remove: () => attachment2.onRemoveAttachment(attachment2.attachment) }));
             }
         }), BdApi2.DOM.addStyle(styles_default), this.forceUpdateMessages();
       }

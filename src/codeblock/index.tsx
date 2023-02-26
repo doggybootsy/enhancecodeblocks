@@ -6,8 +6,7 @@ import { useLanguage, useHighlighted, useSizing, useStateDeps } from "../hooks";
 import Header from "./header";
 import Table from "./table";
 import Preview from "./preview";
-import { ModalRoot } from "../components";
-import { Spinner } from "../components";
+import { ModalRoot, Spinner } from "../components";
 import { useData } from "../data";
 
 const { thin } = BdApi.Webpack.getModule(m => m.thin && m.none) as { thin: string };
@@ -17,7 +16,7 @@ const openModal = BdApi.Webpack.getModule(m => m?.toString?.().includes("onClose
   transitionState: null | number
 }) => React.ReactNode) => string;
 
-function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: { content: string, lang: string, modal: boolean, fileName: () => string, loading?: boolean, remove?: () => void }) {
+function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: { content: string, lang: string, modal: boolean, fileName: () => string, loading?: boolean, remove?: (() => void) | false }) {
   const tableRef = useRef<HTMLTableElement>(null);
 
   const [ _lang, setLang ] = useStateDeps(lang, [ lang ]);
@@ -59,6 +58,8 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
     ));
   }, [ content, lang, loading ]);
 
+  const byteSize = useMemo(() => new File([ content ], "").size, [ content ]);
+
   return (
     <div 
       className={`ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`} 
@@ -77,7 +78,8 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
         enlargeAction={enlargeAction} 
         modal={modal} 
         setLang={setLang} 
-        remove={remove} />
+        remove={remove}
+        bytes={byteSize} />
       <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height }}>
         {loading && <Spinner type={Spinner.Type.WANDERING_CUBES} />}
         {(!loading && showPreview && isSVG) && <Preview content={content} height={modal ? 400 : previewHeight} />}

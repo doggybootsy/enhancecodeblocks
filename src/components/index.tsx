@@ -69,13 +69,26 @@ export const Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toStri
   onRequestClose: () => void
 }>;
 
-export const NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,"));
+export const NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,")) as React.ComponentClass<{
+  value: number,
+  onChange: (v: number) => void,
+  className?: string,
+  minValue?: number
+  maxValue?: number
+}>;
+
+export const Text = BdApi.Webpack.getModule(m => m.Colors && m.Sizes) as React.ComponentClass<{
+  className?: string,
+  children: React.ReactNode
+}>;
 
 const classes = BdApi.Webpack.getModule(m => m.container && m.dividerDefault);
+const noteClasses = BdApi.Webpack.getModule(m => m.description && m.modeDefault);
 const { divider } = BdApi.Webpack.getModule(m => m.divider && Object.keys(m).length === 1);
 
-export function SettingItem({ title, disabled, hideBorder, item }: {
-  title: string,
+export function SettingItem({ title, disabled, hideBorder, item, note }: {
+  title: React.ReactNode,
+  note?: React.ReactNode,
   disabled?: boolean,
   hideBorder?: boolean,
   item: React.ReactNode
@@ -86,6 +99,7 @@ export function SettingItem({ title, disabled, hideBorder, item }: {
         <label className={classes.title}>{title}</label>
         <div className={classes.control}>{item}</div>
       </div>
+      {note && <Text className={`${noteClasses.description} ${noteClasses.modeDefault}${disabled ? ` ${noteClasses.modeDisabled}` : ""}`}>{note}</Text>}
       {!hideBorder && <div className={`${divider} ${classes.dividerDefault}`} />}
     </div>
   )
@@ -103,7 +117,7 @@ export class ErrorBoundary extends React.Component<
 
   render() {
     if (this.state.hasError) return (
-      <div className="ECBlock-error">
+      <div className="ECBlock ECBlock-error">
         <div className="react-error" onClick={() => this.setState({ hasError: false })}>
           There was an unexpected Error with Enhance Codeblocks. Click to try and rerender.
         </div>

@@ -1,38 +1,33 @@
-import { useMemo, useRef, useLayoutEffect } from "react";
-
-import { useForceUpdate } from "./common";
+import { useEffect, useState } from "react";
 
 // Maybe store in a window? For hotswapping / updates
 const cache = new Map<string, string>();
 export function useFetchContent(url: string) {
-  const refOriginalValue = useMemo(() => {
+  const [ content, setContent ] = useState<false | string>(() => {
     const cached = cache.has(url);
     if (cached) return cache.get(url) as string;
     return false;
-  }, []);
-
-  const body = useRef<false | string>(refOriginalValue);
-
-  const forceUpdate = useForceUpdate();
+  });
   
-  useLayoutEffect(() => {
-    if (body.current) return;
+  useEffect(() => {    
+    if (content !== false) return;
     
     const abortController = new AbortController();
-
+    
     (async () => {
       const result = await fetch(url, { signal: abortController.signal });
       if (result.ok) {
-        body.current = await result.text();
-        cache.set(url, body.current);
+        const text = await result.text();
+        cache.set(url, text);
+        setContent(text);        
       }
-      else body.current = `Enhance Codeblocks FETCH ERROR: STATUS=${JSON.stringify(result.status)} OK=${JSON.stringify(result.ok)} URL=${JSON.stringify(result.url)}`;
-
-      forceUpdate();
+      else setContent(`Enhance Codeblocks FETCH ERROR: STATUS=${JSON.stringify(result.status)} OK=${JSON.stringify(result.ok)} URL=${JSON.stringify(result.url)}`);
     })();
 
-    return () => abortController.abort();
+    return () => {
+      abortController.abort();
+    }
   }, []);
 
-  return body.current
+  return content;
 };

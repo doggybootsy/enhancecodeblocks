@@ -12,10 +12,15 @@
   overflow: hidden;
   color: var(--text-muted);
 }
-.ECBlock-error {
+.ECBlock.ECBlock-error {
   padding: 8px;
-  border-radius: 8px;
   background: var(--background-message-automod);
+}
+.ECBlock.ECBlock-error pre {
+  max-width: 100%;
+}
+.ECBlock .react-error {
+  margin-bottom: 8px;
 }
 .ECBlock-file .ECBlock {
   /* so they wont be small */
@@ -39,10 +44,16 @@
   display: flex;
   align-items: center;
   margin-right: 16px;
-  cursor: pointer;
 } 
 .ECBlock .ECBlock-title > :not(:last-child) {
   margin-right: 8px;
+} 
+.ECBlock .ECBlock-lang {
+  cursor: pointer;
+} 
+.ECBlock .ECBlock-byteSize {
+  font-size: small;
+  color: var(--text-muted);
 } 
 .ECBlock .ECBlock-collapse {
   cursor: pointer;

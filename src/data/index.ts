@@ -3,7 +3,8 @@ import { useCallback, useLayoutEffect, useState } from "react";
 type settings = {
   autoCollapse: boolean,
   maxHeight: number,
-  previewHeight: number
+  previewHeight: number,
+  maxBytes: number
 };
 
 const listeners = new Map<string, Set<() => void>>();

@@ -40,7 +40,9 @@ const exportModule = (module) => `const module = ${module};Object.assign(exports
       author: pkg.author
     };
   
-    const pluginCode = `/**\n${Object.entries(meta).map(([ k, v ]) => ` * @${k} ${v}`).join("\n")}\n */\n${readFileSync("dist/EnhanceCodeBlocks.plugin.js", "utf-8")}`;
+    const pluginData = readFileSync("dist/EnhanceCodeBlocks.plugin.js", { encoding: "utf-8" });
+    
+    const pluginCode = `/**\n${Object.entries(meta).map(([ k, v ]) => ` * @${k} ${v}`).join("\n")}\n */\n${pluginData}`;
     writeFileSync("dist/EnhanceCodeBlocks.plugin.js", pluginCode, { encoding: "utf-8" });
     console.log("Built");
   

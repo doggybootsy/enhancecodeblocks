@@ -4,7 +4,7 @@ import type { HighlightResult } from "highlight.js";
 
 function Code({ highlighted, tableRef }: { highlighted: HighlightResult, tableRef: React.RefObject<HTMLTableElement> }) {
   const spl = useMemo(() => highlighted.value.split("\n"), [ highlighted ]);
-  
+
   return (
     <table className="ECBlock-table" ref={tableRef}>
       <tbody>

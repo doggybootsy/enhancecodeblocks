@@ -17,10 +17,11 @@ export type AttachmentProps = {
   renderAdjacentContent: () => React.ReactNode,
   onContextMenu: (event: React.MouseEvent<HTMLDivElement>) => void,
   className: string,
-  remove: () => void
+  remove: () => void,
+  canDeleteAttachments: boolean
 };
 
-function Attachment({ attachment, onContextMenu, className, remove }: AttachmentProps) {
+function Attachment({ attachment, onContextMenu, className, remove, canDeleteAttachments }: AttachmentProps) {
   const content = useFetchContent(attachment.url);
 
   const lang = useMemo(() => {
@@ -37,7 +38,7 @@ function Attachment({ attachment, onContextMenu, className, remove }: Attachment
         modal={false} 
         fileName={() => attachment.filename} 
         loading={typeof content !== "string"} 
-        remove={remove} />
+        remove={canDeleteAttachments ? remove : false} />
     </div>
   );
 };
