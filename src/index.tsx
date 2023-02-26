@@ -35,7 +35,7 @@ class ECBlocks implements Plugin {
     };
   };
   start(): void {
-    BdApi.Patcher.after(codeBlock, "react", (_that, [ props ], res) => (
+    BdApi.Patcher.after(codeBlock, "react", (that, [ props ], res) => (
       <ErrorBoundary fallback={res}>
         <CodeBlock {...props as ({ content: string, lang: string })} modal={false} fileName={() => `codeblock-${Date.now()}.${(props as { lang: string }).lang || "txt"}`} />
       </ErrorBoundary>
@@ -62,9 +62,13 @@ class ECBlocks implements Plugin {
     BdApi.DOM.removeStyle();
     this.forceUpdateMessages();
   };
-  getSettingsPanel(): JSX.Element {
-    return <Settings />
-  }
+  getSettingsPanel(): JSX.Element { 
+    return (
+      <ErrorBoundary>
+        <Settings />
+      </ErrorBoundary>
+    ); 
+  };
 };
 
 export default ECBlocks;

@@ -25,6 +25,7 @@ const exportModule = (module) => `const module = ${module};Object.assign(exports
       minifySyntax: true,
       loader: { ".css": "text" },
       ignoreAnnotations: true,
+      jsxFactory: "BdApi.React.createElement",
       plugins: [
         shim("react", exportModule("BdApi.React")),
         shim("react-spring", exportModule("BdApi.Webpack.getModule(m => m.useSpring)")),

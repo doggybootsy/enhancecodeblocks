@@ -12,6 +12,11 @@
   overflow: hidden;
   color: var(--text-muted);
 }
+.ECBlock-error {
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--background-message-automod);
+}
 .ECBlock-file .ECBlock {
   /* so they wont be small */
   width: 100vw;

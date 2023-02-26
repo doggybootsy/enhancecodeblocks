@@ -1,10 +1,21 @@
 import React, { memo } from "react";
 import hljs, { Language } from "highlight.js";
-import { useMessages } from "./hooks";
+import { useMessages } from "../hooks";
 
-const SearchPopout = BdApi.Webpack.getModule(m => m.toString?.().includes(".Messages.AUTOCOMPLETE_NO_RESULTS_HEADER"), { searchExports: true });
-const SearchItem = BdApi.Webpack.getModule(m => m.Checkbox && m.Checkmark, { searchExports: true });
-const { languageSelector } = BdApi.Webpack.getModule(m => m.languageSelector);
+const SearchPopout = BdApi.Webpack.getModule(m => m.toString?.().includes(".Messages.AUTOCOMPLETE_NO_RESULTS_HEADER"), { searchExports: true }) as React.ComponentClass<{
+  autoFocus: true,
+  className: string,
+  multiSelect: boolean,
+  onChange: (newValue: string) => void,
+  placeholder: string,
+  value: Set<string>,
+  children: (searchValue: string) => JSX.Element[]
+}>;
+const SearchItem = BdApi.Webpack.getModule(m => m.Checkbox && m.Checkmark, { searchExports: true }) as React.ComponentClass<{
+  value: string,
+  children: React.ReactNode
+}> & { Label: React.ComponentClass<{ children: React.ReactNode }> };
+const { languageSelector } = BdApi.Webpack.getModule(m => m.languageSelector) as { languageSelector: string };
 
 const LANGUAGES = hljs.listLanguages().map(name => {
   const lang = hljs.getLanguage(name) as Language;

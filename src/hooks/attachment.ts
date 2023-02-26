@@ -1,6 +1,6 @@
-import React, { useLayoutEffect, useMemo } from "react";
+import { useMemo, useRef, useLayoutEffect } from "react";
 
-import { useForceUpdate } from "../util";
+import { useForceUpdate } from "./common";
 
 // Maybe store in a window? For hotswapping / updates
 const cache = new Map<string, string>();
@@ -11,7 +11,7 @@ export function useFetchContent(url: string) {
     return false;
   }, []);
 
-  const body = React.useRef<false | string>(refOriginalValue);
+  const body = useRef<false | string>(refOriginalValue);
 
   const forceUpdate = useForceUpdate();
   

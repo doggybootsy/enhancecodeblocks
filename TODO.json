@@ -1,10 +1,5 @@
 [
 	{
-		"priority": 1,
-		"id": "MHLS",
-		"name": "Make setting for max-height limit"
-	},
-	{
 		"priority": 2,
 		"id": "CFT",
 		"name": "Make code file types comeback"

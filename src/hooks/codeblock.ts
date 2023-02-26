@@ -1,16 +1,18 @@
 /// <reference path="../index.d.ts" />
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import hljs, { Language } from "highlight.js";
+import { useMemo, useRef, useEffect, useLayoutEffect, useState } from "react";
 import ReactSpring from "react-spring";
 
-import { PREVIEW_HEIGHT, MODAL_HEIGHT, MAX_HEIGHT } from "./constants";
-import { createURL, useForceUpdate } from "../util";
+import { useForceUpdate } from "./common";
+import { createURL } from "../util";
+import { useData } from "../data";
 
-const intl = BdApi.Webpack.getModule(m => m.Messages);
-export function useMessages(): Record<string, string> {
-  const ref = useRef(intl._fetchMessages(intl.getLocale()));
-
-  return ref.current;
+const intl = BdApi.Webpack.getModule(m => m.Messages) as {
+  _fetchMessages(lang: string): Record<string, string>,
+  getLocale(): string
+};
+export function useMessages() {
+  return useMemo(() => intl._fetchMessages(intl.getLocale()), [ ]);
 };
 
 export function useLanguage(language: string): Language {
@@ -45,16 +47,14 @@ export function useSrc(content: string) {
 };
 
 export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTableElement>, modal: boolean,content: string, lang:string, showPreview: boolean) {
+  const [ maxHeight ] = useData("maxHeight", 300);
+  const [ previewHeight ] = useData("previewHeight", 200);  
+
   const ref = useRef(false);
   const [ tableHeight, setTableHeight ] = useState(0);
 
   const { height, angle } = ReactSpring.useSpring({
-    config: ref.current ? {
-      mass: 1,
-      tension: 250
-    } : {
-      duration: 0
-    },
+    config: ref.current ? ReactSpring.config.default : { duration: 0 },
     height: collapsed ? 0 : tableHeight,
     angle: collapsed ? 0 : 1
   });
@@ -62,7 +62,7 @@ export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTabl
   useLayoutEffect(() => {
     ref.current = false;
 
-    if (modal) setTableHeight(MODAL_HEIGHT);
+    if (modal) setTableHeight(400);
     else if (tableRef.current && tableRef.current.parentElement) {
       const scrollerHeight = Number(getComputedStyle(tableRef.current.parentElement, "::-webkit-scrollbar").height.replace("px", ""));
 
@@ -72,13 +72,13 @@ export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTabl
 
       setTableHeight(
         // Max Height of 300px
-        Math.min(add ? scrollerHeight + tableRef.current.offsetHeight : tableRef.current.offsetHeight, MAX_HEIGHT)
+        Math.min(add ? scrollerHeight + tableRef.current.offsetHeight : tableRef.current.offsetHeight, maxHeight)
       );
     }
-    else setTableHeight(PREVIEW_HEIGHT);
+    else setTableHeight(previewHeight);
     
     setTimeout(() => ref.current = true);
-  }, [ content, showPreview, lang ]);
+  }, [ content, showPreview, lang, maxHeight, previewHeight ]);
 
   return { height, angle };
 };

@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react";
 
-import { useFetchContent } from "./hooks";
+import { useFetchContent } from "../hooks";
 import Codeblock from "../codeblock";
 
 export type attachment = {
@@ -11,7 +11,7 @@ export type attachment = {
   size: number,
   spoiler: false,
   url: string
-}
+};
 export type AttachmentProps = {
   attachment: attachment,
   renderAdjacentContent: () => React.ReactNode,
@@ -20,7 +20,6 @@ export type AttachmentProps = {
   remove: () => void
 };
 
-// A wrapper to use the same Codeblock component for attachments
 function Attachment({ attachment, onContextMenu, className, remove }: AttachmentProps) {
   const content = useFetchContent(attachment.url);
 
@@ -31,8 +30,14 @@ function Attachment({ attachment, onContextMenu, className, remove }: Attachment
   }, []);
 
   return (
-    <div className={`ECBlock-file ${className}`}onContextMenu={onContextMenu}>
-      <Codeblock content={content || ""} lang={lang} modal={false} fileName={() => attachment.filename} loading={typeof content !== "string"} remove={remove} />
+    <div className={`ECBlock-file ${className}`} onContextMenu={onContextMenu}>
+      <Codeblock 
+        content={content || ""} 
+        lang={lang} 
+        modal={false} 
+        fileName={() => attachment.filename} 
+        loading={typeof content !== "string"} 
+        remove={remove} />
     </div>
   );
 };

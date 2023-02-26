@@ -1,7 +1,9 @@
 import { useCallback, useLayoutEffect, useState } from "react";
 
 type settings = {
-  autoCollapse: boolean
+  autoCollapse: boolean,
+  maxHeight: number,
+  previewHeight: number
 };
 
 const listeners = new Map<string, Set<() => void>>();
@@ -31,7 +33,7 @@ export function useData<key extends keyof settings>(key: key, presetValue: setti
     
     set.add(forceUpdate);
     return () => void set?.delete(forceUpdate);
-  }, []);
+  }, [ ]);
 
   return [
     state, 

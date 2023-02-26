@@ -1,7 +1,6 @@
 import React from "react";
 
 type Icon = React.ComponentClass<{ width: number, height: number }>;
-
 export const ArrowIcon = BdApi.Webpack.getModule(m => m.toString().includes("M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.")) as Icon;
 export const EyeIcon = BdApi.Webpack.getModule(m => m.toString().includes("13.1046 10.8954 14 12 14Z")) as Icon;
 export const DownloadIcon = BdApi.Webpack.getModule(m => m.toString().includes("20V18H6V20H18Z")) as Icon;
@@ -21,7 +20,7 @@ export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("
   onClose: () => void,
   transitionState: null | number,
   children: React.ReactNode,
-  size?: string
+  size?: "large" | "medium" | "small"
 }>;
 
 export const Spinner = BdApi.Webpack.getModule(m => m.Type?.PULSING_ELLIPSIS, { searchExports: true }) as React.ComponentClass<{ type: string }> & { Type: { WANDERING_CUBES: "string" }};
@@ -54,8 +53,8 @@ export const Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".t
 
 export const Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout")) as React.ComponentClass<{
   children: (props: {
-    "aria-controls": undefined,
-    "aria-expanded": false,
+    "aria-controls": string | undefined,
+    "aria-expanded": boolean,
     onClick: React.MouseEventHandler<HTMLDivElement>,
     onKeyDown: React.KeyboardEventHandler<HTMLDivElement>,
     onMouseDown: React.MouseEventHandler<HTMLDivElement>
@@ -70,23 +69,44 @@ export const Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toStri
   onRequestClose: () => void
 }>;
 
-type boundaryProps = { fallback?: React.ReactNode, children: React.ReactNode }
+export const NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,"));
+
+export function SettingItem({ title, disabled, hideBorder, item }: {
+  title: string,
+  disabled?: boolean,
+  hideBorder?: boolean,
+  item: React.ReactNode
+}) {
+  return (
+    <div className="container-31PmuA">
+      <div className="labelRow-NnoUIp">
+        <label className="title-2yADjX">{title}</label>
+        <div className="control-10qYax">{item}</div>
+      </div>
+      {!hideBorder && <div className="divider-3nqZNm dividerDefault-wIfHHD" />}
+    </div>
+  )
+};
 
 export class ErrorBoundary extends React.Component<
-  boundaryProps,
+  { fallback?: React.ReactNode, children: React.ReactNode },
   { hasError: boolean }
 > {
-  constructor(props: boundaryProps) {
-    super(props);
-    this.state = { hasError: false };
-  };
+  state = { hasError: false };
 
   componentDidCatch() {    
     this.setState({ hasError: true });
   };
 
   render() {
-    if (this.state.hasError) return this.props.fallback ?? <div className="react-error">There was an unexpected Error.</div>;  
+    if (this.state.hasError) return (
+      <div className="ECBlock-error">
+        <div className="react-error" onClick={() => this.setState({ hasError: false })}>
+          There was an unexpected Error with Enhance Codeblocks. Click to try and rerender.
+        </div>
+        {this.props.fallback}
+      </div>
+    );
     return this.props.children; 
   };
 }
