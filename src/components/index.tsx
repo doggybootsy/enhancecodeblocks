@@ -16,7 +16,7 @@ export function EnlargeIcon({ width, height }: { width: number, height: number }
   )
 };
 
-export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("ENTERING"), { searchExports: true  }) as React.ComponentClass<{
+export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("ENTERING") && m?.toString?.()?.includes("headerId"), { searchExports: true  }) as React.ComponentClass<{
   onClose: () => void,
   transitionState: null | number,
   children: React.ReactNode,
@@ -25,7 +25,7 @@ export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("
 
 export const Spinner = BdApi.Webpack.getModule(m => m.Type?.PULSING_ELLIPSIS, { searchExports: true }) as React.ComponentClass<{ type: string }> & { Type: { WANDERING_CUBES: "string" }};
 
-export const Tooltip = BdApi.Webpack.getModule(m => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()")) as React.ComponentClass<{
+export const Tooltip = BdApi.Webpack.getModule(m => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: true }) as React.ComponentClass<{
   text: React.ReactNode, 
   hideOnClick?: boolean, 
   children: (props: {
@@ -51,7 +51,7 @@ export const Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".t
   value: boolean
 }>;
 
-export const Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout")) as React.ComponentClass<{
+export const Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"), { searchExports: true }) as React.ComponentClass<{
   children: (props: {
     "aria-controls": string | undefined,
     "aria-expanded": boolean,

@@ -8,10 +8,10 @@ import ChangeLang from "./changeLang";
 import { useMessages } from "../hooks";
 import { formatBytes } from "../util";
 
-function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove, bytes }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, languageName: string, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void, remove?: (() => void) | false, bytes: number }) {
+function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove, bytes, loading }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, languageName: string, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void, remove?: (() => void) | false, bytes: number, loading?: boolean }) {
   const [ shouldShow, setShouldShow ] = React.useState(false);
   const messages = useMessages();
-
+  
   const formattedBytes = useMemo(() => formatBytes(bytes), [ bytes ]);
 
   return (
@@ -52,9 +52,11 @@ function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPrevi
             }}>{languageName}</div>
           )}
         </Popout>
-        <Tooltip text={`${bytes} B`} hideOnClick={false}>
-          {(props) => <div className="ECBlock-byteSize" {...props}>{formattedBytes}</div>}
-        </Tooltip>
+        {!loading && (
+          <Tooltip text={`${bytes} B`} hideOnClick={false}>
+            {(props) => <div className="ECBlock-byteSize" {...props}>{formattedBytes}</div>}
+          </Tooltip>
+        )}
       </div>
       <div className="ECBlock-actions">
         {remove && <Tooltip text={messages.DELETE} hideOnClick={false}>

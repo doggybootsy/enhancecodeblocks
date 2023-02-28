@@ -18,7 +18,7 @@ const openModal = BdApi.Webpack.getModule(m => m?.toString?.().includes("onClose
 
 function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: { content: string, lang: string, modal: boolean, fileName: () => string, loading?: boolean, remove?: (() => void) | false }) {
   const tableRef = useRef<HTMLTableElement>(null);
-
+  
   const [ _lang, setLang ] = useStateDeps(lang, [ lang ]);
   
   const [ autoCollapse ] = useData("autoCollapse", false);
@@ -26,12 +26,12 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
   
   const language = useLanguage(_lang);
   const highlighted = useHighlighted(language, _lang, content);
-
+  
   const [ showPreview, setShowPreview ] = useState(false);
   const [ previewHeight ] = useData("previewHeight", 200); 
-
+  
   const { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview);
-
+  
   // Original language must be CSS and the language name must be the html like
   const isSVG = useMemo(() => lang === "svg" && language.name === "HTML, XML", [ lang, language ]);
 
@@ -39,7 +39,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
     if (loading) return;
     if (window.DiscordNative) window.DiscordNative.fileManager.saveWithDialog(content, fileName());
   }, [ content, lang, loading ]);
-
+  
   const [ copied, setCopied ] = React.useState(false);
   const copyAction = useCallback(() => {
     if (loading) return;
@@ -48,7 +48,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [ content, copied, loading ]);
-
+  
   const enlargeAction = useCallback(() => {
     if (loading) return;
     openModal(({ transitionState, onClose }) => (
@@ -57,13 +57,13 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
       </ModalRoot>
     ));
   }, [ content, lang, loading ]);
-
+  
   const byteSize = useMemo(() => new File([ content ], "").size, [ content ]);
 
   return (
     <div 
       className={`ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`} 
-      data-language={language.name} >
+      data-language={language.name}>
       <Header 
         angle={angle} 
         collapsed={collapsed} 
@@ -79,7 +79,8 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
         modal={modal} 
         setLang={setLang} 
         remove={remove}
-        bytes={byteSize} />
+        bytes={byteSize}
+        loading={loading} />
       <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height }}>
         {loading && <Spinner type={Spinner.Type.WANDERING_CUBES} />}
         {(!loading && showPreview && isSVG) && <Preview content={content} height={modal ? 400 : previewHeight} />}

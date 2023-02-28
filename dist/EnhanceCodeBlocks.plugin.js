@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.7
+ * @version 1.0.8
  * @author Doggybootsy
  */
 "use strict";
@@ -211,6 +211,10 @@ function createURL(content) {
   return URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
 }
 function formatBytes(bytes) {
+  if (Number.isNaN(bytes))
+    return "";
+  if (bytes === 0)
+    return "0 B";
   let i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${["", "K", "M"][i]}B`;
 }
@@ -360,7 +364,7 @@ var import_react6, ArrowIcon, EyeIcon, DownloadIcon, CopyIcon, TrashIcon, ModalR
   "src/components/index.tsx"() {
     "use strict";
     import_react6 = __toESM(require_react()), ArrowIcon = BdApi.Webpack.getModule((m) => m.toString().includes("M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.")), EyeIcon = BdApi.Webpack.getModule((m) => m.toString().includes("13.1046 10.8954 14 12 14Z")), DownloadIcon = BdApi.Webpack.getModule((m) => m.toString().includes("20V18H6V20H18Z")), CopyIcon = BdApi.Webpack.getModule((m) => m.toString().includes("21V7h6v5h5v9H8z")), TrashIcon = BdApi.Webpack.getModule((m) => m.toString?.().includes("17H9V11H11V17ZM15 17H13V11H15V17Z"));
-    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), Tooltip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()")), Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout")), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,")), Text = BdApi.Webpack.getModule((m) => m.Colors && m.Sizes), classes = BdApi.Webpack.getModule((m) => m.container && m.dividerDefault), noteClasses = BdApi.Webpack.getModule((m) => m.description && m.modeDefault), { divider } = BdApi.Webpack.getModule((m) => m.divider && Object.keys(m).length === 1);
+    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING") && m?.toString?.()?.includes("headerId"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), Tooltip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: !0 }), Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"), { searchExports: !0 }), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,")), Text = BdApi.Webpack.getModule((m) => m.Colors && m.Sizes), classes = BdApi.Webpack.getModule((m) => m.container && m.dividerDefault), noteClasses = BdApi.Webpack.getModule((m) => m.description && m.modeDefault), { divider } = BdApi.Webpack.getModule((m) => m.divider && Object.keys(m).length === 1);
     ErrorBoundary = class extends import_react6.default.Component {
       state = { hasError: !1 };
       componentDidCatch() {
@@ -413,7 +417,7 @@ var import_react7, import_highlight2, SearchPopout, SearchItem, languageSelector
 });
 
 // src/codeblock/header.tsx
-function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove, bytes }) {
+function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove, bytes, loading }) {
   let [shouldShow, setShouldShow] = import_react8.default.useState(!1), messages = useMessages(), formattedBytes = (0, import_react8.useMemo)(() => formatBytes(bytes), [bytes]);
   return BdApi.React.createElement("div", { className: "ECBlock-header" }, BdApi.React.createElement("div", { className: "ECBlock-title" }, !modal && BdApi.React.createElement(import_react_spring2.default.animated.div, { style: {
     transform: angle.to({
@@ -436,7 +440,7 @@ function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPrevi
     (props) => BdApi.React.createElement("div", { className: "ECBlock-lang", ...props, onClick: (event) => {
       setShouldShow(!shouldShow), props.onClick(event);
     } }, languageName)
-  ), BdApi.React.createElement(Tooltip, { text: `${bytes} B`, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-byteSize", ...props }, formattedBytes))), BdApi.React.createElement("div", { className: "ECBlock-actions" }, remove && BdApi.React.createElement(Tooltip, { text: messages.DELETE, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-remove", ...props, onClick: remove }, BdApi.React.createElement(TrashIcon, { width: 22, height: 22 }))), isSVG && BdApi.React.createElement(Tooltip, { text: "Preview", hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-previewButton${showPreview ? " ECBlock-active" : ""}`, ...props, onClick: () => setShowPreview(!showPreview) }, BdApi.React.createElement(EyeIcon, { width: 22, height: 22 }))), BdApi.React.createElement(Tooltip, { text: messages.DOWNLOAD, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-downloadButton", ...props, onClick: downloadAction }, BdApi.React.createElement(DownloadIcon, { width: 22, height: 22 }))), BdApi.React.createElement(Tooltip, { text: copied ? messages.COPIED : messages.COPY, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-copyButton${copied ? " ECBlock-copied" : ""}`, ...props, onClick: copyAction }, BdApi.React.createElement(CopyIcon, { width: 22, height: 22 }))), !modal && BdApi.React.createElement(Tooltip, { text: messages.PREVIEW_WHOLE_FILE, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-enlarge", ...props, onClick: enlargeAction }, BdApi.React.createElement(EnlargeIcon, { width: 16, height: 16 })))));
+  ), !loading && BdApi.React.createElement(Tooltip, { text: `${bytes} B`, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-byteSize", ...props }, formattedBytes))), BdApi.React.createElement("div", { className: "ECBlock-actions" }, remove && BdApi.React.createElement(Tooltip, { text: messages.DELETE, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-remove", ...props, onClick: remove }, BdApi.React.createElement(TrashIcon, { width: 22, height: 22 }))), isSVG && BdApi.React.createElement(Tooltip, { text: "Preview", hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-previewButton${showPreview ? " ECBlock-active" : ""}`, ...props, onClick: () => setShowPreview(!showPreview) }, BdApi.React.createElement(EyeIcon, { width: 22, height: 22 }))), BdApi.React.createElement(Tooltip, { text: messages.DOWNLOAD, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-downloadButton", ...props, onClick: downloadAction }, BdApi.React.createElement(DownloadIcon, { width: 22, height: 22 }))), BdApi.React.createElement(Tooltip, { text: copied ? messages.COPIED : messages.COPY, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-copyButton${copied ? " ECBlock-copied" : ""}`, ...props, onClick: copyAction }, BdApi.React.createElement(CopyIcon, { width: 22, height: 22 }))), !modal && BdApi.React.createElement(Tooltip, { text: messages.PREVIEW_WHOLE_FILE, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-enlarge", ...props, onClick: enlargeAction }, BdApi.React.createElement(EnlargeIcon, { width: 16, height: 16 })))));
 }
 var import_react8, import_react_spring2, header_default, init_header = __esm({
   "src/codeblock/header.tsx"() {
@@ -510,7 +514,8 @@ function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
         modal,
         setLang,
         remove,
-        bytes: byteSize
+        bytes: byteSize,
+        loading
       }
     ),
     BdApi.React.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && BdApi.React.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && BdApi.React.createElement(preview_default, { content, height: modal ? 400 : previewHeight }), !loading && !(showPreview && isSVG) && BdApi.React.createElement(table_default, { highlighted, tableRef }))
