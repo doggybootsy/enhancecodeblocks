@@ -153,6 +153,7 @@ var styles_default, init_styles = __esm({
   padding: 0 8px;\r
   white-space: pre;\r
   user-select: text;\r
+  width: 100%;\r
 }\r
 .ECBlock-preview {\r
   display: flex;\r
@@ -455,10 +456,22 @@ var import_react8, import_react_spring2, header_default, init_header = __esm({
 });
 
 // src/codeblock/table.tsx
-function Code({ highlighted, tableRef }) {
+function properties(language, line) {
+  let props = {
+    dangerouslySetInnerHTML: { __html: line }
+  };
+  if (language.name !== "Diff")
+    return props;
+  let match = line.match(/<span class="hljs-(deletion|addition)">(.*?)<\/span>/);
+  if (!match)
+    return props;
+  let [, type, content] = match;
+  return props.dangerouslySetInnerHTML.__html = content, props.className = `hljs-${type}`, props;
+}
+function Code({ highlighted, tableRef, language }) {
   let spl = (0, import_react9.useMemo)(() => highlighted.value.split(`
 `), [highlighted]);
-  return BdApi.React.createElement("table", { className: "ECBlock-table", ref: tableRef }, BdApi.React.createElement("tbody", null, spl.map((line, i) => BdApi.React.createElement("tr", { key: `${line}__${i}` }, BdApi.React.createElement("td", null, i + 1), BdApi.React.createElement("td", { dangerouslySetInnerHTML: { __html: line } })))));
+  return BdApi.React.createElement("table", { className: "ECBlock-table", ref: tableRef }, BdApi.React.createElement("tbody", null, spl.map((line, i) => BdApi.React.createElement("tr", { key: `${line}__${i}` }, BdApi.React.createElement("td", null, i + 1), BdApi.React.createElement("td", { ...properties(language, line) })))));
 }
 var import_react9, table_default, init_table = __esm({
   "src/codeblock/table.tsx"() {
@@ -518,7 +531,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
         loading
       }
     ),
-    BdApi.React.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && BdApi.React.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && BdApi.React.createElement(preview_default, { content, height: modal ? 400 : previewHeight }), !loading && !(showPreview && isSVG) && BdApi.React.createElement(table_default, { highlighted, tableRef }))
+    BdApi.React.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && BdApi.React.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && BdApi.React.createElement(preview_default, { content, height: modal ? 400 : previewHeight }), !loading && !(showPreview && isSVG) && BdApi.React.createElement(table_default, { highlighted, tableRef, language }))
   );
 }
 var import_react11, import_react_spring3, thin, openModal, codeblock_default, init_codeblock2 = __esm({

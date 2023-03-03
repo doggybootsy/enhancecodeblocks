@@ -84,7 +84,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
       <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height }}>
         {loading && <Spinner type={Spinner.Type.WANDERING_CUBES} />}
         {(!loading && showPreview && isSVG) && <Preview content={content} height={modal ? 400 : previewHeight} />}
-        {(!loading && !(showPreview && isSVG)) && <Table highlighted={highlighted} tableRef={tableRef} />}
+        {(!loading && !(showPreview && isSVG)) && <Table highlighted={highlighted} tableRef={tableRef} language={language} />}
       </ReactSpring.animated.div>
     </div>
   )

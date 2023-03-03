@@ -114,6 +114,7 @@
   padding: 0 8px;
   white-space: pre;
   user-select: text;
+  width: 100%;
 }
 .ECBlock-preview {
   display: flex;
