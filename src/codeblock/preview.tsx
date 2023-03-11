@@ -9,7 +9,7 @@ function Preview({ content, height }: { content: string, height: number }) {
     <div className="ECBlock-preview">
       <img src={src} height={height} />
     </div>
-  )
+  );
 };
 
 export default memo(Preview);

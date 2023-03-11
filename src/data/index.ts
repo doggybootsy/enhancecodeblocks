@@ -8,6 +8,7 @@ type settings = {
 };
 
 const listeners = new Map<string, Set<() => void>>();
+
 export function useData<key extends keyof settings>(key: key, presetValue: settings[key]): [
   settings[key],
   (value: settings[key]) => void

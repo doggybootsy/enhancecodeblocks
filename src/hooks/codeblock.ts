@@ -38,18 +38,17 @@ export function useHighlighted(language: Language, _lang: string, content: strin
 };
 
 export function useSrc(content: string) {
-  const forceUpdate = useForceUpdate();
+  const [ src, setSrc ] = useState(() => createURL(content));
 
-  const src = useRef(createURL(content));
-  
-  useEffect(() => () => URL.revokeObjectURL(src.current), []);
+  useEffect(() => () => URL.revokeObjectURL(src));
   useLayoutEffect(() => {
-    URL.revokeObjectURL(src.current);
-    src.current = createURL(content);
-    forceUpdate();
+    setSrc((old) => {
+      URL.revokeObjectURL(old);
+      return createURL(content);
+    })
   }, [ content ]);
 
-  return src.current;
+  return src;
 };
 
 export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTableElement>, modal: boolean,content: string, lang:string, showPreview: boolean) {

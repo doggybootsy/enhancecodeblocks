@@ -24,9 +24,7 @@ export function useFetchContent(url: string) {
       else setContent(`Enhance Codeblocks FETCH ERROR: STATUS=${JSON.stringify(result.status)} OK=${JSON.stringify(result.ok)} URL=${JSON.stringify(result.url)}`);
     })();
 
-    return () => {
-      abortController.abort();
-    }
+    return () => abortController.abort();
   }, []);
 
   return content;

@@ -32,7 +32,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
   
   const { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview);
   
-  // Original language must be CSS and the language name must be the html like
+  // Original language must be SVG and the language name must be the html like
   const isSVG = useMemo(() => lang === "svg" && language.name === "HTML, XML", [ lang, language ]);
 
   const downloadAction = useCallback(() => {

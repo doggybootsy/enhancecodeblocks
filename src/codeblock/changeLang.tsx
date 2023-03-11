@@ -24,7 +24,7 @@ const LANGUAGES = hljs.listLanguages().map(name => {
     lang: lang,
     value: name,
     aliases: lang.aliases ? lang.aliases.concat(name) : [ name ]
-  }
+  };
 });
 
 function getContent(searchValue: string) {
@@ -49,7 +49,7 @@ function ChangeLang({ value, onChange }: { value: string, onChange: (value: stri
       onChange={onChange}
       placeholder={messages.SEARCH_LANGUAGES}
       value={new Set([ value.toLowerCase() ])}
-    >{getContent}</SearchPopout>
+    >{(searchValue) => getContent(searchValue)}</SearchPopout>
   )
 };
 
