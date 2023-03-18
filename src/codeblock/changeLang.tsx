@@ -15,7 +15,7 @@ const SearchItem = BdApi.Webpack.getModule(m => m.Checkbox && m.Checkmark, { sea
   value: string,
   children: React.ReactNode
 }> & { Label: React.ComponentClass<{ children: React.ReactNode }> };
-const { languageSelector } = BdApi.Webpack.getModule(m => m.languageSelector) as { languageSelector: string };
+const { languageSelector } = BdApi.Webpack.getModule(m => m.languageSelector && m.codeIcon) as { languageSelector: string };
 
 const LANGUAGES = hljs.listLanguages().map(name => {
   const lang = hljs.getLanguage(name) as Language;
@@ -47,10 +47,9 @@ function ChangeLang({ value, onChange }: { value: string, onChange: (value: stri
       className={languageSelector}
       multiSelect={false}
       onChange={onChange}
-      placeholder={messages.SEARCH_LANGUAGES}
+      placeholder={messages.PREVIEW_CHANGE_LANGUAGE}
       value={new Set([ value.toLowerCase() ])}
     >{(searchValue) => getContent(searchValue)}</SearchPopout>
   )
 };
-
 export default memo(ChangeLang);

@@ -3,17 +3,8 @@ import hljs, { Language } from "highlight.js";
 import { useMemo, useRef, useEffect, useLayoutEffect, useState } from "react";
 import ReactSpring from "react-spring";
 
-import { useForceUpdate } from "./common";
 import { createURL } from "../util";
 import { useData } from "../data";
-
-const intl = BdApi.Webpack.getModule(m => m.Messages) as {
-  _fetchMessages(lang: string): Record<string, string>,
-  getLocale(): string
-};
-export function useMessages() {
-  return useMemo(() => intl._fetchMessages(intl.getLocale()), [ ]);
-};
 
 export function useLanguage(language: string): Language {
   return useMemo(() => {
@@ -22,7 +13,6 @@ export function useLanguage(language: string): Language {
     return hljs.getLanguage("txt") as Language;
   }, [ language ]);
 };
-
 
 export function useHighlighted(language: Language, _lang: string, content: string) {
   const [ maxBytes ] = useData("maxBytes", 21_846);

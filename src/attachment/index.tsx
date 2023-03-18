@@ -1,12 +1,16 @@
-import React, { memo, useState } from "react";
+import React, { memo } from "react";
 
 import AttachmentWrapper, { AttachmentProps, attachment } from "./wrapper";
 import { ErrorBoundary } from "../components";
+import { useData } from "../data";
+import { useStateDeps } from "../hooks";
 
 export type DiscordAttachment = { renderPlaintextFilePreview: (props: AttachmentProps) => React.ReactNode, onRemoveAttachment: (attachment: attachment) => void, attachment: attachment };
 
 function Attachment({ props, attachment, renderPlaintextFilePreview, canDeleteAttachments }: { props: AttachmentProps, attachment: DiscordAttachment, renderPlaintextFilePreview(props: AttachmentProps): React.ReactNode, canDeleteAttachments: boolean }) {
-  const [ error, setError ] = useState(attachment.attachment.size > 200_000_000);
+  const [ maxFileBytes ] = useData("maxFileBytes", 200_000_000);
+
+  const [ error, setError ] = useStateDeps(() => attachment.attachment.size > maxFileBytes, [ maxFileBytes ]);
 
   if (error) return (
     <div className="ECBlock ECBlock-error">

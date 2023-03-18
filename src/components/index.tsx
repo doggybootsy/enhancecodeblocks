@@ -1,6 +1,7 @@
 import React from "react";
 
 export { default as Icon } from "./icon";
+export { default as SettingItem } from "./settingsItem";
 
 export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("ENTERING") && m?.toString?.()?.includes("headerId"), { searchExports: true  }) as React.ComponentClass<{
   onClose: () => void,
@@ -59,41 +60,13 @@ export const Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toStri
   onRequestClose: () => void
 }>;
 
-export const NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,")) as React.ComponentClass<{
+export const NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,", "tabIndex:")) as React.ComponentClass<{
   value: number,
   onChange: (v: number) => void,
   className?: string,
   minValue?: number
   maxValue?: number
 }>;
-
-export const Text = BdApi.Webpack.getModule(m => m.Colors && m.Sizes) as React.ComponentClass<{
-  className?: string,
-  children: React.ReactNode
-}>;
-
-const classes = BdApi.Webpack.getModule(m => m.container && m.dividerDefault);
-const noteClasses = BdApi.Webpack.getModule(m => m.description && m.modeDefault);
-const { divider } = BdApi.Webpack.getModule(m => m.divider && Object.keys(m).length === 1);
-
-export function SettingItem({ title, disabled, hideBorder, item, note }: {
-  title: React.ReactNode,
-  note?: React.ReactNode,
-  disabled?: boolean,
-  hideBorder?: boolean,
-  item: React.ReactNode
-}) {
-  return (
-    <div className={`${classes.container}${disabled ? ` ${classes.disabled}` : ""}`}>
-      <div className={classes.labelRow}>
-        <label className={classes.title}>{title}</label>
-        <div className={classes.control}>{item}</div>
-      </div>
-      {note && <Text className={`${noteClasses.description} ${noteClasses.modeDefault}${disabled ? ` ${noteClasses.modeDisabled}` : ""}`}>{note}</Text>}
-      {!hideBorder && <div className={`${divider} ${classes.dividerDefault}`} />}
-    </div>
-  )
-};
 
 export class ErrorBoundary extends React.Component<
   { fallback?: React.ReactNode, children: React.ReactNode },

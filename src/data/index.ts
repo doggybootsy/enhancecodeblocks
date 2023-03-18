@@ -4,7 +4,8 @@ type settings = {
   autoCollapse: boolean,
   maxHeight: number,
   previewHeight: number,
-  maxBytes: number
+  maxBytes: number,
+  maxFileBytes: number
 };
 
 const listeners = new Map<string, Set<() => void>>();

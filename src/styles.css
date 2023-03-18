@@ -22,6 +22,13 @@
 .ECBlock .react-error {
   margin-bottom: 8px;
 }
+.ECBlock-numberSetting {
+  transform: translateY(-5px);
+  display: flex;
+}
+.ECBlock-numberSetting [class*="value-"] {
+  width: 120px;
+}
 .ECBlock-file .ECBlock {
   /* so they wont be small */
   width: 100vw;
@@ -120,4 +127,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.ECBlock-overflow {
+  position: fixed;
+  right: 12px;
+  top: 12px;
+  display: flex;
+  color: var(--interactive-normal);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+.ECBlock-overflow:hover {
+  color: var(--interactive-hover);  
+  background: var(--background-modifier-hover);
+}
+.ECBlock-overflow:active {
+  color: var(--interactive-active);  
+  background: var(--background-modifier-active);
+}
+.ECBlock-overflow.ECBlock-selected {
+  background: var(--background-modifier-selected);
+}
+.ECBlock-zIndex-hook {
+  z-index: 1;
 }
