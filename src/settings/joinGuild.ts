@@ -20,9 +20,16 @@ const transitionTo = BdApi.Webpack.getModule((m) => typeof m === "function" && S
 let cachedInvite: any;
 async function getInvite() {
   if (cachedInvite) return cachedInvite;
-  const { invite } = await inviteResolver.resolveInvite(GUILD_CONSTANT.invite, "Desktop Modal");
-  cachedInvite = invite;
-  return invite;
+  try {
+    BdApi.UI.showToast(`Resolving invite '${GUILD_CONSTANT.invite}'`, { icon: true, type: "info" });
+    const { invite } = await inviteResolver.resolveInvite(GUILD_CONSTANT.invite, "Desktop Modal");
+    cachedInvite = invite;
+    return invite;
+  } catch (error) {
+    BdApi.UI.showToast(`Unable to resolve invite '${GUILD_CONSTANT.invite}'`, { icon: true, type: "danger" });
+    console.error(error);
+    return false;
+  }
 };
 
 async function joinGuild() {
@@ -30,9 +37,11 @@ async function joinGuild() {
   if (guild) {
     BdApi.UI.showToast(`Going to ${guild.name}`, { icon: true, type: "info" });    
     return transitionTo(`/channels/${GUILD_CONSTANT.guildId}`);
-  }
+  };
 
   const invite = await getInvite();
+  
+  if (!invite) return;
 
   InviteModalStore.isOpen = () => true;
   native.minimize = () => {};

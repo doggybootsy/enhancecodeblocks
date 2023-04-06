@@ -28,7 +28,7 @@ type Tooltip = React.ComponentClass<{
 
 // If my search fails hopefully bds doesnt
 const foundToolTip = BdApi.Webpack.getModule(m => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: true }) as Tooltip | undefined;
-export const Tooltip = foundToolTip ?? (BdApi.Components.Tooltip as Tooltip);
+export const Tooltip = foundToolTip ? foundToolTip : (BdApi.Components.Tooltip as Tooltip);
 
 export const Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: true }) as React.ComponentClass<{
   children: React.ReactNode,

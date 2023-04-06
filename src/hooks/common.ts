@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useReducer, useMemo, useSyncExternalStore } from "react";
+import { useState, useLayoutEffect, useReducer, useMemo } from "react";
 
 export function useForceUpdate(): () => void {
   const [, forceUpdate ] = useReducer((state) => state + 1, 0);

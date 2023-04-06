@@ -2,10 +2,11 @@ import React, { memo, useLayoutEffect, useRef, useState } from "react";
 
 import { Icon, NumberInputStepper, Popout, SettingItem, Switch } from "../components";
 import { useData } from "../data";
-import Menu from "./menu";
+import Menu, { shouldShowMenu } from "./menu";
 
 function Settings() {
   const [ autoCollapse, setAutoCollapse ] = useData("autoCollapse", false);  
+  const [ instantCollapse, setInstantCollapse ] = useData("instantCollapse", false);  
   const [ maxHeight, setMaxHeight ] = useData("maxHeight", 300);
   const [ previewHeight, setPreviewHeight ] = useData("previewHeight", 200);  
   const [ maxBytes, setBytes ] = useData("maxBytes", 21_846);
@@ -22,7 +23,7 @@ function Settings() {
   
   return (
     <div className="ECBlock-settings" ref={ref}>
-      <Popout
+      {shouldShowMenu && <Popout
         onRequestClose={() => setOpen(false)}
         shouldShow={open}
         position="left"
@@ -33,15 +34,19 @@ function Settings() {
         renderPopout={() => <Menu onClose={() => setOpen(false)} />}
       >
         {(props) => (
-          <div {...props} onClick={() => setOpen(!open)} className={`ECBlock-overflow${open ? ` ECBlock-selected` : ""}`}>
+          <div {...props} onClick={() => setOpen(!open)} role="button" tabIndex={1} className={`ECBlock-overflow${open ? ` ECBlock-selected` : ""}`}>
             <Icon name="overflow" size={24} />
           </div>
         )}
-      </Popout>
+      </Popout>}
       <Switch
         value={autoCollapse}
         onChange={setAutoCollapse}
       >Auto Collapse</Switch>
+      <Switch
+        value={instantCollapse}
+        onChange={setInstantCollapse}
+      >Instant Collapse</Switch>
       <SettingItem 
         item={(
           <div className="ECBlock-numberSetting">

@@ -22,8 +22,8 @@ export function useHighlighted(language: Language, _lang: string, content: strin
 
     const _content = content.length > maxBytes ? `${content.slice(0, maxBytes)}\n\n[Download to view the rest of this file]` : content;
 
-    if (hljs.getLanguage(lang)) return hljs.highlight(lang, _content);
-    return hljs.highlight(_lang, _content);
+    if (hljs.getLanguage(lang)) return hljs.highlight(_content, { language: lang });
+    return hljs.highlight(_content, { language: _lang });
   }, [ content, language, maxBytes ]);
 };
 
@@ -44,12 +44,13 @@ export function useSrc(content: string) {
 export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTableElement>, modal: boolean,content: string, lang:string, showPreview: boolean) {
   const [ maxHeight ] = useData("maxHeight", 300);
   const [ previewHeight ] = useData("previewHeight", 200);  
+  const [ instantCollapse ] = useData("instantCollapse", false);  
 
   const ref = useRef(false);
   const [ tableHeight, setTableHeight ] = useState(0);
 
   const { height, angle } = ReactSpring.useSpring({
-    config: ref.current ? ReactSpring.config.default : { duration: 0 },
+    config: ref.current ? instantCollapse ? { duration: 0 } : ReactSpring.config.default : { duration: 0 },
     height: collapsed ? 0 : tableHeight,
     angle: collapsed ? 0 : 1
   });
@@ -67,7 +68,7 @@ export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTabl
 
       setTableHeight(
         // Max Height of 300px
-        Math.min(add ? scrollerHeight + tableRef.current.offsetHeight : tableRef.current.offsetHeight, maxHeight)
+        Math.min((add ? scrollerHeight + tableRef.current.offsetHeight : tableRef.current.offsetHeight) + 2, maxHeight)
       );
     }
     else setTableHeight(previewHeight);

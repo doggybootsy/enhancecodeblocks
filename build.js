@@ -12,7 +12,7 @@ function shim(id, contents) {
   }
 };
 
-const exportModule = (module) => `const module = ${module};Object.assign(exports, module);if (!module.default) Object.assign(exports, { default: module });`;
+const exportModule = (module) => `const module = ${module};Object.assign(exports, module);if (!("default" in module)) Object.assign(exports, { default: module });`;
 
 (async () => {
   if (!process.argv.includes("--no-build")) {

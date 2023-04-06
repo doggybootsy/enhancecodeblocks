@@ -11,7 +11,7 @@ function Code({ highlighted, tableRef, language }: { highlighted: HighlightResul
     <table className="ECBlock-table" ref={tableRef}>
       <tbody>
         {spl.map((line, index) => (
-          <Line key={`${line}__${index}`} index={index} line={line} language={language}/>
+          <Line key={`${line}__${index}`} index={index} line={line} language={language} />
         ))}
       </tbody>
     </table>

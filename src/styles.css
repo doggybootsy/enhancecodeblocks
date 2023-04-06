@@ -147,6 +147,7 @@
   background: var(--background-modifier-active);
 }
 .ECBlock-overflow.ECBlock-selected {
+  color: var(--interactive-active);  
   background: var(--background-modifier-selected);
 }
 .ECBlock-zIndex-hook {

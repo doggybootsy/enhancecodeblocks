@@ -25,7 +25,7 @@ export function useFetchContent(url: string) {
     })();
 
     return () => abortController.abort();
-  }, []);
+  }, [ ]);
 
   return content;
 };

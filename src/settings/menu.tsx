@@ -5,14 +5,9 @@ import joinGuild from "./joinGuild";
 
 const displayUserModal = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".analyticsLocation,", ",friendToken:"), { searchExports: true }) as (props: { userId: string }) => void;
 
-export default BdApi.ContextMenu.buildMenu([
+const Menu = BdApi.ContextMenu.buildMenu([
   {
-    label: "Github",
-    action: () => window.open("https://github.com/doggybootsy/enhancecodeblocks/"),
-    icon: () => <Icon name="github" size={18} />
-  },
-  {
-    label: "Join Discord",
+    label: "Support Discord",
     action: () => joinGuild(),
     icon: () => <Icon name="discord" size={18} />
   },
@@ -22,8 +17,22 @@ export default BdApi.ContextMenu.buildMenu([
     icon: () => <Icon name="at" size={18} />
   },
   {
+    label: "Source",
+    action: () => window.open("https://github.com/doggybootsy/enhancecodeblocks/"),
+    icon: () => <Icon name="github" size={18} />
+  },
+  {
     label: "Website",
     action: () => window.open("https://doggybootsy.github.io/"),
     icon: () => <Icon name="globe" size={18} />
   }
 ]);
+
+export let shouldShowMenu = true;
+
+try {
+  if (Menu({})?.type === undefined) shouldShowMenu = false;
+} 
+catch (error) {}
+
+export default Menu;

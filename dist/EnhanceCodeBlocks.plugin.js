@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.11
+ * @version 1.0.12
  * @author Doggybootsy
  */
 "use strict";
@@ -10,7 +10,6 @@ var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf, __hasOwnProp = Object.prototype.hasOwnProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: !0, configurable: !0, writable: !0, value }) : obj[key] = value;
 var __esm = (fn, res) => function() {
   return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
 };
@@ -34,7 +33,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: !0 }) : target,
   mod
 )), __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: !0 }), mod);
-var __publicField = (obj, key, value) => (__defNormalProp(obj, typeof key != "symbol" ? key + "" : key, value), value);
 
 // src/styles.css
 var styles_default, init_styles = __esm({
@@ -188,6 +186,7 @@ var styles_default, init_styles = __esm({
   background: var(--background-modifier-active);\r
 }\r
 .ECBlock-overflow.ECBlock-selected {\r
+  color: var(--interactive-active);  \r
   background: var(--background-modifier-selected);\r
 }\r
 .ECBlock-zIndex-hook {\r
@@ -201,7 +200,7 @@ var require_react = __commonJS({
   "shim-react:react"(exports2) {
     var module2 = BdApi.React;
     Object.assign(exports2, module2);
-    module2.default || Object.assign(exports2, { default: module2 });
+    "default" in module2 || Object.assign(exports2, { default: module2 });
   }
 });
 
@@ -210,7 +209,7 @@ var require_react_spring = __commonJS({
   "shim-react-spring:react-spring"(exports2) {
     var module2 = BdApi.Webpack.getModule((m) => m.useSpring);
     Object.assign(exports2, module2);
-    module2.default || Object.assign(exports2, { default: module2 });
+    "default" in module2 || Object.assign(exports2, { default: module2 });
   }
 });
 
@@ -235,7 +234,7 @@ var require_highlight = __commonJS({
   "shim-highlight.js:highlight.js"(exports2) {
     var module2 = BdApi.Webpack.getModule((m) => m.highlight);
     Object.assign(exports2, module2);
-    module2.default || Object.assign(exports2, { default: module2 });
+    "default" in module2 || Object.assign(exports2, { default: module2 });
   }
 });
 
@@ -306,7 +305,7 @@ function useHighlighted(language, _lang, content) {
     let lang = language.aliases?.[0] ? language.aliases[0] : language.name, _content = content.length > maxBytes ? `${content.slice(0, maxBytes)}
 
 [Download to view the rest of this file]` : content;
-    return import_highlight.default.getLanguage(lang) ? import_highlight.default.highlight(lang, _content) : import_highlight.default.highlight(_lang, _content);
+    return import_highlight.default.getLanguage(lang) ? import_highlight.default.highlight(_content, { language: lang }) : import_highlight.default.highlight(_content, { language: _lang });
   }, [content, language, maxBytes]);
 }
 function useSrc(content) {
@@ -316,8 +315,8 @@ function useSrc(content) {
   }, [content]), src;
 }
 function useSizing(collapsed, tableRef, modal, content, lang, showPreview) {
-  let [maxHeight] = useData("maxHeight", 300), [previewHeight] = useData("previewHeight", 200), ref = (0, import_react4.useRef)(!1), [tableHeight, setTableHeight] = (0, import_react4.useState)(0), { height, angle } = import_react_spring.default.useSpring({
-    config: ref.current ? import_react_spring.default.config.default : { duration: 0 },
+  let [maxHeight] = useData("maxHeight", 300), [previewHeight] = useData("previewHeight", 200), [instantCollapse] = useData("instantCollapse", !1), ref = (0, import_react4.useRef)(!1), [tableHeight, setTableHeight] = (0, import_react4.useState)(0), { height, angle } = import_react_spring.default.useSpring({
+    config: ref.current ? instantCollapse ? { duration: 0 } : import_react_spring.default.config.default : { duration: 0 },
     height: collapsed ? 0 : tableHeight,
     angle: collapsed ? 0 : 1
   });
@@ -330,7 +329,7 @@ function useSizing(collapsed, tableRef, modal, content, lang, showPreview) {
       let add = tableRef.current.parentElement.scrollLeft !== 0;
       tableRef.current.parentElement.scroll({ left: 0 }), setTableHeight(
         // Max Height of 300px
-        Math.min(add ? scrollerHeight + tableRef.current.offsetHeight : tableRef.current.offsetHeight, maxHeight)
+        Math.min((add ? scrollerHeight + tableRef.current.offsetHeight : tableRef.current.offsetHeight) + 2, maxHeight)
       );
     } else
       setTableHeight(previewHeight);
@@ -381,19 +380,14 @@ var init_hooks = __esm({
 });
 
 // src/components/icon.tsx
-var import_react6, _Icon, Icon, icon_default, init_icon = __esm({
+function Icon({ size, name }) {
+  let Icon2 = (0, import_react6.useMemo)(() => icons[name] ? icons[name] : icons.error, [name]);
+  return BdApi.React.createElement(Icon2, { width: size, height: size });
+}
+var import_react6, icons, icon_default, init_icon = __esm({
   "src/components/icon.tsx"() {
     "use strict";
-    import_react6 = __toESM(require_react()), _Icon = class extends import_react6.Component {
-      static error({ width, height }) {
-        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 20 20", color: "var(--status-danger)" }, BdApi.React.createElement("path", { d: "M10 0C4.486 0 0 4.486 0 10C0 15.515 4.486 20 10 20C15.514 20 20 15.515 20 10C20 4.486 15.514 0 10 0ZM9 4H11V11H9V4ZM10 15.25C9.31 15.25 8.75 14.691 8.75 14C8.75 13.31 9.31 12.75 10 12.75C10.69 12.75 11.25 13.31 11.25 14C11.25 14.691 10.69 15.25 10 15.25Z", "fill-rule": "evenodd", "clip-rule": "evenodd", fill: "currentColor" }));
-      }
-      render() {
-        let CachedIcon = _Icon.icons[this.props.name];
-        return CachedIcon ? BdApi.React.createElement(CachedIcon, { width: this.props.size, height: this.props.size }) : BdApi.React.createElement(_Icon.error, { width: this.props.size, height: this.props.size });
-      }
-    }, Icon = _Icon;
-    __publicField(Icon, "icons", {
+    import_react6 = __toESM(require_react()), icons = {
       arrow: BdApi.Webpack.getModule((m) => m.toString().includes("M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.")),
       eye: BdApi.Webpack.getModule((m) => m.toString().includes("13.1046 10.8954 14 12 14Z")),
       download: BdApi.Webpack.getModule((m) => m.toString().includes("20V18H6V20H18Z")),
@@ -408,9 +402,12 @@ var import_react6, _Icon, Icon, icon_default, init_icon = __esm({
       },
       github({ width, height }) {
         return BdApi.React.createElement("svg", { viewBox: "0 0 24 24", fill: "currentColor", width, height }, BdApi.React.createElement("path", { d: "m12 .5c-6.63 0-12 5.28-12 11.792 0 5.211 3.438 9.63 8.205 11.188.6.111.82-.254.82-.567 0-.28-.01-1.022-.015-2.005-3.338.711-4.042-1.582-4.042-1.582-.546-1.361-1.335-1.725-1.335-1.725-1.087-.731.084-.716.084-.716 1.205.082 1.838 1.215 1.838 1.215 1.07 1.803 2.809 1.282 3.495.981.108-.763.417-1.282.76-1.577-2.665-.295-5.466-1.309-5.466-5.827 0-1.287.465-2.339 1.235-3.164-.135-.298-.54-1.497.105-3.121 0 0 1.005-.316 3.3 1.209.96-.262 1.98-.392 3-.398 1.02.006 2.04.136 3 .398 2.28-1.525 3.285-1.209 3.285-1.209.645 1.624.24 2.823.12 3.121.765.825 1.23 1.877 1.23 3.164 0 4.53-2.805 5.527-5.475 5.817.42.354.81 1.077.81 2.182 0 1.578-.015 2.846-.015 3.229 0 .309.21.678.825.56 4.801-1.548 8.236-5.97 8.236-11.173 0-6.512-5.373-11.792-12-11.792z" }));
+      },
+      error({ width, height }) {
+        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 20 20", color: "var(--status-danger)" }, BdApi.React.createElement("path", { d: "M10 0C4.486 0 0 4.486 0 10C0 15.515 4.486 20 10 20C15.514 20 20 15.515 20 10C20 4.486 15.514 0 10 0ZM9 4H11V11H9V4ZM10 15.25C9.31 15.25 8.75 14.691 8.75 14C8.75 13.31 9.31 12.75 10 12.75C10.69 12.75 11.25 13.31 11.25 14C11.25 14.691 10.69 15.25 10 15.25Z", "fill-rule": "evenodd", "clip-rule": "evenodd", fill: "currentColor" }));
       }
-    });
-    icon_default = Icon;
+    };
+    icon_default = (0, import_react6.memo)(Icon);
   }
 });
 
@@ -433,7 +430,7 @@ var import_react8, ModalRoot, Spinner, foundToolTip, Tooltip, Switch, Popout, Nu
     import_react8 = __toESM(require_react());
     init_icon();
     init_settingsItem();
-    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING") && m?.toString?.()?.includes("headerId"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), foundToolTip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: !0 }), Tooltip = foundToolTip ?? BdApi.Components.Tooltip, Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"), { searchExports: !0 }), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,", "tabIndex:")), ErrorBoundary = class extends import_react8.default.Component {
+    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING") && m?.toString?.()?.includes("headerId"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), foundToolTip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: !0 }), Tooltip = foundToolTip || BdApi.Components.Tooltip, Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"), { searchExports: !0 }), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,", "tabIndex:")), ErrorBoundary = class extends import_react8.default.Component {
       state = { hasError: !1 };
       componentDidCatch() {
         this.setState({ hasError: !0 });
@@ -695,18 +692,23 @@ var import_react16, attachment_default, init_attachment2 = __esm({
 async function getInvite() {
   if (cachedInvite)
     return cachedInvite;
-  let { invite } = await inviteResolver.resolveInvite(GUILD_CONSTANT.invite, "Desktop Modal");
-  return cachedInvite = invite, invite;
+  try {
+    BdApi.UI.showToast(`Resolving invite '${GUILD_CONSTANT.invite}'`, { icon: !0, type: "info" });
+    let { invite } = await inviteResolver.resolveInvite(GUILD_CONSTANT.invite, "Desktop Modal");
+    return cachedInvite = invite, invite;
+  } catch (error) {
+    return BdApi.UI.showToast(`Unable to resolve invite '${GUILD_CONSTANT.invite}'`, { icon: !0, type: "danger" }), console.error(error), !1;
+  }
 }
 async function joinGuild() {
   let guild = GuildStore.getGuild(GUILD_CONSTANT.guildId);
   if (guild)
     return BdApi.UI.showToast(`Going to ${guild.name}`, { icon: !0, type: "info" }), transitionTo(`/channels/${GUILD_CONSTANT.guildId}`);
   let invite = await getInvite();
-  InviteModalStore.isOpen = () => !0, native.minimize = () => {
+  invite && (InviteModalStore.isOpen = () => !0, native.minimize = () => {
   }, await dispatcher.dispatch({ type: "INVITE_MODAL_OPEN", invite }), setTimeout(() => {
     InviteModalStore.isOpen = originalIsOpen, native.minimize = originalNative;
-  });
+  }));
 }
 var GUILD_CONSTANT, dispatcher, inviteResolver, InviteModalStore, originalIsOpen, native, originalNative, GuildStore, transitionTo, cachedInvite, joinGuild_default, init_joinGuild = __esm({
   "src/settings/joinGuild.ts"() {
@@ -720,19 +722,14 @@ var GUILD_CONSTANT, dispatcher, inviteResolver, InviteModalStore, originalIsOpen
 });
 
 // src/settings/menu.tsx
-var displayUserModal, menu_default, init_menu = __esm({
+var displayUserModal, Menu, shouldShowMenu, menu_default, init_menu = __esm({
   "src/settings/menu.tsx"() {
     "use strict";
     init_components();
     init_joinGuild();
-    displayUserModal = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".analyticsLocation,", ",friendToken:"), { searchExports: !0 }), menu_default = BdApi.ContextMenu.buildMenu([
+    displayUserModal = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".analyticsLocation,", ",friendToken:"), { searchExports: !0 }), Menu = BdApi.ContextMenu.buildMenu([
       {
-        label: "Github",
-        action: () => window.open("https://github.com/doggybootsy/enhancecodeblocks/"),
-        icon: () => BdApi.React.createElement(icon_default, { name: "github", size: 18 })
-      },
-      {
-        label: "Join Discord",
+        label: "Support Discord",
         action: () => joinGuild_default(),
         icon: () => BdApi.React.createElement(icon_default, { name: "discord", size: 18 })
       },
@@ -742,20 +739,30 @@ var displayUserModal, menu_default, init_menu = __esm({
         icon: () => BdApi.React.createElement(icon_default, { name: "at", size: 18 })
       },
       {
+        label: "Source",
+        action: () => window.open("https://github.com/doggybootsy/enhancecodeblocks/"),
+        icon: () => BdApi.React.createElement(icon_default, { name: "github", size: 18 })
+      },
+      {
         label: "Website",
         action: () => window.open("https://doggybootsy.github.io/"),
         icon: () => BdApi.React.createElement(icon_default, { name: "globe", size: 18 })
       }
-    ]);
+    ]), shouldShowMenu = !0;
+    try {
+      Menu({})?.type === void 0 && (shouldShowMenu = !1);
+    } catch {
+    }
+    menu_default = Menu;
   }
 });
 
 // src/settings/index.tsx
 function Settings() {
-  let [autoCollapse, setAutoCollapse] = useData("autoCollapse", !1), [maxHeight, setMaxHeight] = useData("maxHeight", 300), [previewHeight, setPreviewHeight] = useData("previewHeight", 200), [maxBytes, setBytes] = useData("maxBytes", 21846), [maxFileBytes, setFileBytes] = useData("maxFileBytes", 2e8), [open, setOpen] = (0, import_react17.useState)(!1), ref = (0, import_react17.useRef)(null);
+  let [autoCollapse, setAutoCollapse] = useData("autoCollapse", !1), [instantCollapse, setInstantCollapse] = useData("instantCollapse", !1), [maxHeight, setMaxHeight] = useData("maxHeight", 300), [previewHeight, setPreviewHeight] = useData("previewHeight", 200), [maxBytes, setBytes] = useData("maxBytes", 21846), [maxFileBytes, setFileBytes] = useData("maxFileBytes", 2e8), [open, setOpen] = (0, import_react17.useState)(!1), ref = (0, import_react17.useRef)(null);
   return (0, import_react17.useLayoutEffect)(() => {
     !ref.current || !ref.current.parentElement || ref.current.parentElement.classList.add("ECBlock-zIndex-hook");
-  }, []), BdApi.React.createElement("div", { className: "ECBlock-settings", ref }, BdApi.React.createElement(
+  }, []), BdApi.React.createElement("div", { className: "ECBlock-settings", ref }, shouldShowMenu && BdApi.React.createElement(
     Popout,
     {
       onRequestClose: () => setOpen(!1),
@@ -767,7 +774,7 @@ function Settings() {
       nudgeAlignIntoViewport: !0,
       renderPopout: () => BdApi.React.createElement(menu_default, { onClose: () => setOpen(!1) })
     },
-    (props) => BdApi.React.createElement("div", { ...props, onClick: () => setOpen(!open), className: `ECBlock-overflow${open ? " ECBlock-selected" : ""}` }, BdApi.React.createElement(icon_default, { name: "overflow", size: 24 }))
+    (props) => BdApi.React.createElement("div", { ...props, onClick: () => setOpen(!open), role: "button", tabIndex: 1, className: `ECBlock-overflow${open ? " ECBlock-selected" : ""}` }, BdApi.React.createElement(icon_default, { name: "overflow", size: 24 }))
   ), BdApi.React.createElement(
     Switch,
     {
@@ -775,6 +782,13 @@ function Settings() {
       onChange: setAutoCollapse
     },
     "Auto Collapse"
+  ), BdApi.React.createElement(
+    Switch,
+    {
+      value: instantCollapse,
+      onChange: setInstantCollapse
+    },
+    "Instant Collapse"
   ), BdApi.React.createElement(
     settingsItem_default,
     {
