@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.12
+ * @version 1.0.13
  * @author Doggybootsy
  */
 "use strict";
@@ -145,7 +145,7 @@ var styles_default, init_styles = __esm({
   overflow: auto scroll;\r
 }\r
 .ECBlock .ECBlock-table {\r
-  font-size: 0.9rem;\r
+  font-size: 0.9em;\r
 }\r
 .ECBlock .ECBlock-table tr > :first-child {\r
   padding: 0 8px;\r
