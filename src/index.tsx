@@ -1,7 +1,7 @@
 import React from "react";
 import type { Plugin } from "betterdiscord";
 
-import css from "./styles.css";
+import css from "@plugin/css";
 
 import CodeBlock from "./codeblock";
 import Attachment, { DiscordAttachment } from "./attachment";

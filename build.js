@@ -1,5 +1,6 @@
 const esbuild = require("esbuild");
 const { readFileSync, writeFileSync } = require("fs");
+const { readFile } = require("fs/promises");
 const { join } = require("path");
 
 function shim(id, contents) {
@@ -27,6 +28,7 @@ const exportModule = (module) => `const module = ${module};Object.assign(exports
       ignoreAnnotations: true,
       jsxFactory: "BdApi.React.createElement",
       plugins: [
+        shim("@plugin/css", `export default ${JSON.stringify(await readFile("./src/styles.css", "utf-8"))}`),
         shim("react", exportModule("BdApi.React")),
         shim("react-spring", exportModule("BdApi.Webpack.getModule(m => m.useSpring)")),
         shim("highlight.js", exportModule("BdApi.Webpack.getModule(m => m.highlight)"))

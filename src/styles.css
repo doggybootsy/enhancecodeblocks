@@ -11,6 +11,8 @@
   border-radius: 3px;
   overflow: hidden;
   color: var(--text-muted);
+  text-size-adjust: none;
+  line-height: 1rem;
 }
 .ECBlock.ECBlock-error {
   padding: 8px;
@@ -107,6 +109,7 @@
 }
 .ECBlock .ECBlock-table {
   font-size: 0.9em;
+  font-family: var(--font-code);
 }
 .ECBlock .ECBlock-table tr > :first-child {
   padding: 0 8px;

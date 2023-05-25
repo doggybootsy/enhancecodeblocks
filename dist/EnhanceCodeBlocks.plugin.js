@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.13
+ * @version 1.0.14
  * @author Doggybootsy
  */
 "use strict";
@@ -34,10 +34,10 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 )), __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: !0 }), mod);
 
-// src/styles.css
-var styles_default, init_styles = __esm({
-  "src/styles.css"() {
-    styles_default = `[class^="spoilerContainer-"] {\r
+// shim-@plugin/css:@plugin/css
+var css_default, init_css = __esm({
+  "shim-@plugin/css:@plugin/css"() {
+    css_default = `[class^="spoilerContainer-"] {\r
   width: 100%;\r
 }\r
 .ECBlock-file {\r
@@ -50,6 +50,8 @@ var styles_default, init_styles = __esm({
   border-radius: 3px;\r
   overflow: hidden;\r
   color: var(--text-muted);\r
+  text-size-adjust: none;\r
+  line-height: 1rem;\r
 }\r
 .ECBlock.ECBlock-error {\r
   padding: 8px;\r
@@ -146,6 +148,7 @@ var styles_default, init_styles = __esm({
 }\r
 .ECBlock .ECBlock-table {\r
   font-size: 0.9em;\r
+  font-family: var(--font-code);\r
 }\r
 .ECBlock .ECBlock-table tr > :first-child {\r
   padding: 0 8px;\r
@@ -836,7 +839,7 @@ __export(src_exports, {
 var BdApi2, codeBlock, MessageAttachment, messageListItem, ECBlocks, src_default, init_src = __esm({
   "src/index.tsx"() {
     "use strict";
-    init_styles();
+    init_css();
     init_codeblock2();
     init_attachment2();
     init_settings();
@@ -858,7 +861,7 @@ var BdApi2, codeBlock, MessageAttachment, messageListItem, ECBlocks, src_default
               let { renderPlaintextFilePreview } = attachment2;
               attachment2.renderPlaintextFilePreview = (props2) => BdApi2.React.createElement(attachment_default, { props: props2, attachment: attachment2, canDeleteAttachments: that.props.canDeleteAttachments, renderPlaintextFilePreview });
             }
-        }), BdApi2.DOM.addStyle(styles_default), this.forceUpdateMessages();
+        }), BdApi2.DOM.addStyle(css_default), this.forceUpdateMessages();
       }
       stop() {
         BdApi2.Patcher.unpatchAll(), BdApi2.DOM.removeStyle(), this.forceUpdateMessages();

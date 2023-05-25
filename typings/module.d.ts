@@ -1,4 +1,4 @@
-declare module "*.css" {
+declare module "@plugin/css" {
   const type: string;
   export default type;
 }
