@@ -4,13 +4,14 @@ import ReactSpring from "react-spring";
 import type { SpringValue } from "@react-spring/web";
 
 import { Tooltip, Icon, Popout } from "../components";
+
 import ChangeLang from "./changeLang";
 import { useMessages } from "../hooks";
 import { formatBytes } from "../util";
 
 function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove, bytes, loading }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, languageName: string, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void, remove?: (() => void) | false, bytes: number, loading?: boolean }) {
   const [ shouldShow, setShouldShow ] = React.useState(false);
-  const messages = useMessages();
+  const messages = useMessages();  
   
   const formattedBytes = useMemo(() => formatBytes(bytes), [ bytes ]);
 

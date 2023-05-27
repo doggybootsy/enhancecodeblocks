@@ -1,5 +1,12 @@
 import { useReducer } from "react";
 
+export function debounce<f extends Function>(handler: f, timeout?: number | undefined): f {
+  let timer: number;
+  return function(this: any) {
+    clearTimeout(timer);
+    timer = setTimeout(() => handler.apply(this, arguments), timeout);
+  } as unknown as f;
+};
 
 export function useForceUpdate() {
   const [, forceUpdate ] = useReducer((num) => num + 1, 0);
@@ -7,10 +14,12 @@ export function useForceUpdate() {
   return forceUpdate;
 };
 
+const domParser = new DOMParser();
 export function createURL(content: string): string {
-  // Add a 'xmlns' tag if it doesnt exist
-  const svg = content.includes("xmlns=") ? content : content.replace(/^(<svg) /, "$1 xmlns=\"http://www.w3.org/2000/svg\" ");
-  return URL.createObjectURL(new Blob([ svg ], { type: "image/svg+xml" }));
+  const svg = domParser.parseFromString(content, "image/svg+xml");
+  // add xmlns if not added
+  if (!svg.documentElement.getAttribute("xmlns")) svg.documentElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  return URL.createObjectURL(new Blob([ svg.documentElement.outerHTML ], { type: "image/svg+xml" }));
 };
 
 export function formatBytes(bytes: number): string {

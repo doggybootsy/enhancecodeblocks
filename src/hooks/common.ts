@@ -15,9 +15,8 @@ export function useStateDeps<T>(initialState: T | (() => T), deps: React.Depende
 };
 
 const intl = BdApi.Webpack.getModule(m => m.Messages) as {
-  _fetchMessages(lang: string): Record<string, string>,
-  getLocale(): string
+  Messages: Record<string, string>
 };
 export function useMessages() {
-  return useMemo(() => intl._fetchMessages(intl.getLocale()), [ ]);
+  return intl.Messages;
 };

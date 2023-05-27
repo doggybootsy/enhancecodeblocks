@@ -8,6 +8,7 @@ import Table from "./table";
 import Preview from "./preview";
 import { ModalRoot, Spinner } from "../components";
 import { useData } from "../data";
+import { debounce } from "../util";
 
 const { thin } = BdApi.Webpack.getModule(m => m.thin && m.none) as { thin: string };
 
@@ -40,13 +41,13 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
     if (window.DiscordNative) window.DiscordNative.fileManager.saveWithDialog(content, fileName());
   }, [ content, lang, loading ]);
   
-  const [ copied, setCopied ] = React.useState(false);
+  const [ copied, setCopied ] = useState(false);
+  const setCopiedFalse = useMemo(() => debounce(() => setCopied(false), 2000), [ ]);
   const copyAction = useCallback(() => {
     if (loading) return;
-    if (copied) return;
     if (window.DiscordNative) window.DiscordNative.clipboard.copy(content);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedFalse();
   }, [ content, copied, loading ]);
   
   const enlargeAction = useCallback(() => {

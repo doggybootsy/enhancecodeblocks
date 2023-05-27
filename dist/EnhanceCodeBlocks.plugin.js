@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.14
+ * @version 1.0.15
  * @author Doggybootsy
  */
 "use strict";
@@ -222,7 +222,7 @@ function useStateDeps(initialState, deps) {
   return (0, import_react.useLayoutEffect)(() => setState(initialState), deps), [state, setState];
 }
 function useMessages() {
-  return (0, import_react.useMemo)(() => intl._fetchMessages(intl.getLocale()), []);
+  return intl.Messages;
 }
 var import_react, intl, init_common = __esm({
   "src/hooks/common.ts"() {
@@ -242,9 +242,15 @@ var require_highlight = __commonJS({
 });
 
 // src/util/index.ts
+function debounce(handler, timeout) {
+  let timer;
+  return function() {
+    clearTimeout(timer), timer = setTimeout(() => handler.apply(this, arguments), timeout);
+  };
+}
 function createURL(content) {
-  let svg = content.includes("xmlns=") ? content : content.replace(/^(<svg) /, '$1 xmlns="http://www.w3.org/2000/svg" ');
-  return URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+  let svg = domParser.parseFromString(content, "image/svg+xml");
+  return svg.documentElement.getAttribute("xmlns") || svg.documentElement.setAttribute("xmlns", "http://www.w3.org/2000/svg"), URL.createObjectURL(new Blob([svg.documentElement.outerHTML], { type: "image/svg+xml" }));
 }
 function formatBytes(bytes) {
   if (Number.isNaN(bytes))
@@ -254,10 +260,11 @@ function formatBytes(bytes) {
   let i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${["", "K", "M"][i]}B`;
 }
-var import_react2, init_util = __esm({
+var import_react2, domParser, init_util = __esm({
   "src/util/index.ts"() {
     "use strict";
     import_react2 = __toESM(require_react());
+    domParser = new DOMParser();
   }
 });
 
@@ -596,8 +603,8 @@ var import_react13, preview_default, init_preview = __esm({
 function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
   let tableRef = (0, import_react14.useRef)(null), [_lang, setLang] = useStateDeps(lang, [lang]), [autoCollapse] = useData("autoCollapse", !1), [collapsed, setCollapsed] = useStateDeps(() => modal ? !1 : autoCollapse, [autoCollapse]), language = useLanguage(_lang), highlighted = useHighlighted(language, _lang, content), [showPreview, setShowPreview] = (0, import_react14.useState)(!1), [previewHeight] = useData("previewHeight", 200), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), isSVG = (0, import_react14.useMemo)(() => lang === "svg" && language.name === "HTML, XML", [lang, language]), downloadAction = (0, import_react14.useCallback)(() => {
     loading || window.DiscordNative && window.DiscordNative.fileManager.saveWithDialog(content, fileName());
-  }, [content, lang, loading]), [copied, setCopied] = import_react14.default.useState(!1), copyAction = (0, import_react14.useCallback)(() => {
-    loading || copied || (window.DiscordNative && window.DiscordNative.clipboard.copy(content), setCopied(!0), setTimeout(() => setCopied(!1), 2e3));
+  }, [content, lang, loading]), [copied, setCopied] = (0, import_react14.useState)(!1), setCopiedFalse = (0, import_react14.useMemo)(() => debounce(() => setCopied(!1), 2e3), []), copyAction = (0, import_react14.useCallback)(() => {
+    loading || (window.DiscordNative && window.DiscordNative.clipboard.copy(content), setCopied(!0), setCopiedFalse());
   }, [content, copied, loading]), enlargeAction = (0, import_react14.useCallback)(() => {
     loading || openModal(({ transitionState, onClose }) => BdApi.React.createElement(ModalRoot, { transitionState, onClose, size: "large" }, BdApi.React.createElement(CodeBlock, { content, lang, modal: !0, fileName })));
   }, [content, lang, loading]), byteSize = (0, import_react14.useMemo)(() => new File([content], "").size, [content]);
@@ -641,6 +648,7 @@ var import_react14, import_react_spring3, thin, openModal, codeblock_default, in
     init_preview();
     init_components();
     init_data();
+    init_util();
     ({ thin } = BdApi.Webpack.getModule((m) => m.thin && m.none)), openModal = BdApi.Webpack.getModule((m) => m?.toString?.().includes("onCloseCallback") && m?.toString().includes("Layer"), { searchExports: !0 });
     codeblock_default = (0, import_react14.memo)(CodeBlock);
   }
