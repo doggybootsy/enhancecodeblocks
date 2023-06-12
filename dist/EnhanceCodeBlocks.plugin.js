@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.15
+ * @version 1.0.16
  * @author Doggybootsy
  */
 "use strict";
@@ -249,8 +249,8 @@ function debounce(handler, timeout) {
   };
 }
 function createURL(content) {
-  let svg = domParser.parseFromString(content, "image/svg+xml");
-  return svg.documentElement.getAttribute("xmlns") || svg.documentElement.setAttribute("xmlns", "http://www.w3.org/2000/svg"), URL.createObjectURL(new Blob([svg.documentElement.outerHTML], { type: "image/svg+xml" }));
+  let svg = domParser.parseFromString(content, "image/svg+xml").documentElement;
+  return svg instanceof SVGElement ? (svg.getAttribute("xmlns") || svg.setAttribute("xmlns", "http://www.w3.org/2000/svg"), URL.createObjectURL(new Blob([svg.outerHTML], { type: "image/svg+xml" }))) : !1;
 }
 function formatBytes(bytes) {
   if (Number.isNaN(bytes))
@@ -320,8 +320,11 @@ function useHighlighted(language, _lang, content) {
 }
 function useSrc(content) {
   let [src, setSrc] = (0, import_react4.useState)(() => createURL(content));
-  return (0, import_react4.useEffect)(() => () => URL.revokeObjectURL(src)), (0, import_react4.useLayoutEffect)(() => {
-    setSrc((old) => (URL.revokeObjectURL(old), createURL(content)));
+  return (0, import_react4.useEffect)(() => {
+    if (src)
+      return () => URL.revokeObjectURL(src);
+  }, [src]), (0, import_react4.useLayoutEffect)(() => {
+    setSrc((old) => (old && URL.revokeObjectURL(old), createURL(content)));
   }, [content]), src;
 }
 function useSizing(collapsed, tableRef, modal, content, lang, showPreview) {
@@ -334,7 +337,21 @@ function useSizing(collapsed, tableRef, modal, content, lang, showPreview) {
     if (ref.current = !1, modal)
       setTableHeight(400);
     else if (tableRef.current && tableRef.current.parentElement) {
-      let scrollerHeight = Number(getComputedStyle(tableRef.current.parentElement, "::-webkit-scrollbar").height.replace("px", ""));
+      let { height: height2 } = getComputedStyle(tableRef.current.parentElement, "::-webkit-scrollbar"), match = height2.match(/([0-9]+)(.*)/), scrollerHeight;
+      try {
+        if (match) {
+          let [, size, length] = match;
+          if (!CSS[length])
+            scrollerHeight = Number(height2.replace("px", ""));
+          else {
+            let css = CSS[length](size);
+            css ? scrollerHeight = css.to("px").value : scrollerHeight = Number(height2.replace("px", ""));
+          }
+        } else
+          scrollerHeight = Number(height2.replace("px", ""));
+      } catch {
+        scrollerHeight = Number(height2.replace("px", ""));
+      }
       tableRef.current.parentElement.scroll({ left: 1e4 });
       let add = tableRef.current.parentElement.scrollLeft !== 0;
       tableRef.current.parentElement.scroll({ left: 0 }), setTableHeight(
@@ -586,22 +603,20 @@ var import_react12, table_default, init_table = __esm({
 });
 
 // src/codeblock/preview.tsx
-function Preview({ content, height }) {
-  let src = useSrc(content);
+function Preview({ height, src }) {
   return BdApi.React.createElement("div", { className: "ECBlock-preview" }, BdApi.React.createElement("img", { src, height }));
 }
 var import_react13, preview_default, init_preview = __esm({
   "src/codeblock/preview.tsx"() {
     "use strict";
     import_react13 = __toESM(require_react());
-    init_hooks();
     preview_default = (0, import_react13.memo)(Preview);
   }
 });
 
 // src/codeblock/index.tsx
 function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
-  let tableRef = (0, import_react14.useRef)(null), [_lang, setLang] = useStateDeps(lang, [lang]), [autoCollapse] = useData("autoCollapse", !1), [collapsed, setCollapsed] = useStateDeps(() => modal ? !1 : autoCollapse, [autoCollapse]), language = useLanguage(_lang), highlighted = useHighlighted(language, _lang, content), [showPreview, setShowPreview] = (0, import_react14.useState)(!1), [previewHeight] = useData("previewHeight", 200), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), isSVG = (0, import_react14.useMemo)(() => lang === "svg" && language.name === "HTML, XML", [lang, language]), downloadAction = (0, import_react14.useCallback)(() => {
+  let tableRef = (0, import_react14.useRef)(null), [_lang, setLang] = useStateDeps(lang, [lang]), [autoCollapse] = useData("autoCollapse", !1), [collapsed, setCollapsed] = useStateDeps(() => modal ? !1 : autoCollapse, [autoCollapse]), language = useLanguage(_lang), highlighted = useHighlighted(language, _lang, content), [showPreview, setShowPreview] = (0, import_react14.useState)(!1), [previewHeight] = useData("previewHeight", 200), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), src = useSrc(content), isSVG = (0, import_react14.useMemo)(() => lang === "svg" && language.name === "HTML, XML" && Boolean(src), [lang, language, src]), downloadAction = (0, import_react14.useCallback)(() => {
     loading || window.DiscordNative && window.DiscordNative.fileManager.saveWithDialog(content, fileName());
   }, [content, lang, loading]), [copied, setCopied] = (0, import_react14.useState)(!1), setCopiedFalse = (0, import_react14.useMemo)(() => debounce(() => setCopied(!1), 2e3), []), copyAction = (0, import_react14.useCallback)(() => {
     loading || (window.DiscordNative && window.DiscordNative.clipboard.copy(content), setCopied(!0), setCopiedFalse());
@@ -635,7 +650,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
         loading
       }
     ),
-    BdApi.React.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && BdApi.React.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && BdApi.React.createElement(preview_default, { content, height: modal ? 400 : previewHeight }), !loading && !(showPreview && isSVG) && BdApi.React.createElement(table_default, { highlighted, tableRef, language }))
+    BdApi.React.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && BdApi.React.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && BdApi.React.createElement(preview_default, { src, height: modal ? 400 : previewHeight }), !loading && !(showPreview && isSVG) && BdApi.React.createElement(table_default, { highlighted, tableRef, language }))
   );
 }
 var import_react14, import_react_spring3, thin, openModal, codeblock_default, init_codeblock2 = __esm({

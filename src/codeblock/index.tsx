@@ -2,7 +2,7 @@
 import React, { memo, useMemo, useState, useRef, useCallback } from "react";
 import ReactSpring from "react-spring";
 
-import { useLanguage, useHighlighted, useSizing, useStateDeps } from "../hooks";
+import { useLanguage, useHighlighted, useSizing, useStateDeps, useSrc } from "../hooks";
 import Header from "./header";
 import Table from "./table";
 import Preview from "./preview";
@@ -33,9 +33,11 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
   
   const { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview);
   
-  // Original language must be SVG and the language name must be the html like
-  const isSVG = useMemo(() => lang === "svg" && language.name === "HTML, XML", [ lang, language ]);
+  const src = useSrc(content);
 
+  // Original language must be SVG and the language name must be the html like
+  const isSVG = useMemo(() => lang === "svg" && language.name === "HTML, XML" && Boolean(src), [ lang, language, src ]);
+  
   const downloadAction = useCallback(() => {
     if (loading) return;
     if (window.DiscordNative) window.DiscordNative.fileManager.saveWithDialog(content, fileName());
@@ -84,7 +86,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
         loading={loading} />
       <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height }}>
         {loading && <Spinner type={Spinner.Type.WANDERING_CUBES} />}
-        {(!loading && showPreview && isSVG) && <Preview content={content} height={modal ? 400 : previewHeight} />}
+        {(!loading && showPreview && isSVG) && <Preview src={src as string} height={modal ? 400 : previewHeight} />}
         {(!loading && !(showPreview && isSVG)) && <Table highlighted={highlighted} tableRef={tableRef} language={language} />}
       </ReactSpring.animated.div>
     </div>

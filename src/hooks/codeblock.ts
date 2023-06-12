@@ -30,12 +30,16 @@ export function useHighlighted(language: Language, _lang: string, content: strin
 export function useSrc(content: string) {
   const [ src, setSrc ] = useState(() => createURL(content));
 
-  useEffect(() => () => URL.revokeObjectURL(src));
+  useEffect(() => {
+    if (!src) return;
+    return () => URL.revokeObjectURL(src);
+  }, [ src ]);
+
   useLayoutEffect(() => {
     setSrc((old) => {
-      URL.revokeObjectURL(old);
+      if (old) URL.revokeObjectURL(old);
       return createURL(content);
-    })
+    });
   }, [ content ]);
 
   return src;
@@ -60,7 +64,27 @@ export function useSizing(collapsed: boolean, tableRef: React.RefObject<HTMLTabl
 
     if (modal) setTableHeight(400);
     else if (tableRef.current && tableRef.current.parentElement) {
-      const scrollerHeight = Number(getComputedStyle(tableRef.current.parentElement, "::-webkit-scrollbar").height.replace("px", ""));
+      const { height } = getComputedStyle(tableRef.current.parentElement, "::-webkit-scrollbar");
+
+      const match = height.match(/([0-9]+)(.*)/);
+
+      let scrollerHeight: number;
+      
+      try {
+        if (match) {
+          const [, size, length ] = match as [ any, string, keyof typeof CSS ];
+          if (!CSS[length]) scrollerHeight = Number(height.replace("px", ""));
+          else {
+            const css = CSS[length](size) as unknown as void | { to(what: "px"): { value: number }};
+            if (!css) scrollerHeight = Number(height.replace("px", ""));
+            else scrollerHeight = css.to("px").value;
+          };
+        }
+        else scrollerHeight = Number(height.replace("px", ""));
+      } 
+      catch (error) {
+        scrollerHeight = Number(height.replace("px", ""));
+      }
 
       tableRef.current.parentElement.scroll({ left: 10000 });
       const add = tableRef.current.parentElement.scrollLeft !== 0;

@@ -1,10 +1,6 @@
 import React, { memo } from "react";
 
-import { useSrc } from "../hooks";
-
-function Preview({ content, height }: { content: string, height: number }) {
-  const src = useSrc(content);
-
+function Preview({ height, src }: { height: number, src: string }) {
   return (
     <div className="ECBlock-preview">
       <img src={src} height={height} />

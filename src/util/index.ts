@@ -15,11 +15,15 @@ export function useForceUpdate() {
 };
 
 const domParser = new DOMParser();
-export function createURL(content: string): string {
-  const svg = domParser.parseFromString(content, "image/svg+xml");
+export function createURL(content: string): string | false {
+  const parsed = domParser.parseFromString(content, "image/svg+xml");
+  const svg = parsed.documentElement;
   // add xmlns if not added
-  if (!svg.documentElement.getAttribute("xmlns")) svg.documentElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-  return URL.createObjectURL(new Blob([ svg.documentElement.outerHTML ], { type: "image/svg+xml" }));
+  
+  if (!(svg instanceof SVGElement)) return false;
+  
+  if (!svg.getAttribute("xmlns")) svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  return URL.createObjectURL(new Blob([ svg.outerHTML ], { type: "image/svg+xml" }));
 };
 
 export function formatBytes(bytes: number): string {
