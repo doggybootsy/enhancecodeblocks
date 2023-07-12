@@ -11,6 +11,7 @@ function Settings() {
   const [ previewHeight, setPreviewHeight ] = useData("previewHeight", 200);  
   const [ maxBytes, setBytes ] = useData("maxBytes", 21_846);
   const [ maxFileBytes, setFileBytes ] = useData("maxFileBytes", 200_000_000);
+  const [ wrapText, setWrapText ] = useData("wrapText", false);
 
   const [ open, setOpen ] = useState(false);
 
@@ -77,6 +78,10 @@ function Settings() {
         )}
         note="This helps preventing crashing on large files"
         title="Max Number of Bytes allowed on files" />
+      <Switch
+        value={wrapText}
+        onChange={setWrapText}
+      >Wrap Text</Switch>
     </div>
   )
 };

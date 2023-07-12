@@ -7,6 +7,7 @@ type settings = {
   maxBytes: number,
   maxFileBytes: number,
   instantCollapse: boolean
+  wrapText: boolean
 };
 
 const listeners = new Map<string, Set<() => void>>();

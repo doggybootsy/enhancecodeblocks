@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.16
+ * @version 1.0.17
  * @author Doggybootsy
  */
 "use strict";
@@ -52,6 +52,9 @@ var css_default, init_css = __esm({
   color: var(--text-muted);\r
   text-size-adjust: none;\r
   line-height: 1rem;\r
+}\r
+.ECBlock.ECBlock-wrap .ECBlock-table tr > :last-child {\r
+  white-space: pre-wrap;\r
 }\r
 .ECBlock.ECBlock-error {\r
   padding: 8px;\r
@@ -622,11 +625,11 @@ function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
     loading || (window.DiscordNative && window.DiscordNative.clipboard.copy(content), setCopied(!0), setCopiedFalse());
   }, [content, copied, loading]), enlargeAction = (0, import_react14.useCallback)(() => {
     loading || openModal(({ transitionState, onClose }) => BdApi.React.createElement(ModalRoot, { transitionState, onClose, size: "large" }, BdApi.React.createElement(CodeBlock, { content, lang, modal: !0, fileName })));
-  }, [content, lang, loading]), byteSize = (0, import_react14.useMemo)(() => new File([content], "").size, [content]);
+  }, [content, lang, loading]), byteSize = (0, import_react14.useMemo)(() => new File([content], "").size, [content]), [wrapText] = useData("wrapText", !1);
   return BdApi.React.createElement(
     "div",
     {
-      className: `ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`,
+      className: `ECBlock${wrapText ? " ECBlock-wrap" : ""}${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`,
       "data-language": language.name
     },
     BdApi.React.createElement(
@@ -785,7 +788,7 @@ var displayUserModal, Menu, shouldShowMenu, menu_default, init_menu = __esm({
 
 // src/settings/index.tsx
 function Settings() {
-  let [autoCollapse, setAutoCollapse] = useData("autoCollapse", !1), [instantCollapse, setInstantCollapse] = useData("instantCollapse", !1), [maxHeight, setMaxHeight] = useData("maxHeight", 300), [previewHeight, setPreviewHeight] = useData("previewHeight", 200), [maxBytes, setBytes] = useData("maxBytes", 21846), [maxFileBytes, setFileBytes] = useData("maxFileBytes", 2e8), [open, setOpen] = (0, import_react17.useState)(!1), ref = (0, import_react17.useRef)(null);
+  let [autoCollapse, setAutoCollapse] = useData("autoCollapse", !1), [instantCollapse, setInstantCollapse] = useData("instantCollapse", !1), [maxHeight, setMaxHeight] = useData("maxHeight", 300), [previewHeight, setPreviewHeight] = useData("previewHeight", 200), [maxBytes, setBytes] = useData("maxBytes", 21846), [maxFileBytes, setFileBytes] = useData("maxFileBytes", 2e8), [wrapText, setWrapText] = useData("wrapText", !1), [open, setOpen] = (0, import_react17.useState)(!1), ref = (0, import_react17.useRef)(null);
   return (0, import_react17.useLayoutEffect)(() => {
     !ref.current || !ref.current.parentElement || ref.current.parentElement.classList.add("ECBlock-zIndex-hook");
   }, []), BdApi.React.createElement("div", { className: "ECBlock-settings", ref }, shouldShowMenu && BdApi.React.createElement(
@@ -841,6 +844,13 @@ function Settings() {
       note: "This helps preventing crashing on large files",
       title: "Max Number of Bytes allowed on files"
     }
+  ), BdApi.React.createElement(
+    Switch,
+    {
+      value: wrapText,
+      onChange: setWrapText
+    },
+    "Wrap Text"
   ));
 }
 var import_react17, settings_default, init_settings = __esm({

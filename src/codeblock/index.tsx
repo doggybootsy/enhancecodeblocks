@@ -62,10 +62,11 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
   }, [ content, lang, loading ]);
   
   const byteSize = useMemo(() => new File([ content ], "").size, [ content ]);
+  const [ wrapText ] = useData("wrapText", false);
 
   return (
     <div 
-      className={`ECBlock${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`} 
+      className={`ECBlock${wrapText ? " ECBlock-wrap" : ""}${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`} 
       data-language={language.name}>
       <Header 
         angle={angle} 

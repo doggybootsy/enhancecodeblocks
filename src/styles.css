@@ -14,6 +14,9 @@
   text-size-adjust: none;
   line-height: 1rem;
 }
+.ECBlock.ECBlock-wrap .ECBlock-table tr > :last-child {
+  white-space: pre-wrap;
+}
 .ECBlock.ECBlock-error {
   padding: 8px;
   background: var(--background-message-automod);
