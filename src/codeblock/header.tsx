@@ -21,7 +21,7 @@ function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPrevi
         {!modal && (
           <ReactSpring.animated.div style={{
             transform: angle.to({
-              output: [ "rotate(-90deg)", "rotate(0deg)" ]
+              output: [ "rotate(270deg)", "rotate(180deg)" ]
             })
           }}>
             <Tooltip text={!collapsed ? "Uncollapse" : "Collapsed"} hideOnClick={false}>

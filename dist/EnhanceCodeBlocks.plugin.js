@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.17
+ * @version 1.0.18
  * @author Doggybootsy
  */
 "use strict";
@@ -37,8 +37,19 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 // shim-@plugin/css:@plugin/css
 var css_default, init_css = __esm({
   "shim-@plugin/css:@plugin/css"() {
-    css_default = `[class^="spoilerContainer-"] {\r
-  width: 100%;\r
+    css_default = `[class^="obscuredTextContent-"]:has(.ECBlock) {\r
+  pointer-events: all !important;\r
+}\r
+[class*="hidden-"] .ECBlock::after {\r
+  content: "";\r
+  position: absolute;\r
+  left: 0;\r
+  top: 0;\r
+  right: 0;\r
+  bottom: 0;\r
+  background: var(--__current--spoiler-background-color);\r
+  border-radius: var(--radius-xs);\r
+  pointer-events: none;\r
 }\r
 .ECBlock-file {\r
   width: 100%;\r
@@ -47,11 +58,17 @@ var css_default, init_css = __esm({
 .ECBlock {\r
   background: var(--background-secondary-alt);\r
   border: 1px solid var(--background-tertiary);\r
-  border-radius: 3px;\r
+  border-radius: var(--radius-xs);\r
   overflow: hidden;\r
   color: var(--text-muted);\r
   text-size-adjust: none;\r
   line-height: 1rem;\r
+  position: relative;\r
+}\r
+.ECBlock > div {\r
+  opacity: var(--__current--spoiler-content-opacity);\r
+  -webkit-transition: opacity .1s ease;\r
+  transition: opacity .1s ease;\r
 }\r
 .ECBlock.ECBlock-wrap .ECBlock-table tr > :last-child {\r
   white-space: pre-wrap;\r
@@ -109,7 +126,14 @@ var css_default, init_css = __esm({
 .ECBlock .ECBlock-collapse {\r
   cursor: pointer;\r
   display: flex;\r
+  color: var(--interactive-normal);\r
 } \r
+.ECBlock .ECBlock-collapse:hover {\r
+  color: var(--interactive-hover);  \r
+}\r
+.ECBlock .ECBlock-collapse:active {\r
+  color: var(--interactive-active);  \r
+}\r
 .ECBlock .ECBlock-enlarge {\r
   width: 22px;\r
   justify-content: center;\r
@@ -128,7 +152,7 @@ var css_default, init_css = __esm({
 } \r
 .ECBlock .ECBlock-actions > div {\r
   cursor: pointer;\r
-  color: var(--interactive-normal);  \r
+  color: var(--interactive-normal);\r
   display: flex;\r
   align-items: center;\r
 } \r
@@ -181,7 +205,7 @@ var css_default, init_css = __esm({
   color: var(--interactive-normal);\r
   cursor: pointer;\r
   padding: 4px;\r
-  border-radius: 4px;\r
+  border-radius: var(--radius-xs);\r
 }\r
 .ECBlock-overflow:hover {\r
   color: var(--interactive-hover);  \r
@@ -418,15 +442,33 @@ var import_react6, icons, icon_default, init_icon = __esm({
   "src/components/icon.tsx"() {
     "use strict";
     import_react6 = __toESM(require_react()), icons = {
-      arrow: BdApi.Webpack.getModule((m) => m.toString().includes("M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.")),
-      eye: BdApi.Webpack.getModule((m) => m.toString().includes("13.1046 10.8954 14 12 14Z")),
-      download: BdApi.Webpack.getModule((m) => m.toString().includes("20V18H6V20H18Z")),
-      copy: BdApi.Webpack.getModule((m) => m.toString().includes("21V7h6v5h5v9H8z")),
-      trash: BdApi.Webpack.getModule((m) => m.toString?.().includes("17H9V11H11V17ZM15 17H13V11H15V17Z")),
-      discord: BdApi.Webpack.getModule((m) => m.toString?.().includes("9.54272 12.0187 10.994C12.0187")),
-      at: BdApi.Webpack.getModule((m) => m.toString?.().includes("11.999C14.6 13.433")),
-      globe: BdApi.Webpack.getModule((m) => m.toString?.().includes("16H15V13C15 12.45 14.55")),
-      overflow: BdApi.Webpack.getModule((m) => m.toString?.().includes(".8954305-2 2-2zm0-6c1.1045695 0 2 .8954305")),
+      arrow({ width, height }) {
+        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 24 24" }, BdApi.React.createElement("polygon", { fillRule: "nonzero", fill: "currentColor", points: "18.35 4.35 16 2 6 12 16 22 18.35 19.65 10.717 12" }));
+      },
+      eye({ width, height }) {
+        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 24 24" }, BdApi.React.createElement("path", { fill: "currentColor", d: "M12 5C5.648 5 1 12 1 12C1 12 5.648 19 12 19C18.352 19 23 12 23 12C23 12 18.352 5 12 5ZM12 16C9.791 16 8 14.21 8 12C8 9.79 9.791 8 12 8C14.209 8 16 9.79 16 12C16 14.21 14.209 16 12 16Z" }), BdApi.React.createElement("path", { fill: "currentColor", d: "M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z" }));
+      },
+      download({ width, height }) {
+        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 24 24" }, BdApi.React.createElement("path", { fill: "currentColor", d: "M16.293 9.293L17.707 10.707L12 16.414L6.29297 10.707L7.70697 9.293L11 12.586V2H13V12.586L16.293 9.293ZM18 20V18H20V20C20 21.102 19.104 22 18 22H6C4.896 22 4 21.102 4 20V18H6V20H18Z" }));
+      },
+      copy({ width, height }) {
+        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 24 24" }, BdApi.React.createElement("path", { fill: "currentColor", d: "M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1z" }), BdApi.React.createElement("path", { fill: "currentColor", d: "M15 5H8c-1.1 0-1.99.9-1.99 2L6 21c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V11l-6-6zM8 21V7h6v5h5v9H8z" }));
+      },
+      trash({ width, height }) {
+        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 24 24" }, BdApi.React.createElement("path", { fill: "currentColor", d: "M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z" }), BdApi.React.createElement("path", { fill: "currentColor", d: "M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z" }));
+      },
+      discord({ width, height }) {
+        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 28 20" }, BdApi.React.createElement("path", { fill: "currentColor", d: "M23.0212 1.67671C21.3107 0.879656 19.5079 0.318797 17.6584 0C17.4062 0.461742 17.1749 0.934541 16.9708 1.4184C15.003 1.12145 12.9974 1.12145 11.0283 1.4184C10.819 0.934541 10.589 0.461744 10.3368 0.00546311C8.48074 0.324393 6.67795 0.885118 4.96746 1.68231C1.56727 6.77853 0.649666 11.7538 1.11108 16.652C3.10102 18.1418 5.3262 19.2743 7.69177 20C8.22338 19.2743 8.69519 18.4993 9.09812 17.691C8.32996 17.3997 7.58522 17.0424 6.87684 16.6135C7.06531 16.4762 7.24726 16.3387 7.42403 16.1847C11.5911 18.1749 16.408 18.1749 20.5763 16.1847C20.7531 16.3332 20.9351 16.4762 21.1171 16.6135C20.41 17.0369 19.6639 17.3997 18.897 17.691C19.3052 18.4993 19.7718 19.2689 20.3021 19.9945C22.6677 19.2689 24.8929 18.1364 26.8828 16.6466H26.8893C27.43 10.9731 25.9665 6.04728 23.0212 1.67671ZM9.68041 13.6383C8.39754 13.6383 7.34085 12.4453 7.34085 10.994C7.34085 9.54272 8.37155 8.34973 9.68041 8.34973C10.9893 8.34973 12.0395 9.54272 12.0187 10.994C12.0187 12.4453 10.9828 13.6383 9.68041 13.6383ZM18.3161 13.6383C17.0332 13.6383 15.9765 12.4453 15.9765 10.994C15.9765 9.54272 17.0124 8.34973 18.3161 8.34973C19.6184 8.34973 20.6751 9.54272 20.6543 10.994C20.6543 12.4453 19.6184 13.6383 18.3161 13.6383Z" }));
+      },
+      at({ width, height }) {
+        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 24 24" }, BdApi.React.createElement("path", { fill: "currentColor", d: "M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z" }));
+      },
+      globe({ width, height }) {
+        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 24 24" }, BdApi.React.createElement("path", { fill: "currentColor", d: "M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 19.93C7.05 19.44 4 16.08 4 12C4 11.38 4.08 10.79 4.21 10.21L9 15V16C9 17.1 9.9 18 11 18V19.93ZM17.9 17.39C17.64 16.58 16.9 16 16 16H15V13C15 12.45 14.55 12 14 12H8V10H10C10.55 10 11 9.55 11 9V7H13C14.1 7 15 6.1 15 5V4.59C17.93 5.78 20 8.65 20 12C20 14.08 19.2 15.97 17.9 17.39Z" }));
+      },
+      overflow({ width, height }) {
+        return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 24 24" }, BdApi.React.createElement("path", { fill: "currentColor", d: "M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z" }));
+      },
       enlarge({ width, height }) {
         return BdApi.React.createElement("svg", { "aria-hidden": "true", role: "img", width, height, viewBox: "0 0 16 16" }, BdApi.React.createElement("path", { fill: "currentColor", d: "M1.93956 14.6668H6.18203C6.51658 14.6668 6.7881 14.3953 6.7881 14.0607C6.7881 13.7262 6.51658 13.4547 6.18203 13.4547H3.40261L7.21658 9.64069C7.45325 9.40402 7.45325 9.02038 7.21658 8.78371C7.0984 8.66522 6.94325 8.60613 6.7881 8.60613C6.63294 8.60613 6.47779 8.66522 6.35961 8.78371L2.54563 12.5977V9.81826C2.54563 9.48372 2.27411 9.2122 1.93956 9.2122C1.60501 9.2122 1.3335 9.48372 1.3335 9.81826V14.0607C1.3335 14.3953 1.60501 14.6668 1.93956 14.6668Z" }), BdApi.React.createElement("path", { fill: "currentColor", d: "M8.78374 7.21643C9.02041 7.4531 9.40405 7.4531 9.64072 7.21643L13.4547 3.40245V6.18188C13.4547 6.51643 13.7262 6.78794 14.0608 6.78794C14.3953 6.78794 14.6668 6.51643 14.6668 6.18188V1.93941C14.6668 1.60486 14.3953 1.33334 14.0608 1.33334L9.8183 1.33334C9.48375 1.33334 9.21223 1.60486 9.21223 1.93941C9.21223 2.27396 9.48375 2.54548 9.8183 2.54548H12.5977L8.78374 6.35945C8.54707 6.59612 8.54707 6.97976 8.78374 7.21643Z" }));
       },
@@ -516,7 +558,7 @@ function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPrevi
   let [shouldShow, setShouldShow] = import_react10.default.useState(!1), messages = useMessages(), formattedBytes = (0, import_react10.useMemo)(() => formatBytes(bytes), [bytes]);
   return BdApi.React.createElement("div", { className: "ECBlock-header" }, BdApi.React.createElement("div", { className: "ECBlock-title" }, !modal && BdApi.React.createElement(import_react_spring2.default.animated.div, { style: {
     transform: angle.to({
-      output: ["rotate(-90deg)", "rotate(0deg)"]
+      output: ["rotate(270deg)", "rotate(180deg)"]
     })
   } }, BdApi.React.createElement(Tooltip, { text: collapsed ? "Collapsed" : "Uncollapse", hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-collapse", ...props, onClick: () => setCollapsed(!collapsed) }, BdApi.React.createElement(icon_default, { size: 22, name: "arrow" })))), BdApi.React.createElement(
     Popout,

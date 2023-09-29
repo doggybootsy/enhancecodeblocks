@@ -1,5 +1,16 @@
-[class^="spoilerContainer-"] {
-  width: 100%;
+[class^="obscuredTextContent-"]:has(.ECBlock) {
+  pointer-events: all !important;
+}
+[class*="hidden-"] .ECBlock::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--__current--spoiler-background-color);
+  border-radius: var(--radius-xs);
+  pointer-events: none;
 }
 .ECBlock-file {
   width: 100%;
@@ -8,11 +19,17 @@
 .ECBlock {
   background: var(--background-secondary-alt);
   border: 1px solid var(--background-tertiary);
-  border-radius: 3px;
+  border-radius: var(--radius-xs);
   overflow: hidden;
   color: var(--text-muted);
   text-size-adjust: none;
   line-height: 1rem;
+  position: relative;
+}
+.ECBlock > div {
+  opacity: var(--__current--spoiler-content-opacity);
+  -webkit-transition: opacity .1s ease;
+  transition: opacity .1s ease;
 }
 .ECBlock.ECBlock-wrap .ECBlock-table tr > :last-child {
   white-space: pre-wrap;
@@ -70,7 +87,14 @@
 .ECBlock .ECBlock-collapse {
   cursor: pointer;
   display: flex;
+  color: var(--interactive-normal);
 } 
+.ECBlock .ECBlock-collapse:hover {
+  color: var(--interactive-hover);  
+}
+.ECBlock .ECBlock-collapse:active {
+  color: var(--interactive-active);  
+}
 .ECBlock .ECBlock-enlarge {
   width: 22px;
   justify-content: center;
@@ -89,7 +113,7 @@
 } 
 .ECBlock .ECBlock-actions > div {
   cursor: pointer;
-  color: var(--interactive-normal);  
+  color: var(--interactive-normal);
   display: flex;
   align-items: center;
 } 
@@ -142,7 +166,7 @@
   color: var(--interactive-normal);
   cursor: pointer;
   padding: 4px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 .ECBlock-overflow:hover {
   color: var(--interactive-hover);  
