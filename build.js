@@ -30,8 +30,8 @@ const exportModule = (module) => `const module = ${module};Object.assign(exports
       plugins: [
         shim("@plugin/css", `export default ${JSON.stringify(await readFile("./src/styles.css", "utf-8"))}`),
         shim("react", exportModule("BdApi.React")),
-        shim("react-spring", exportModule("BdApi.Webpack.getModule(m => m.useSpring)")),
-        shim("highlight.js", exportModule("BdApi.Webpack.getModule(m => m.highlight)"))
+        shim("react-spring", exportModule("BdApi.Webpack.getModule(m => m.useSpring && m.animated)")),
+        shim("highlight.js", exportModule("BdApi.Webpack.getModule(m => m.highlight && m.listLanguages)"))
       ]
     });
     const pkg = require("./package.json");

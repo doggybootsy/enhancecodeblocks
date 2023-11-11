@@ -3,12 +3,7 @@ import React from "react";
 export { default as Icon } from "./icon";
 export { default as SettingItem } from "./settingsItem";
 
-export const ModalRoot = BdApi.Webpack.getModule(m => m?.toString?.().includes("ENTERING") && m?.toString?.()?.includes("headerId"), { searchExports: true  }) as React.ComponentClass<{
-  onClose: () => void,
-  transitionState: null | number,
-  children: React.ReactNode,
-  size?: "large" | "medium" | "small"
-}>;
+export const ModalRoot = BdApi.Webpack.getModule(m => m.ModalRoot).ModalRoot;
 
 export const Spinner = BdApi.Webpack.getModule(m => m.Type?.PULSING_ELLIPSIS, { searchExports: true }) as React.ComponentClass<{ type: string }> & { Type: { WANDERING_CUBES: "string" }};
 

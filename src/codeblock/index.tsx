@@ -12,7 +12,7 @@ import { debounce } from "../util";
 
 const { thin } = BdApi.Webpack.getModule(m => m.thin && m.none) as { thin: string };
 
-const openModal = BdApi.Webpack.getModule(m => m?.toString?.().includes("onCloseCallback") && m?.toString().includes("Layer"), {searchExports: true}) as (cb: (props: {
+const openModal = BdApi.Webpack.getModule(m => m.openModal).openModal as (cb: (props: {
   onClose: () => void,
   transitionState: null | number
 }) => React.ReactNode) => string;
@@ -54,8 +54,9 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
   
   const enlargeAction = useCallback(() => {
     if (loading) return;
-    openModal(({ transitionState, onClose }) => (
-      <ModalRoot transitionState={transitionState} onClose={onClose} size="large">
+
+    openModal(({ transitionState }) => (
+      <ModalRoot transitionState={transitionState} size="large">
         <CodeBlock content={content} lang={lang} modal={true} fileName={fileName} />
       </ModalRoot>
     ));

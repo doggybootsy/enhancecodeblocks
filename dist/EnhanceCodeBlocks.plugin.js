@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.18
+ * @version 1.0.19
  * @author Doggybootsy
  */
 "use strict";
@@ -237,7 +237,7 @@ var require_react = __commonJS({
 // shim-react-spring:react-spring
 var require_react_spring = __commonJS({
   "shim-react-spring:react-spring"(exports2) {
-    var module2 = BdApi.Webpack.getModule((m) => m.useSpring);
+    var module2 = BdApi.Webpack.getModule((m) => m.useSpring && m.animated);
     Object.assign(exports2, module2);
     "default" in module2 || Object.assign(exports2, { default: module2 });
   }
@@ -262,7 +262,7 @@ var import_react, intl, init_common = __esm({
 // shim-highlight.js:highlight.js
 var require_highlight = __commonJS({
   "shim-highlight.js:highlight.js"(exports2) {
-    var module2 = BdApi.Webpack.getModule((m) => m.highlight);
+    var module2 = BdApi.Webpack.getModule((m) => m.highlight && m.listLanguages);
     Object.assign(exports2, module2);
     "default" in module2 || Object.assign(exports2, { default: module2 });
   }
@@ -502,7 +502,7 @@ var import_react8, ModalRoot, Spinner, foundToolTip, Tooltip, Switch, Popout, Nu
     import_react8 = __toESM(require_react());
     init_icon();
     init_settingsItem();
-    ModalRoot = BdApi.Webpack.getModule((m) => m?.toString?.().includes("ENTERING") && m?.toString?.()?.includes("headerId"), { searchExports: !0 }), Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), foundToolTip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: !0 }), Tooltip = foundToolTip || BdApi.Components.Tooltip, Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"), { searchExports: !0 }), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,", "tabIndex:")), ErrorBoundary = class extends import_react8.default.Component {
+    ModalRoot = BdApi.Webpack.getModule((m) => m.ModalRoot).ModalRoot, Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), foundToolTip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: !0 }), Tooltip = foundToolTip || BdApi.Components.Tooltip, Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"), { searchExports: !0 }), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,", "tabIndex:")), ErrorBoundary = class extends import_react8.default.Component {
       state = { hasError: !1 };
       componentDidCatch() {
         this.setState({ hasError: !0 });
@@ -558,7 +558,7 @@ function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPrevi
   let [shouldShow, setShouldShow] = import_react10.default.useState(!1), messages = useMessages(), formattedBytes = (0, import_react10.useMemo)(() => formatBytes(bytes), [bytes]);
   return BdApi.React.createElement("div", { className: "ECBlock-header" }, BdApi.React.createElement("div", { className: "ECBlock-title" }, !modal && BdApi.React.createElement(import_react_spring2.default.animated.div, { style: {
     transform: angle.to({
-      output: ["rotate(270deg)", "rotate(180deg)"]
+      output: ["rotate(180deg)", "rotate(270deg)"]
     })
   } }, BdApi.React.createElement(Tooltip, { text: collapsed ? "Collapsed" : "Uncollapse", hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-collapse", ...props, onClick: () => setCollapsed(!collapsed) }, BdApi.React.createElement(icon_default, { size: 22, name: "arrow" })))), BdApi.React.createElement(
     Popout,
@@ -666,7 +666,7 @@ function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
   }, [content, lang, loading]), [copied, setCopied] = (0, import_react14.useState)(!1), setCopiedFalse = (0, import_react14.useMemo)(() => debounce(() => setCopied(!1), 2e3), []), copyAction = (0, import_react14.useCallback)(() => {
     loading || (window.DiscordNative && window.DiscordNative.clipboard.copy(content), setCopied(!0), setCopiedFalse());
   }, [content, copied, loading]), enlargeAction = (0, import_react14.useCallback)(() => {
-    loading || openModal(({ transitionState, onClose }) => BdApi.React.createElement(ModalRoot, { transitionState, onClose, size: "large" }, BdApi.React.createElement(CodeBlock, { content, lang, modal: !0, fileName })));
+    loading || openModal(({ transitionState }) => BdApi.React.createElement(ModalRoot, { transitionState, size: "large" }, BdApi.React.createElement(CodeBlock, { content, lang, modal: !0, fileName })));
   }, [content, lang, loading]), byteSize = (0, import_react14.useMemo)(() => new File([content], "").size, [content]), [wrapText] = useData("wrapText", !1);
   return BdApi.React.createElement(
     "div",
@@ -709,7 +709,7 @@ var import_react14, import_react_spring3, thin, openModal, codeblock_default, in
     init_components();
     init_data();
     init_util();
-    ({ thin } = BdApi.Webpack.getModule((m) => m.thin && m.none)), openModal = BdApi.Webpack.getModule((m) => m?.toString?.().includes("onCloseCallback") && m?.toString().includes("Layer"), { searchExports: !0 });
+    ({ thin } = BdApi.Webpack.getModule((m) => m.thin && m.none)), openModal = BdApi.Webpack.getModule((m) => m.openModal).openModal;
     codeblock_default = (0, import_react14.memo)(CodeBlock);
   }
 });
