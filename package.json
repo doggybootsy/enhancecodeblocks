@@ -1,6 +1,6 @@
 {
   "name": "enhancecodeblocks",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Enhances Discords Codeblocks & Text File Attachments",
   "main": "build.js",
   "scripts": {

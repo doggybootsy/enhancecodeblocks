@@ -20,7 +20,7 @@ function Settings() {
   useLayoutEffect(() => {
     if (!ref.current || !ref.current.parentElement) return;
     ref.current.parentElement.classList.add("ECBlock-zIndex-hook");
-  }, [ ]);
+  }, [ ]);  
   
   return (
     <div className="ECBlock-settings" ref={ref}>

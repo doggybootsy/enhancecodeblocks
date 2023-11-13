@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.19
+ * @version 1.0.20
  * @author Doggybootsy
  */
 "use strict";
@@ -490,7 +490,7 @@ function SettingItem({ title, disabled, hideBorder, item, note }) {
 var import_react7, classes, noteClasses, Divider, Text, settingsItem_default, init_settingsItem = __esm({
   "src/components/settingsItem.tsx"() {
     "use strict";
-    import_react7 = __toESM(require_react()), classes = BdApi.Webpack.getModule((m) => m.container && m.dividerDefault), noteClasses = BdApi.Webpack.getModule((m) => m.description && m.modeDefault), Divider = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings("),style:", "().divider,"), { searchExports: !0 }), Text = BdApi.Webpack.getModule((m) => m.Colors && m.Sizes);
+    import_react7 = __toESM(require_react()), classes = BdApi.Webpack.getModule((m) => m.container && m.dividerDefault), noteClasses = BdApi.Webpack.getModule((m) => m.description && m.modeDefault), Divider = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings("),style:", ".divider,"), { searchExports: !0 }), Text = BdApi.Webpack.getModule((m) => m.Colors && m.Sizes);
     settingsItem_default = (0, import_react7.memo)(SettingItem);
   }
 });
@@ -502,7 +502,7 @@ var import_react8, ModalRoot, Spinner, foundToolTip, Tooltip, Switch, Popout, Nu
     import_react8 = __toESM(require_react());
     init_icon();
     init_settingsItem();
-    ModalRoot = BdApi.Webpack.getModule((m) => m.ModalRoot).ModalRoot, Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), foundToolTip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: !0 }), Tooltip = foundToolTip || BdApi.Components.Tooltip, Switch = BdApi.Webpack.getModule((m) => m.toString?.().includes(".tooltipNote,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"), { searchExports: !0 }), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".minValue,", ".maxValue,", "tabIndex:")), ErrorBoundary = class extends import_react8.default.Component {
+    ModalRoot = BdApi.Webpack.getModule((m) => m.ModalRoot).ModalRoot, Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), foundToolTip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: !0 }), Tooltip = foundToolTip || BdApi.Components.Tooltip, Switch = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings("focusProps:", ",tooltipNote:", ".Switch,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"), { searchExports: !0 }), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".subtract", ".TextInput", "maxValue:")), ErrorBoundary = class extends import_react8.default.Component {
       state = { hasError: !1 };
       componentDidCatch() {
         this.setState({ hasError: !0 });

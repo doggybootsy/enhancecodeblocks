@@ -3,7 +3,7 @@ import React, { memo } from "react";
 const classes = BdApi.Webpack.getModule(m => m.container && m.dividerDefault);
 const noteClasses = BdApi.Webpack.getModule(m => m.description && m.modeDefault);
 
-const Divider = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings("),style:", "().divider,"), { searchExports: true }) as React.ComponentClass<{
+const Divider = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings("),style:", ".divider,"), { searchExports: true }) as React.ComponentClass<{
   style?: React.CSSProperties,
   className?: string
 }>;
