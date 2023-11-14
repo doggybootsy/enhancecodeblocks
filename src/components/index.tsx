@@ -55,14 +55,6 @@ export const Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toStri
   onRequestClose: () => void
 }>;
 
-export const NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".subtract", ".TextInput", "maxValue:")) as React.ComponentClass<{
-  value: number,
-  onChange: (v: number) => void,
-  className?: string,
-  minValue?: number
-  maxValue?: number
-}>;
-
 export class ErrorBoundary extends React.Component<
   { fallback?: React.ReactNode, children: React.ReactNode },
   { hasError: boolean }

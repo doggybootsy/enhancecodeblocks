@@ -1,8 +1,12 @@
 import React, { memo, useLayoutEffect, useRef, useState } from "react";
 
-import { Icon, NumberInputStepper, Popout, SettingItem, Switch } from "../components";
+import { Icon, Popout, SettingItem, Switch } from "../components";
 import { useData } from "../data";
 import Menu, { shouldShowMenu } from "./menu";
+
+function clamp(x: number, lower: number, upper: number) {
+  return Math.min(upper, Math.max(lower, x));
+}
 
 function Settings() {
   const [ autoCollapse, setAutoCollapse ] = useData("autoCollapse", false);  
@@ -51,21 +55,39 @@ function Settings() {
       <SettingItem 
         item={(
           <div className="ECBlock-numberSetting">
-            <NumberInputStepper onChange={setMaxHeight} value={maxHeight} />
+            <input 
+              type="number" 
+              onChange={(event) => {
+                setMaxHeight(clamp(event.currentTarget.valueAsNumber, 0, Number.MAX_SAFE_INTEGER));
+              }} 
+              value={maxHeight}
+            />
           </div>
         )}
         title="Max Height" />
       <SettingItem 
         item={(
           <div className="ECBlock-numberSetting">
-            <NumberInputStepper onChange={setPreviewHeight} value={previewHeight} />
+            <input 
+              type="number" 
+              onChange={(event) => {
+                setPreviewHeight(clamp(event.currentTarget.valueAsNumber, 0, Number.MAX_SAFE_INTEGER));
+              }} 
+              value={previewHeight}
+            />
           </div>
         )}
         title="Preview Height" />
       <SettingItem 
         item={(
           <div className="ECBlock-numberSetting">
-            <NumberInputStepper onChange={setBytes} value={maxBytes} />
+            <input 
+              type="number" 
+              onChange={(event) => {
+                setBytes(clamp(event.currentTarget.valueAsNumber, 0, Number.MAX_SAFE_INTEGER));
+              }} 
+              value={maxBytes}
+            />
           </div>
         )}
         note="This helps reduce lag, by limiting the amount of characters that gets highlighted"
@@ -73,7 +95,13 @@ function Settings() {
       <SettingItem 
         item={(
           <div className="ECBlock-numberSetting">
-            <NumberInputStepper onChange={setFileBytes} value={maxFileBytes} />
+            <input 
+              type="number" 
+              onChange={(event) => {
+                setFileBytes(clamp(event.currentTarget.valueAsNumber, 0, Number.MAX_SAFE_INTEGER));
+              }} 
+              value={maxFileBytes}
+            />
           </div>
         )}
         note="This helps preventing crashing on large files"

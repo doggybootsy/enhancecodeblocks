@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.20
+ * @version 1.0.21
  * @author Doggybootsy
  */
 "use strict";
@@ -496,13 +496,13 @@ var import_react7, classes, noteClasses, Divider, Text, settingsItem_default, in
 });
 
 // src/components/index.tsx
-var import_react8, ModalRoot, Spinner, foundToolTip, Tooltip, Switch, Popout, NumberInputStepper, ErrorBoundary, init_components = __esm({
+var import_react8, ModalRoot, Spinner, foundToolTip, Tooltip, Switch, Popout, ErrorBoundary, init_components = __esm({
   "src/components/index.tsx"() {
     "use strict";
     import_react8 = __toESM(require_react());
     init_icon();
     init_settingsItem();
-    ModalRoot = BdApi.Webpack.getModule((m) => m.ModalRoot).ModalRoot, Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), foundToolTip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: !0 }), Tooltip = foundToolTip || BdApi.Components.Tooltip, Switch = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings("focusProps:", ",tooltipNote:", ".Switch,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"), { searchExports: !0 }), NumberInputStepper = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings(".subtract", ".TextInput", "maxValue:")), ErrorBoundary = class extends import_react8.default.Component {
+    ModalRoot = BdApi.Webpack.getModule((m) => m.ModalRoot).ModalRoot, Spinner = BdApi.Webpack.getModule((m) => m.Type?.PULSING_ELLIPSIS, { searchExports: !0 }), foundToolTip = BdApi.Webpack.getModule((m) => m.prototype?.setDomElement && m.prototype.render.toString().includes("renderTooltip()"), { searchExports: !0 }), Tooltip = foundToolTip || BdApi.Components.Tooltip, Switch = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byStrings("focusProps:", ",tooltipNote:", ".Switch,"), { searchExports: !0 }), Popout = BdApi.Webpack.getModule((m) => m.prototype?.render?.toString().includes("shouldShowPopout"), { searchExports: !0 }), ErrorBoundary = class extends import_react8.default.Component {
       state = { hasError: !1 };
       componentDidCatch() {
         this.setState({ hasError: !0 });
@@ -829,6 +829,9 @@ var displayUserModal, Menu, shouldShowMenu, menu_default, init_menu = __esm({
 });
 
 // src/settings/index.tsx
+function clamp(x, lower, upper) {
+  return Math.min(upper, Math.max(lower, x));
+}
 function Settings() {
   let [autoCollapse, setAutoCollapse] = useData("autoCollapse", !1), [instantCollapse, setInstantCollapse] = useData("instantCollapse", !1), [maxHeight, setMaxHeight] = useData("maxHeight", 300), [previewHeight, setPreviewHeight] = useData("previewHeight", 200), [maxBytes, setBytes] = useData("maxBytes", 21846), [maxFileBytes, setFileBytes] = useData("maxFileBytes", 2e8), [wrapText, setWrapText] = useData("wrapText", !1), [open, setOpen] = (0, import_react17.useState)(!1), ref = (0, import_react17.useRef)(null);
   return (0, import_react17.useLayoutEffect)(() => {
@@ -863,26 +866,62 @@ function Settings() {
   ), BdApi.React.createElement(
     settingsItem_default,
     {
-      item: BdApi.React.createElement("div", { className: "ECBlock-numberSetting" }, BdApi.React.createElement(NumberInputStepper, { onChange: setMaxHeight, value: maxHeight })),
+      item: BdApi.React.createElement("div", { className: "ECBlock-numberSetting" }, BdApi.React.createElement(
+        "input",
+        {
+          type: "number",
+          onChange: (event) => {
+            setMaxHeight(clamp(event.currentTarget.valueAsNumber, 0, Number.MAX_SAFE_INTEGER));
+          },
+          value: maxHeight
+        }
+      )),
       title: "Max Height"
     }
   ), BdApi.React.createElement(
     settingsItem_default,
     {
-      item: BdApi.React.createElement("div", { className: "ECBlock-numberSetting" }, BdApi.React.createElement(NumberInputStepper, { onChange: setPreviewHeight, value: previewHeight })),
+      item: BdApi.React.createElement("div", { className: "ECBlock-numberSetting" }, BdApi.React.createElement(
+        "input",
+        {
+          type: "number",
+          onChange: (event) => {
+            setPreviewHeight(clamp(event.currentTarget.valueAsNumber, 0, Number.MAX_SAFE_INTEGER));
+          },
+          value: previewHeight
+        }
+      )),
       title: "Preview Height"
     }
   ), BdApi.React.createElement(
     settingsItem_default,
     {
-      item: BdApi.React.createElement("div", { className: "ECBlock-numberSetting" }, BdApi.React.createElement(NumberInputStepper, { onChange: setBytes, value: maxBytes })),
+      item: BdApi.React.createElement("div", { className: "ECBlock-numberSetting" }, BdApi.React.createElement(
+        "input",
+        {
+          type: "number",
+          onChange: (event) => {
+            setBytes(clamp(event.currentTarget.valueAsNumber, 0, Number.MAX_SAFE_INTEGER));
+          },
+          value: maxBytes
+        }
+      )),
       note: "This helps reduce lag, by limiting the amount of characters that gets highlighted",
       title: "Max Number of Characters"
     }
   ), BdApi.React.createElement(
     settingsItem_default,
     {
-      item: BdApi.React.createElement("div", { className: "ECBlock-numberSetting" }, BdApi.React.createElement(NumberInputStepper, { onChange: setFileBytes, value: maxFileBytes })),
+      item: BdApi.React.createElement("div", { className: "ECBlock-numberSetting" }, BdApi.React.createElement(
+        "input",
+        {
+          type: "number",
+          onChange: (event) => {
+            setFileBytes(clamp(event.currentTarget.valueAsNumber, 0, Number.MAX_SAFE_INTEGER));
+          },
+          value: maxFileBytes
+        }
+      )),
       note: "This helps preventing crashing on large files",
       title: "Max Number of Bytes allowed on files"
     }
