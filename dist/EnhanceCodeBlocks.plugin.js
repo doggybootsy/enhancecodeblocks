@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.21
+ * @version 1.0.22
  * @author Doggybootsy
  */
 "use strict";
@@ -37,10 +37,10 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 // shim-@plugin/css:@plugin/css
 var css_default, init_css = __esm({
   "shim-@plugin/css:@plugin/css"() {
-    css_default = `[class^="obscuredTextContent-"]:has(.ECBlock) {\r
+    css_default = `[class^="obscuredTextContent_"]:has(.ECBlock) {\r
   pointer-events: all !important;\r
 }\r
-[class*="hidden-"] .ECBlock::after {\r
+[class*="hidden_"] .ECBlock::after {\r
   content: "";\r
   position: absolute;\r
   left: 0;\r

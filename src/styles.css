@@ -1,7 +1,7 @@
-[class^="obscuredTextContent-"]:has(.ECBlock) {
+[class^="obscuredTextContent_"]:has(.ECBlock) {
   pointer-events: all !important;
 }
-[class*="hidden-"] .ECBlock::after {
+[class*="hidden_"] .ECBlock::after {
   content: "";
   position: absolute;
   left: 0;
