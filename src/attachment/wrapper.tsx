@@ -4,16 +4,18 @@ import { useFetchContent } from "../hooks";
 import Codeblock from "../codeblock";
 
 export type attachment = {
-  content_type: string,
-  filename: string,
-  id: string,
-  proxy_url: string,
-  size: number,
-  spoiler: false,
-  url: string
+  originalItem: {
+    content_type: string,
+    filename: string,
+    id: string,
+    proxy_url: string,
+    size: number,
+    spoiler: false,
+    url: string
+  }
 };
 export type AttachmentProps = {
-  attachment: attachment,
+  item: attachment,
   renderAdjacentContent: () => React.ReactNode,
   onContextMenu: (event: React.MouseEvent<HTMLDivElement>) => void,
   className: string,
@@ -21,11 +23,11 @@ export type AttachmentProps = {
   canDeleteAttachments: boolean
 };
 
-function AttachmentWrapper({ attachment, onContextMenu, className, remove, canDeleteAttachments }: AttachmentProps) {
-  const content = useFetchContent(attachment.url);
+function AttachmentWrapper({ item, onContextMenu, className, remove, canDeleteAttachments }: AttachmentProps) {
+  const content = useFetchContent(item.originalItem.url);
 
   const lang = useMemo(() => {    
-    const spl = attachment.filename.split(".");
+    const spl = item.originalItem.filename.split(".");
     if (spl.length - 1) return spl.pop() as string;
     return "";
   }, []);
@@ -36,7 +38,7 @@ function AttachmentWrapper({ attachment, onContextMenu, className, remove, canDe
         content={content || ""} 
         lang={lang} 
         modal={false} 
-        fileName={() => attachment.filename} 
+        fileName={() => item.originalItem.filename} 
         loading={typeof content !== "string"} 
         remove={canDeleteAttachments ? remove : false} />
     </div>

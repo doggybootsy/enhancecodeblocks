@@ -5,12 +5,13 @@ import { ErrorBoundary } from "../components";
 import { useData } from "../data";
 import { useStateDeps } from "../hooks";
 
-export type DiscordAttachment = { renderPlaintextFilePreview: (props: AttachmentProps) => React.ReactNode, onRemoveAttachment: (attachment: attachment) => void, attachment: attachment };
+export type DiscordAttachment = { renderPlaintextFilePreview: (props: AttachmentProps) => React.ReactNode, onRemoveAttachment: (attachment: attachment) => void, item: attachment };
 
-function Attachment({ props, attachment, renderPlaintextFilePreview, canDeleteAttachments }: { props: AttachmentProps, attachment: DiscordAttachment, renderPlaintextFilePreview(props: AttachmentProps): React.ReactNode, canDeleteAttachments: boolean }) {
+function Attachment({ props, item: attachment, renderPlaintextFilePreview, canDeleteAttachments }: { props: AttachmentProps, item: DiscordAttachment, renderPlaintextFilePreview(props: AttachmentProps): React.ReactNode, canDeleteAttachments: boolean }) {
   const [ maxFileBytes ] = useData("maxFileBytes", 200_000_000);
+  
 
-  const [ error, setError ] = useStateDeps(() => attachment.attachment.size > maxFileBytes, [ maxFileBytes ]);
+  const [ error, setError ] = useStateDeps(() => attachment.item.originalItem.size > maxFileBytes, [ maxFileBytes ]);
 
   if (error) return (
     <div className="ECBlock ECBlock-error">
@@ -18,9 +19,10 @@ function Attachment({ props, attachment, renderPlaintextFilePreview, canDeleteAt
       {renderPlaintextFilePreview.call(attachment, props)}
     </div>
   );
+  
   return (
     <ErrorBoundary fallback={renderPlaintextFilePreview.call(attachment, props)}>
-      <AttachmentWrapper {...props} canDeleteAttachments={canDeleteAttachments} remove={() => attachment.onRemoveAttachment(attachment.attachment)} />
+      <AttachmentWrapper {...props} canDeleteAttachments={canDeleteAttachments} remove={() => attachment.onRemoveAttachment(attachment.item)} />
     </ErrorBoundary>
   );
 };
