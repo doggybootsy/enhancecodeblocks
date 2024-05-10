@@ -1,7 +1,7 @@
 /**
  * @name enhancecodeblocks
  * @description Enhances Discords Codeblocks & Text File Attachments
- * @version 1.0.23
+ * @version 1.0.24
  * @author Doggybootsy
  */
 "use strict";
@@ -709,7 +709,7 @@ var import_react14, import_react_spring3, thin, openModal, codeblock_default, in
     init_components();
     init_data();
     init_util();
-    ({ thin } = BdApi.Webpack.getModule((m) => m.thin && m.none)), openModal = BdApi.Webpack.getModule((m) => m.openModal).openModal;
+    ({ thin } = BdApi.Webpack.getModule((m) => m.thin && m.none)), openModal = BdApi.Webpack.getModule((m) => m.openModal && m.closeModal).openModal;
     codeblock_default = (0, import_react14.memo)(CodeBlock);
   }
 });
@@ -970,13 +970,11 @@ var BdApi2, codeBlock, MessageAttachment, messageListItem, ECBlocks, src_default
       }
       start() {
         BdApi2.Patcher.after(codeBlock, "react", (that, [props], res) => BdApi2.React.createElement(ErrorBoundary, { fallback: res }, BdApi2.React.createElement(codeblock_default, { ...props, modal: !1, fileName: () => `codeblock-${Date.now()}.${props.lang || "txt"}` }))), BdApi2.Patcher.after(MessageAttachment.prototype, "renderAttachments", (that, props, res) => {
-          if (res) {
-            console.log(res.props.items);
+          if (res)
             for (let attachment2 of res.props.items) {
               let { renderPlaintextFilePreview } = attachment2;
               attachment2.renderPlaintextFilePreview = (props2) => BdApi2.React.createElement(attachment_default, { props: props2, item: attachment2, canDeleteAttachments: that.props.canDeleteAttachments, renderPlaintextFilePreview });
             }
-          }
         }), BdApi2.DOM.addStyle(css_default), this.forceUpdateMessages();
       }
       stop() {

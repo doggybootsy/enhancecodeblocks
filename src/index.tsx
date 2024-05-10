@@ -41,8 +41,6 @@ class ECBlocks implements Plugin {
 
     BdApi.Patcher.after(MessageAttachment.prototype, "renderAttachments", (that, props, res: React.ReactElement<{ items: Array<DiscordAttachment> }, "div"> | false) => {
       if (!res) return;
-
-      console.log(res.props.items);
       
       for (const attachment of res.props.items) {                
         const { renderPlaintextFilePreview } = attachment;
