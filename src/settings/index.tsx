@@ -16,6 +16,7 @@ function Settings() {
   const [ maxBytes, setBytes ] = useData("maxBytes", 21_846);
   const [ maxFileBytes, setFileBytes ] = useData("maxFileBytes", 200_000_000);
   const [ wrapText, setWrapText ] = useData("wrapText", false);
+  const [ markdownViewMode, setMarkdownViewMode ] = useData("markdownViewMode", "raw");
 
   const [ open, setOpen ] = useState(false);
 
@@ -110,6 +111,20 @@ function Settings() {
         value={wrapText}
         onChange={setWrapText}
       >Wrap Text</Switch>
+      <SettingItem
+        item={
+          <div className="ECBlock-selectSetting">
+            <select
+              value={markdownViewMode}
+              onChange={(e) => setMarkdownViewMode(e.target.value as "raw" | "rendered")}
+            >
+              <option value="raw">Raw</option>
+              <option value="rendered">Rendered</option>
+            </select>
+          </div>
+        }
+        note="Choose how markdown files (.md, .markdown, .mdx) display by default"
+        title="Markdown View Mode" />
     </div>
   )
 };

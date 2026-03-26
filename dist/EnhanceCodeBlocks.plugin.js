@@ -37,190 +37,292 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 // shim-@plugin/css:@plugin/css
 var css_default, init_css = __esm({
   "shim-@plugin/css:@plugin/css"() {
-    css_default = `[class^="obscuredTextContent_"]:has(.ECBlock) {\r
-  pointer-events: all !important;\r
-}\r
-[class*="hidden_"] .ECBlock::after {\r
-  content: "";\r
-  position: absolute;\r
-  left: 0;\r
-  top: 0;\r
-  right: 0;\r
-  bottom: 0;\r
-  background: var(--__current--spoiler-background-color);\r
-  border-radius: var(--radius-xs);\r
-  pointer-events: none;\r
-}\r
-.ECBlock-file {\r
-  width: 100%;\r
-  display: flex;\r
-}\r
-.ECBlock {\r
-  background: var(--background-secondary-alt);\r
-  border: 1px solid var(--background-tertiary);\r
-  border-radius: var(--radius-xs);\r
-  overflow: hidden;\r
-  color: var(--text-muted);\r
-  text-size-adjust: none;\r
-  line-height: 1rem;\r
-  position: relative;\r
-}\r
-.ECBlock > div {\r
-  opacity: var(--__current--spoiler-content-opacity);\r
-  -webkit-transition: opacity .1s ease;\r
-  transition: opacity .1s ease;\r
-}\r
-.ECBlock.ECBlock-wrap .ECBlock-table tr > :last-child {\r
-  white-space: pre-wrap;\r
-}\r
-.ECBlock.ECBlock-error {\r
-  padding: 8px;\r
-  background: var(--background-message-automod);\r
-}\r
-.ECBlock.ECBlock-error pre {\r
-  max-width: 100%;\r
-}\r
-.ECBlock .react-error {\r
-  margin-bottom: 8px;\r
-}\r
-.ECBlock-numberSetting {\r
-  transform: translateY(-5px);\r
-  display: flex;\r
-}\r
-.ECBlock-numberSetting [class*="value-"] {\r
-  width: 120px;\r
-}\r
-.ECBlock-file .ECBlock {\r
-  /* so they wont be small */\r
-  width: 100vw;\r
-}\r
-.ECBlock.ECBlock-loading .ECBlock-wrapper {\r
-  display: flex;\r
-  align-items: center;\r
-  justify-content: center;\r
-}\r
-.ECBlock .ECBlock-header {\r
-  display: flex;\r
-  justify-content: space-between;\r
-  padding: 8px;\r
-  padding-bottom: 6px;\r
-  border-bottom: 1px solid var(--background-tertiary);\r
-  align-items: center;\r
-  color: var(--text-normal);\r
-} \r
-.ECBlock .ECBlock-title {\r
-  display: flex;\r
-  align-items: center;\r
-  margin-right: 16px;\r
-} \r
-.ECBlock .ECBlock-title > :not(:last-child) {\r
-  margin-right: 8px;\r
-} \r
-.ECBlock .ECBlock-lang {\r
-  cursor: pointer;\r
-} \r
-.ECBlock .ECBlock-byteSize {\r
-  font-size: small;\r
-  color: var(--text-muted);\r
-} \r
-.ECBlock .ECBlock-collapse {\r
-  cursor: pointer;\r
-  display: flex;\r
-  color: var(--interactive-normal);\r
-} \r
-.ECBlock .ECBlock-collapse:hover {\r
-  color: var(--interactive-hover);  \r
-}\r
-.ECBlock .ECBlock-collapse:active {\r
-  color: var(--interactive-active);  \r
-}\r
-.ECBlock .ECBlock-enlarge {\r
-  width: 22px;\r
-  justify-content: center;\r
-} \r
-.ECBlock-collapsed .ECBlock-header {\r
-  border-bottom: 0 solid var(--background-tertiary);\r
-} \r
-.ECBlock .ECBlock-actions {\r
-  display: flex;\r
-} \r
-.ECBlock .ECBlock-actions > :not(:last-child) {\r
-  margin-right: 8px;\r
-} \r
-.ECBlock .ECBlock-actions > .ECBlock-remove:hover {\r
-  color: var(--status-danger);\r
-} \r
-.ECBlock .ECBlock-actions > div {\r
-  cursor: pointer;\r
-  color: var(--interactive-normal);\r
-  display: flex;\r
-  align-items: center;\r
-} \r
-.ECBlock.ECBlock-loading .ECBlock-actions > div {\r
-  color: var(--interactive-muted);\r
-  cursor: not-allowed;\r
-} \r
-.ECBlock .ECBlock-actions > div:hover {\r
-  color: var(--interactive-hover);  \r
-}\r
-.ECBlock .ECBlock-actions > div:active,\r
-.ECBlock .ECBlock-actions .ECBlock-active {\r
-  color: var(--interactive-active);  \r
-}\r
-.ECBlock .ECBlock-actions > div.ECBlock-copied {\r
-  color: var(--status-positive);\r
-}\r
-.ECBlock .ECBlock-wrapper {\r
-  overflow: auto scroll;\r
-}\r
-.ECBlock .ECBlock-table {\r
-  font-size: 0.9em;\r
-  font-family: var(--font-code);\r
-}\r
-.ECBlock .ECBlock-table tr > :first-child {\r
-  padding: 0 8px;\r
-  border-right: 1px solid var(--background-tertiary);\r
-  user-select: none;\r
-  text-align: center;\r
-  position: sticky;\r
-  left: 0;\r
-  background: var(--background-secondary-alt);\r
-}\r
-.ECBlock .ECBlock-table tr > :last-child {\r
-  padding: 0 8px;\r
-  white-space: pre;\r
-  user-select: text;\r
-  width: 100%;\r
-}\r
-.ECBlock-preview {\r
-  display: flex;\r
-  align-items: center;\r
-  justify-content: center;\r
-}\r
-.ECBlock-overflow {\r
-  position: fixed;\r
-  right: 12px;\r
-  top: 12px;\r
-  display: flex;\r
-  color: var(--interactive-normal);\r
-  cursor: pointer;\r
-  padding: 4px;\r
-  border-radius: var(--radius-xs);\r
-}\r
-.ECBlock-overflow:hover {\r
-  color: var(--interactive-hover);  \r
-  background: var(--background-modifier-hover);\r
-}\r
-.ECBlock-overflow:active {\r
-  color: var(--interactive-active);  \r
-  background: var(--background-modifier-active);\r
-}\r
-.ECBlock-overflow.ECBlock-selected {\r
-  color: var(--interactive-active);  \r
-  background: var(--background-modifier-selected);\r
-}\r
-.ECBlock-zIndex-hook {\r
-  z-index: 1;\r
+    css_default = `[class^="obscuredTextContent_"]:has(.ECBlock) {
+  pointer-events: all !important;
+}
+[class*="hidden_"] .ECBlock::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--__current--spoiler-background-color);
+  border-radius: var(--radius-xs);
+  pointer-events: none;
+}
+.ECBlock-file {
+  width: 100%;
+  display: flex;
+}
+.ECBlock {
+  background: var(--background-secondary-alt);
+  border: 1px solid var(--background-tertiary);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  color: var(--text-muted);
+  text-size-adjust: none;
+  line-height: 1rem;
+  position: relative;
+}
+.ECBlock > div {
+  opacity: var(--__current--spoiler-content-opacity);
+  -webkit-transition: opacity .1s ease;
+  transition: opacity .1s ease;
+}
+.ECBlock.ECBlock-wrap .ECBlock-table tr > :last-child {
+  white-space: pre-wrap;
+}
+.ECBlock.ECBlock-error {
+  padding: 8px;
+  background: var(--background-message-automod);
+}
+.ECBlock.ECBlock-error pre {
+  max-width: 100%;
+}
+.ECBlock .react-error {
+  margin-bottom: 8px;
+}
+.ECBlock-numberSetting {
+  transform: translateY(-5px);
+  display: flex;
+}
+.ECBlock-numberSetting [class*="value-"] {
+  width: 120px;
+}
+.ECBlock-file .ECBlock {
+  /* so they wont be small */
+  width: 100vw;
+  max-width: 66rem;
+}
+.ECBlock.ECBlock-loading .ECBlock-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ECBlock .ECBlock-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--background-tertiary);
+  align-items: center;
+  color: var(--text-normal);
+} 
+.ECBlock .ECBlock-title {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+} 
+.ECBlock .ECBlock-title > :not(:last-child) {
+  margin-right: 8px;
+} 
+.ECBlock .ECBlock-lang {
+  cursor: pointer;
+} 
+.ECBlock .ECBlock-byteSize {
+  font-size: small;
+  color: var(--text-muted);
+} 
+.ECBlock .ECBlock-collapse {
+  cursor: pointer;
+  display: flex;
+  color: var(--interactive-normal);
+} 
+.ECBlock .ECBlock-collapse:hover {
+  color: var(--interactive-hover);  
+}
+.ECBlock .ECBlock-collapse:active {
+  color: var(--interactive-active);  
+}
+.ECBlock .ECBlock-enlarge {
+  width: 22px;
+  justify-content: center;
+} 
+.ECBlock-collapsed .ECBlock-header {
+  border-bottom: 0 solid var(--background-tertiary);
+} 
+.ECBlock .ECBlock-actions {
+  display: flex;
+} 
+.ECBlock .ECBlock-actions > :not(:last-child) {
+  margin-right: 8px;
+} 
+.ECBlock .ECBlock-actions > .ECBlock-remove:hover {
+  color: var(--status-danger);
+} 
+.ECBlock .ECBlock-actions > div {
+  cursor: pointer;
+  color: var(--interactive-normal);
+  display: flex;
+  align-items: center;
+} 
+.ECBlock.ECBlock-loading .ECBlock-actions > div {
+  color: var(--interactive-muted);
+  cursor: not-allowed;
+} 
+.ECBlock .ECBlock-actions > div:hover {
+  color: var(--interactive-hover);  
+}
+.ECBlock .ECBlock-actions > div:active,
+.ECBlock .ECBlock-actions .ECBlock-active {
+  color: var(--interactive-active);  
+}
+.ECBlock .ECBlock-actions > div.ECBlock-copied {
+  color: var(--status-positive);
+}
+.ECBlock .ECBlock-wrapper {
+  overflow: auto scroll;
+  user-select: text;
+}
+.ECBlock .ECBlock-table {
+  font-size: 0.9em;
+  font-family: var(--font-code);
+}
+.ECBlock .ECBlock-table tr > :first-child {
+  padding: 0 8px;
+  border-right: 1px solid var(--background-tertiary);
+  user-select: none;
+  text-align: center;
+  position: sticky;
+  left: 0;
+  background: var(--background-secondary-alt);
+}
+.ECBlock .ECBlock-table tr > :last-child {
+  padding: 0 8px;
+  white-space: pre;
+  user-select: text;
+  width: 100%;
+}
+.ECBlock-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ECBlock-overflow {
+  position: fixed;
+  right: 12px;
+  top: 12px;
+  display: flex;
+  color: var(--interactive-normal);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-xs);
+}
+.ECBlock-overflow:hover {
+  color: var(--interactive-hover);  
+  background: var(--background-modifier-hover);
+}
+.ECBlock-overflow:active {
+  color: var(--interactive-active);  
+  background: var(--background-modifier-active);
+}
+.ECBlock-overflow.ECBlock-selected {
+  color: var(--interactive-active);  
+  background: var(--background-modifier-selected);
+}
+.ECBlock-zIndex-hook {
+  z-index: 1;
+}
+.ECBlock-selectSetting select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--background-tertiary);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+}
+.ECBlock-markdown {
+  background: var(--background-secondary-alt);
+  padding: 16px;
+  color: var(--text-normal);
+  line-height: 1.6;
+}
+.ECBlock-markdown h1,
+.ECBlock-markdown h2,
+.ECBlock-markdown h3,
+.ECBlock-markdown h4,
+.ECBlock-markdown h5,
+.ECBlock-markdown h6 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+.ECBlock-markdown h1 { font-size: 2em; border-bottom: 1px solid var(--background-tertiary); padding-bottom: 0.3em; }
+.ECBlock-markdown h2 { font-size: 1.5em; border-bottom: 1px solid var(--background-tertiary); padding-bottom: 0.3em; }
+.ECBlock-markdown h3 { font-size: 1.25em; }
+.ECBlock-markdown h4 { font-size: 1em; }
+.ECBlock-markdown h5 { font-size: 0.875em; }
+.ECBlock-markdown h6 { font-size: 0.85em; color: var(--text-muted); }
+.ECBlock-markdown p {
+  margin-bottom: 1em;
+}
+.ECBlock-markdown code {
+  background: var(--background-tertiary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-code);
+  font-size: 0.9em;
+}
+.ECBlock-markdown pre {
+  background: var(--background-tertiary);
+  padding: 12px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin-bottom: 1em;
+}
+.ECBlock-markdown pre code {
+  background: transparent;
+  padding: 0;
+}
+.ECBlock-markdown blockquote {
+  border-left: 4px solid var(--background-tertiary);
+  padding-left: 1em;
+  margin-left: 0;
+  color: var(--text-muted);
+}
+.ECBlock-markdown a {
+  color: var(--text-link);
+  text-decoration: none;
+}
+.ECBlock-markdown a:hover {
+  text-decoration: underline;
+}
+.ECBlock-markdown ul,
+.ECBlock-markdown ol {
+  margin-bottom: 1em;
+  padding-left: 2em;
+}
+.ECBlock-markdown li {
+  margin-bottom: 0.25em;
+}
+.ECBlock-markdown table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1em;
+}
+.ECBlock-markdown table th,
+.ECBlock-markdown table td {
+  border: 1px solid var(--background-tertiary);
+  padding: 8px;
+}
+.ECBlock-markdown table th {
+  background: var(--background-secondary);
+}
+.ECBlock-markdown img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+.ECBlock-markdown hr {
+  border: none;
+  border-top: 1px solid var(--background-tertiary);
+  margin: 1em 0;
+}
+.ECBlock-markdown input[type="checkbox"] {
+  margin-right: 8px;
+}
+.ECBlock-markdown li.task-list-item {
+  list-style-type: none;
 }`;
   }
 });
@@ -553,7 +655,7 @@ var import_react9, import_highlight2, SearchPopout, SearchItem, languageSelector
 });
 
 // src/codeblock/header.tsx
-function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove, bytes, loading }) {
+function Header({ angle, collapsed, setCollapsed, languageName, isSVG, isMarkdown, markdownViewMode, setMarkdownViewMode, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove, bytes, loading }) {
   let [shouldShow, setShouldShow] = import_react10.default.useState(!1), targetElementRef = import_react10.default.useRef(null), formattedBytes = (0, import_react10.useMemo)(() => formatBytes(bytes), [bytes]);
   return BdApi.React.createElement("div", { className: "ECBlock-header" }, BdApi.React.createElement("div", { className: "ECBlock-title" }, !modal && BdApi.React.createElement(import_react_spring2.default.animated.div, { style: {
     transform: angle.to({
@@ -577,7 +679,7 @@ function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPrevi
     (props) => BdApi.React.createElement("div", { className: "ECBlock-lang", ref: targetElementRef, ...props, onClick: (event) => {
       setShouldShow(!shouldShow), props.onClick && props.onClick(event);
     } }, languageName)
-  ), !loading && BdApi.React.createElement(Tooltip, { text: `${bytes} B`, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-byteSize", ...props }, formattedBytes))), BdApi.React.createElement("div", { className: "ECBlock-actions" }, remove && BdApi.React.createElement(Tooltip, { text: message("oyYWHE"), hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-remove", ...props, onClick: remove }, BdApi.React.createElement(icon_default, { size: 22, name: "trash" }))), isSVG && BdApi.React.createElement(Tooltip, { text: "Preview", hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-previewButton${showPreview ? " ECBlock-active" : ""}`, ...props, onClick: () => setShowPreview(!showPreview) }, BdApi.React.createElement(icon_default, { size: 22, name: "eye" }))), BdApi.React.createElement(Tooltip, { text: message("1WjMbC"), hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-downloadButton", ...props, onClick: downloadAction }, BdApi.React.createElement(icon_default, { size: 22, name: "download" }))), BdApi.React.createElement(Tooltip, { text: copied ? message("t5VZ88") : message("OpuAlK"), hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-copyButton${copied ? " ECBlock-copied" : ""}`, ...props, onClick: copyAction }, BdApi.React.createElement(icon_default, { size: 22, name: "copy" }))), !modal && BdApi.React.createElement(Tooltip, { text: message("0PQYk3"), hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-enlarge", ...props, onClick: enlargeAction }, BdApi.React.createElement(icon_default, { size: 22, name: "enlarge" })))));
+  ), !loading && BdApi.React.createElement(Tooltip, { text: `${bytes} B`, hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-byteSize", ...props }, formattedBytes))), BdApi.React.createElement("div", { className: "ECBlock-actions" }, remove && BdApi.React.createElement(Tooltip, { text: message("oyYWHE"), hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-remove", ...props, onClick: remove }, BdApi.React.createElement(icon_default, { size: 22, name: "trash" }))), isSVG && BdApi.React.createElement(Tooltip, { text: "Preview", hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-previewButton${showPreview ? " ECBlock-active" : ""}`, ...props, onClick: () => setShowPreview(!showPreview) }, BdApi.React.createElement(icon_default, { size: 22, name: "eye" }))), isMarkdown && BdApi.React.createElement(Tooltip, { text: markdownViewMode === "rendered" ? "View Code" : "View Rendered", hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-markdownButton${markdownViewMode === "rendered" ? " ECBlock-active" : ""}`, ...props, onClick: () => setMarkdownViewMode?.(markdownViewMode === "rendered" ? "raw" : "rendered") }, BdApi.React.createElement(icon_default, { size: 22, name: markdownViewMode === "rendered" ? "copy" : "eye" }))), BdApi.React.createElement(Tooltip, { text: message("1WjMbC"), hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-downloadButton", ...props, onClick: downloadAction }, BdApi.React.createElement(icon_default, { size: 22, name: "download" }))), BdApi.React.createElement(Tooltip, { text: copied ? message("t5VZ88") : message("OpuAlK"), hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: `ECBlock-copyButton${copied ? " ECBlock-copied" : ""}`, ...props, onClick: copyAction }, BdApi.React.createElement(icon_default, { size: 22, name: "copy" }))), !modal && BdApi.React.createElement(Tooltip, { text: message("0PQYk3"), hideOnClick: !1 }, (props) => BdApi.React.createElement("div", { className: "ECBlock-enlarge", ...props, onClick: enlargeAction }, BdApi.React.createElement(icon_default, { size: 22, name: "enlarge" })))));
 }
 var import_react10, import_react_spring2, header_default, init_header = __esm({
   "src/codeblock/header.tsx"() {
@@ -658,15 +760,37 @@ var import_react13, preview_default, init_preview = __esm({
   }
 });
 
+// src/codeblock/markdown.tsx
+function MarkdownRenderer({ content }) {
+  let html = (window.marked || (() => (text) => {
+    let html2 = text.replace(/^#### (.*$)/gim, "<h4>$1</h4>").replace(/^### (.*$)/gim, "<h3>$1</h3>").replace(/^## (.*$)/gim, "<h2>$1</h2>").replace(/^# (.*$)/gim, "<h1>$1</h1>").replace(/\*\*\*(.*?)\*\*\*/gim, "<strong><em>$1</em></strong>").replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>").replace(/\*(.*?)\*/gim, "<em>$1</em>").replace(/~~(.*?)~~/gim, "<del>$1</del>").replace(/`(.*?)`/gim, "<code>$1</code>").replace(/\n/gim, "<br>");
+    return html2 = html2.replace(/^> (.*$)/gim, "<blockquote>$1</blockquote>"), html2 = html2.replace(/^\- \[x\] (.*$)/gim, '<li class="task-list-item"><input type="checkbox" checked disabled> $1</li>'), html2 = html2.replace(/^\- \[ \] (.*$)/gim, '<li class="task-list-item"><input type="checkbox" disabled> $1</li>'), html2 = html2.replace(/^\- (.*$)/gim, "<li>$1</li>"), html2 = html2.replace(/^\d+\. (.*$)/gim, "<li>$1</li>"), html2 = html2.replace(/^---$/gim, "<hr>"), html2 = html2.replace(/^\*\*\*$/gim, "<hr>"), html2 = html2.replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank">$1</a>'), html2 = html2.replace(/!\[([^\]]*)\]\(([^)]+)\)/gim, '<img src="$2" alt="$1">'), html2 = html2.replace(/```([\s\S]*?)```/gim, "<pre><code>$1</code></pre>"), html2 = html2.replace(/(<li[^>]*>.*?<\/li>\n?)+/gim, "<ul>$&</ul>"), html2;
+  })())(content);
+  return BdApi.React.createElement(
+    "div",
+    {
+      className: "ECBlock-markdown",
+      dangerouslySetInnerHTML: { __html: html }
+    }
+  );
+}
+var import_react14, markdown_default, init_markdown = __esm({
+  "src/codeblock/markdown.tsx"() {
+    "use strict";
+    import_react14 = __toESM(require_react());
+    markdown_default = import_react14.default.memo(MarkdownRenderer);
+  }
+});
+
 // src/codeblock/index.tsx
 function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
-  let tableRef = (0, import_react14.useRef)(null), [_lang, setLang] = useStateDeps(lang, [lang]), [autoCollapse] = useData("autoCollapse", !1), [collapsed, setCollapsed] = useStateDeps(() => modal ? !1 : autoCollapse, [autoCollapse]), language = useLanguage(_lang), highlighted = useHighlighted(language, _lang, content), [showPreview, setShowPreview] = (0, import_react14.useState)(!1), [previewHeight] = useData("previewHeight", 200), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), src = useSrc(content), isSVG = (0, import_react14.useMemo)(() => lang === "svg" && language.name === "HTML, XML" && Boolean(src), [lang, language, src]), downloadAction = (0, import_react14.useCallback)(() => {
+  let tableRef = (0, import_react15.useRef)(null), [_lang, setLang] = useStateDeps(lang, [lang]), [autoCollapse] = useData("autoCollapse", !1), [collapsed, setCollapsed] = useStateDeps(() => modal ? !1 : autoCollapse, [autoCollapse]), language = useLanguage(_lang), highlighted = useHighlighted(language, _lang, content), [showPreview, setShowPreview] = (0, import_react15.useState)(!1), [previewHeight] = useData("previewHeight", 200), [markdownViewMode, setMarkdownViewMode] = useData("markdownViewMode", "raw"), { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview), src = useSrc(content), isSVG = (0, import_react15.useMemo)(() => lang === "svg" && language.name === "HTML, XML" && Boolean(src), [lang, language, src]), isMarkdown = (0, import_react15.useMemo)(() => ["md", "markdown", "mdx"].includes(lang.toLowerCase()), [lang]), downloadAction = (0, import_react15.useCallback)(() => {
     loading || window.DiscordNative && window.DiscordNative.fileManager.saveWithDialog(content, fileName());
-  }, [content, lang, loading]), [copied, setCopied] = (0, import_react14.useState)(!1), setCopiedFalse = (0, import_react14.useMemo)(() => debounce(() => setCopied(!1), 2e3), []), copyAction = (0, import_react14.useCallback)(() => {
+  }, [content, lang, loading]), [copied, setCopied] = (0, import_react15.useState)(!1), setCopiedFalse = (0, import_react15.useMemo)(() => debounce(() => setCopied(!1), 2e3), []), copyAction = (0, import_react15.useCallback)(() => {
     loading || (window.DiscordNative && window.DiscordNative.clipboard.copy(content), setCopied(!0), setCopiedFalse());
-  }, [content, copied, loading]), enlargeAction = (0, import_react14.useCallback)(() => {
+  }, [content, copied, loading]), enlargeAction = (0, import_react15.useCallback)(() => {
     loading || openModal(({ transitionState }) => BdApi.React.createElement(ModalRoot, { transitionState, size: "large" }, BdApi.React.createElement(CodeBlock, { content, lang, modal: !0, fileName })));
-  }, [content, lang, loading]), byteSize = (0, import_react14.useMemo)(() => new File([content], "").size, [content]), [wrapText] = useData("wrapText", !1);
+  }, [content, lang, loading]), byteSize = (0, import_react15.useMemo)(() => new File([content], "").size, [content]), [wrapText] = useData("wrapText", !1);
   return BdApi.React.createElement(
     "div",
     {
@@ -681,6 +805,9 @@ function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
         setCollapsed,
         languageName: `${isSVG ? "SVG, " : ""}${language.name}`,
         isSVG,
+        isMarkdown,
+        markdownViewMode,
+        setMarkdownViewMode,
         showPreview,
         setShowPreview,
         copied,
@@ -694,17 +821,18 @@ function CodeBlock({ content, lang, modal, fileName, loading = !1, remove }) {
         loading
       }
     ),
-    BdApi.React.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && BdApi.React.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && BdApi.React.createElement(preview_default, { src, height: modal ? 400 : previewHeight }), !loading && !(showPreview && isSVG) && BdApi.React.createElement(table_default, { highlighted, tableRef, language }))
+    BdApi.React.createElement(import_react_spring3.default.animated.div, { className: `ECBlock-wrapper ${thin}`, style: { height } }, loading && BdApi.React.createElement(Spinner, { type: Spinner.Type.WANDERING_CUBES }), !loading && showPreview && isSVG && BdApi.React.createElement(preview_default, { src, height: modal ? 400 : previewHeight }), !loading && !(showPreview && isSVG) && isMarkdown && markdownViewMode === "rendered" && BdApi.React.createElement(markdown_default, { content }), !loading && !(showPreview && isSVG) && !(isMarkdown && markdownViewMode === "rendered") && BdApi.React.createElement(table_default, { highlighted, tableRef, language }))
   );
 }
-var import_react14, import_react_spring3, thin, openModal, codeblock_default, init_codeblock2 = __esm({
+var import_react15, import_react_spring3, thin, openModal, codeblock_default, init_codeblock2 = __esm({
   "src/codeblock/index.tsx"() {
     "use strict";
-    import_react14 = __toESM(require_react()), import_react_spring3 = __toESM(require_react_spring());
+    import_react15 = __toESM(require_react()), import_react_spring3 = __toESM(require_react_spring());
     init_hooks();
     init_header();
     init_table();
     init_preview();
+    init_markdown();
     init_components();
     init_data();
     init_util();
@@ -716,13 +844,13 @@ var import_react14, import_react_spring3, thin, openModal, codeblock_default, in
       firstId: 192308,
       cacheId: "betterdiscord-modals"
     }).openModal;
-    codeblock_default = (0, import_react14.memo)(CodeBlock);
+    codeblock_default = (0, import_react15.memo)(CodeBlock);
   }
 });
 
 // src/attachment/wrapper.tsx
 function AttachmentWrapper({ item, onContextMenu, className, remove, canDeleteAttachments }) {
-  let content = useFetchContent(item.originalItem.url), lang = (0, import_react15.useMemo)(() => {
+  let content = useFetchContent(item.originalItem.url), lang = (0, import_react16.useMemo)(() => {
     let spl = item.originalItem.filename.split(".");
     return spl.length - 1 ? spl.pop() : "";
   }, []);
@@ -738,13 +866,13 @@ function AttachmentWrapper({ item, onContextMenu, className, remove, canDeleteAt
     }
   ));
 }
-var import_react15, wrapper_default, init_wrapper = __esm({
+var import_react16, wrapper_default, init_wrapper = __esm({
   "src/attachment/wrapper.tsx"() {
     "use strict";
-    import_react15 = __toESM(require_react());
+    import_react16 = __toESM(require_react());
     init_hooks();
     init_codeblock2();
-    wrapper_default = (0, import_react15.memo)(AttachmentWrapper);
+    wrapper_default = (0, import_react16.memo)(AttachmentWrapper);
   }
 });
 
@@ -753,15 +881,15 @@ function Attachment({ props, item: attachment2, renderPlaintextFilePreview, canD
   let [maxFileBytes] = useData("maxFileBytes", 2e8), [error, setError] = useStateDeps(() => attachment2.item.originalItem.size > maxFileBytes, [maxFileBytes]);
   return error ? BdApi.React.createElement("div", { className: "ECBlock ECBlock-error" }, BdApi.React.createElement("div", { className: "react-error", onClick: () => setError(!1) }, "File is too large for Enhance Codeblocks to handle. Click to try anyways"), renderPlaintextFilePreview.call(attachment2, props)) : BdApi.React.createElement(ErrorBoundary, { fallback: renderPlaintextFilePreview.call(attachment2, props) }, BdApi.React.createElement(wrapper_default, { ...props, canDeleteAttachments, remove: () => attachment2.onRemoveAttachment(attachment2.item) }));
 }
-var import_react16, attachment_default, init_attachment2 = __esm({
+var import_react17, attachment_default, init_attachment2 = __esm({
   "src/attachment/index.tsx"() {
     "use strict";
-    import_react16 = __toESM(require_react());
+    import_react17 = __toESM(require_react());
     init_wrapper();
     init_components();
     init_data();
     init_hooks();
-    attachment_default = (0, import_react16.memo)(Attachment);
+    attachment_default = (0, import_react17.memo)(Attachment);
   }
 });
 
@@ -832,8 +960,8 @@ function clamp(x, lower, upper) {
   return Math.min(upper, Math.max(lower, x));
 }
 function Settings() {
-  let [autoCollapse, setAutoCollapse] = useData("autoCollapse", !1), [instantCollapse, setInstantCollapse] = useData("instantCollapse", !1), [maxHeight, setMaxHeight] = useData("maxHeight", 300), [previewHeight, setPreviewHeight] = useData("previewHeight", 200), [maxBytes, setBytes] = useData("maxBytes", 21846), [maxFileBytes, setFileBytes] = useData("maxFileBytes", 2e8), [wrapText, setWrapText] = useData("wrapText", !1), [open, setOpen] = (0, import_react17.useState)(!1), ref = (0, import_react17.useRef)(null);
-  return (0, import_react17.useLayoutEffect)(() => {
+  let [autoCollapse, setAutoCollapse] = useData("autoCollapse", !1), [instantCollapse, setInstantCollapse] = useData("instantCollapse", !1), [maxHeight, setMaxHeight] = useData("maxHeight", 300), [previewHeight, setPreviewHeight] = useData("previewHeight", 200), [maxBytes, setBytes] = useData("maxBytes", 21846), [maxFileBytes, setFileBytes] = useData("maxFileBytes", 2e8), [wrapText, setWrapText] = useData("wrapText", !1), [markdownViewMode, setMarkdownViewMode] = useData("markdownViewMode", "raw"), [open, setOpen] = (0, import_react18.useState)(!1), ref = (0, import_react18.useRef)(null);
+  return (0, import_react18.useLayoutEffect)(() => {
     !ref.current || !ref.current.parentElement || ref.current.parentElement.classList.add("ECBlock-zIndex-hook");
   }, []), BdApi.React.createElement("div", { className: "ECBlock-settings", ref }, shouldShowMenu && BdApi.React.createElement(
     Popout,
@@ -931,16 +1059,31 @@ function Settings() {
       onChange: setWrapText
     },
     "Wrap Text"
+  ), BdApi.React.createElement(
+    settingsItem_default,
+    {
+      item: BdApi.React.createElement("div", { className: "ECBlock-selectSetting" }, BdApi.React.createElement(
+        "select",
+        {
+          value: markdownViewMode,
+          onChange: (e) => setMarkdownViewMode(e.target.value)
+        },
+        BdApi.React.createElement("option", { value: "raw" }, "Raw"),
+        BdApi.React.createElement("option", { value: "rendered" }, "Rendered")
+      )),
+      note: "Choose how markdown files (.md, .markdown, .mdx) display by default",
+      title: "Markdown View Mode"
+    }
   ));
 }
-var import_react17, settings_default, init_settings = __esm({
+var import_react18, settings_default, init_settings = __esm({
   "src/settings/index.tsx"() {
     "use strict";
-    import_react17 = __toESM(require_react());
+    import_react18 = __toESM(require_react());
     init_components();
     init_data();
     init_menu();
-    settings_default = (0, import_react17.memo)(Settings);
+    settings_default = (0, import_react18.memo)(Settings);
   }
 });
 

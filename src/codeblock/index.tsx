@@ -6,6 +6,7 @@ import { useLanguage, useHighlighted, useSizing, useStateDeps, useSrc } from "..
 import Header from "./header";
 import Table from "./table";
 import Preview from "./preview";
+import MarkdownRenderer from "./markdown";
 import { ModalRoot, Spinner } from "../components";
 import { useData } from "../data";
 import { debounce } from "../util";
@@ -36,7 +37,8 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
   const highlighted = useHighlighted(language, _lang, content);
   
   const [ showPreview, setShowPreview ] = useState(false);
-  const [ previewHeight ] = useData("previewHeight", 200); 
+  const [ previewHeight ] = useData("previewHeight", 200);
+  const [ markdownViewMode, setMarkdownViewMode ] = useData("markdownViewMode", "raw"); 
   
   const { height, angle } = useSizing(collapsed, tableRef, modal, content, lang, showPreview);
   
@@ -44,6 +46,9 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
 
   // Original language must be SVG and the language name must be the html like
   const isSVG = useMemo(() => lang === "svg" && language.name === "HTML, XML" && Boolean(src), [ lang, language, src ]);
+
+  // Check if this is a markdown file
+  const isMarkdown = useMemo(() => ["md", "markdown", "mdx"].includes(lang.toLowerCase()), [ lang ]);
   
   const downloadAction = useCallback(() => {
     if (loading) return;
@@ -76,27 +81,31 @@ function CodeBlock({ content, lang, modal, fileName, loading = false, remove }: 
     <div 
       className={`ECBlock${wrapText ? " ECBlock-wrap" : ""}${collapsed ? " ECBlock-collapsed" : ""}${modal ? " ECBlock-modal" : ""}${loading ? " ECBlock-loading" : ""}`} 
       data-language={language.name}>
-      <Header 
-        angle={angle} 
-        collapsed={collapsed} 
-        setCollapsed={setCollapsed} 
-        languageName={`${isSVG ? "SVG, " : ""}${language.name}`} 
-        isSVG={isSVG} 
-        showPreview={showPreview} 
-        setShowPreview={setShowPreview} 
-        copied={copied} 
-        downloadAction={downloadAction} 
-        copyAction={copyAction} 
-        enlargeAction={enlargeAction} 
-        modal={modal} 
-        setLang={setLang} 
+      <Header
+        angle={angle}
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+        languageName={`${isSVG ? "SVG, " : ""}${language.name}`}
+        isSVG={isSVG}
+        isMarkdown={isMarkdown}
+        markdownViewMode={markdownViewMode}
+        setMarkdownViewMode={setMarkdownViewMode}
+        showPreview={showPreview}
+        setShowPreview={setShowPreview}
+        copied={copied}
+        downloadAction={downloadAction}
+        copyAction={copyAction}
+        enlargeAction={enlargeAction}
+        modal={modal}
+        setLang={setLang}
         remove={remove}
         bytes={byteSize}
         loading={loading} />
       <ReactSpring.animated.div className={`ECBlock-wrapper ${thin}`} style={{ height }}>
         {loading && <Spinner type={Spinner.Type.WANDERING_CUBES} />}
         {(!loading && showPreview && isSVG) && <Preview src={src as string} height={modal ? 400 : previewHeight} />}
-        {(!loading && !(showPreview && isSVG)) && <Table highlighted={highlighted} tableRef={tableRef} language={language} />}
+        {(!loading && !(showPreview && isSVG) && isMarkdown && markdownViewMode === "rendered") && <MarkdownRenderer content={content} />}
+        {(!loading && !(showPreview && isSVG) && !(isMarkdown && markdownViewMode === "rendered")) && <Table highlighted={highlighted} tableRef={tableRef} language={language} />}
       </ReactSpring.animated.div>
     </div>
   )

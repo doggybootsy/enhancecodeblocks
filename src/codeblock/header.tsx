@@ -8,7 +8,7 @@ import { Tooltip, Icon, Popout } from "../components";
 import ChangeLang from "./changeLang";
 import { formatBytes, message } from "../util";
 
-function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove, bytes, loading }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, languageName: string, isSVG: boolean, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void, remove?: (() => void) | false, bytes: number, loading?: boolean }) {
+function Header({ angle, collapsed, setCollapsed, languageName, isSVG, isMarkdown, markdownViewMode, setMarkdownViewMode, showPreview, setShowPreview, copied, downloadAction, copyAction, enlargeAction, modal, setLang, remove, bytes, loading }: { angle: SpringValue<number>, collapsed: boolean, setCollapsed: (v: boolean) => void, languageName: string, isSVG: boolean, isMarkdown?: boolean, markdownViewMode?: string, setMarkdownViewMode?: (v: string) => void, showPreview: boolean, setShowPreview: (v: boolean) => void, copied: boolean, downloadAction: () => void, copyAction: () => void, enlargeAction: () => void, modal: boolean, setLang: (lang: string) => void, remove?: (() => void) | false, bytes: number, loading?: boolean }) {
   const [ shouldShow, setShouldShow ] = React.useState(false);
 
   const targetElementRef = React.useRef<HTMLDivElement>(null);
@@ -75,6 +75,15 @@ function Header({ angle, collapsed, setCollapsed, languageName, isSVG, showPrevi
             {(props) => (
               <div className={`ECBlock-previewButton${showPreview ? " ECBlock-active" : ""}`} {...props} onClick={() => setShowPreview(!showPreview)}>
                 <Icon size={22} name="eye" />
+              </div>
+            )}
+          </Tooltip>
+        )}
+        {isMarkdown && (
+          <Tooltip text={markdownViewMode === "rendered" ? "View Code" : "View Rendered"} hideOnClick={false}>
+            {(props) => (
+              <div className={`ECBlock-markdownButton${markdownViewMode === "rendered" ? " ECBlock-active" : ""}`} {...props} onClick={() => setMarkdownViewMode?.(markdownViewMode === "rendered" ? "raw" : "rendered")}>
+                <Icon size={22} name={markdownViewMode === "rendered" ? "copy" : "eye"} />
               </div>
             )}
           </Tooltip>

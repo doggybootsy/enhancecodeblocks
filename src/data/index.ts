@@ -6,8 +6,9 @@ type settings = {
   previewHeight: number,
   maxBytes: number,
   maxFileBytes: number,
-  instantCollapse: boolean
-  wrapText: boolean
+  instantCollapse: boolean,
+  wrapText: boolean,
+  markdownViewMode: "raw" | "rendered"
 };
 
 const listeners = new Map<string, Set<() => void>>();
